@@ -1041,7 +1041,7 @@
                     <h2>Interval Timer</h2>
                     <div class="form-grid">
                         <div class="field-6">
-                            <label>Repeats</label>
+                            <label>Times</label>
                             <select id="intRepeatsSel" style="display: none;">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -1070,7 +1070,7 @@
                             </div>
                         </div>
                         <div class="field-6 hidden" id="intRepeatsCustomContainer">
-                            <label for="intRepeats">Custom Repeats</label>
+                            <label for="intRepeats">Custom Times</label>
                             <div class="stepper-wrap">
                                 <button type="button" class="stepper-btn" onclick="stepInput('intRepeats', -1)">−</button>
                                 <input id="intRepeats" type="number" min="1" value="10" />
@@ -1175,7 +1175,7 @@
                     <h2>Rest Timer</h2>
                     <div class="form-grid">
                         <div class="field-6">
-                            <label>Repeats</label>
+                            <label>Times</label>
                             <select id="restRepeatsSel" style="display: none;">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -1204,7 +1204,7 @@
                             </div>
                         </div>
                         <div class="field-6 hidden" id="restRepeatsCustomContainer">
-                            <label for="restRepeats">Custom Repeats</label>
+                            <label for="restRepeats">Custom Times</label>
                             <div class="stepper-wrap">
                                 <button type="button" class="stepper-btn" onclick="stepInput('restRepeats', -1)">−</button>
                                 <input id="restRepeats" type="number" min="1" value="10" />
@@ -1264,6 +1264,7 @@
                         <div class="field-6">
                             <label>Rest Duration</label>
                             <select id="restTimeSel" style="display: none;">
+                                <option value="choice">Free Choice</option>
                                 <option value="0:10">0:10</option>
                                 <option value="0:15">0:15</option>
                                 <option value="0:20">0:20</option>
@@ -1275,6 +1276,7 @@
                                 <option value="other">Other...</option>
                             </select>
                             <div class="pill-grid" id="restTimePills" data-select="restTimeSel">
+                                <button type="button" class="pill-btn" data-value="choice">Free Choice</button>
                                 <button type="button" class="pill-btn" data-value="0:10">0:10</button>
                                 <button type="button" class="pill-btn" data-value="0:15">0:15</button>
                                 <button type="button" class="pill-btn" data-value="0:20">0:20</button>
@@ -2067,10 +2069,13 @@
                 restStr = $("restTimeCustom").value.trim();
             }
             
-            const restSeconds = parseTimeToSeconds(restStr);
-            if (restSeconds <= 0) {
-                alert("Please enter a valid rest duration (e.g. 0:30 or 30).");
-                return;
+            let restSeconds = 0;
+            if (restStr !== "choice") {
+                restSeconds = parseTimeToSeconds(restStr);
+                if (restSeconds <= 0) {
+                    alert("Please enter a valid rest duration (e.g. 0:30 or 30).");
+                    return;
+                }
             }
             
             // Save settings presets
@@ -2148,6 +2153,11 @@
             let remaining = 0;
             
             if (intervalState.waitingForNext) {
+                if (line.intervalSeconds === 0) {
+                    updateTimerDisplay();
+                    return;
+                }
+                
                 if (line.mode === "rest") {
                     const elapsedRest = (now - intervalState.finishRepeatMs) / 1000;
                     remaining = line.intervalSeconds - elapsedRest;
@@ -2178,9 +2188,17 @@
         }
 
         function finishRepeat() {
-            if (!intervalState.running || intervalState.waitingForNext) return;
+            if (!intervalState.running) return;
+            
             const line = getCurrentLine();
             if (!line) return;
+
+            if (intervalState.waitingForNext) {
+                if (line.intervalSeconds === 0) {
+                    nextRepeat();
+                }
+                return;
+            }
             
             const now = performance.now();
             const swimSeconds = (now - intervalState.repeatStartMs) / 1000;
@@ -2198,10 +2216,10 @@
                 repeat: intervalState.currentRepeat,
                 distance: line.distance,
                 stroke: line.stroke,
-                interval: formatSeconds(line.intervalSeconds),
+                interval: line.intervalSeconds === 0 ? "Choice" : formatSeconds(line.intervalSeconds),
                 swimTime: formatSeconds(swimSeconds, true),
                 swimSeconds: swimSeconds,
-                restTime: formatRestSeconds(restSeconds),
+                restTime: line.intervalSeconds === 0 ? "-" : formatRestSeconds(restSeconds),
                 notes: line.notes || "",
                 skipped: false
             });
@@ -2237,7 +2255,7 @@
                 repeat: intervalState.currentRepeat,
                 distance: line.distance,
                 stroke: line.stroke,
-                interval: formatSeconds(line.intervalSeconds),
+                interval: line.intervalSeconds === 0 ? "Choice" : formatSeconds(line.intervalSeconds),
                 swimTime: "SKIPPED",
                 swimSeconds: 0,
                 restTime: "-",
@@ -2254,6 +2272,16 @@
             const line = getCurrentLine();
             if (!line) return finishSet();
             
+            if (line.mode === "rest" && line.intervalSeconds === 0 && intervalState.finishRepeatMs) {
+                const now = performance.now();
+                const actualRest = (now - intervalState.finishRepeatMs) / 1000;
+                if (appData.sessionResults.length > 0) {
+                    appData.sessionResults[appData.sessionResults.length - 1].restTime = formatRestSeconds(actualRest);
+                    saveData();
+                    renderLiveLaps();
+                }
+            }
+
             intervalState.waitingForNext = false;
             
             if (intervalState.currentRepeat < Number(line.repeats)) {
@@ -2331,14 +2359,29 @@
             $("strokeInfo").textContent = line.stroke;
             
             $("intervalInfoLabel").textContent = line.mode === "rest" ? "Rest" : "Interval";
-            $("intervalInfo").textContent = formatSeconds(line.intervalSeconds);
+            $("intervalInfo").textContent = line.intervalSeconds === 0 ? "Choice" : formatSeconds(line.intervalSeconds);
             
             if (intervalState.waitingForNext) {
-                $("goCountdown").textContent = formatSeconds(remaining, false);
-                $("timerStatus").textContent = `Resting - next start in ${formatSeconds(remaining)}`;
+                if (line.intervalSeconds === 0) {
+                    const elapsedRest = intervalState.finishRepeatMs ? (now - intervalState.finishRepeatMs) / 1000 : 0;
+                    $("goCountdown").textContent = formatSeconds(elapsedRest, false);
+                    $("timerStatus").textContent = `Resting - elapsed rest: ${formatSeconds(elapsedRest)}`;
+                    $("finishRepeatBtn").textContent = "Start Next Lap";
+                    $("finishRepeatBtn").style.background = "var(--accent)";
+                    $("finishRepeatBtn").style.color = "#06131f";
+                } else {
+                    $("goCountdown").textContent = formatSeconds(remaining, false);
+                    $("timerStatus").textContent = `Resting - next start in ${formatSeconds(remaining)}`;
+                    $("finishRepeatBtn").textContent = "Finish Lap";
+                    $("finishRepeatBtn").style.background = "";
+                    $("finishRepeatBtn").style.color = "";
+                }
             } else {
                 $("goCountdown").textContent = "GO";
                 $("timerStatus").textContent = `Swim - Lap ${intervalState.currentRepeat}`;
+                $("finishRepeatBtn").textContent = "Finish Lap";
+                $("finishRepeatBtn").style.background = "";
+                $("finishRepeatBtn").style.color = "";
             }
             
             $("swimTime").textContent = intervalState.waitingForNext && appData.sessionResults.length > 0
@@ -2465,7 +2508,7 @@
                     <summary>
                         <div>
                             <strong>${date}</strong> - ${escapeHtml(setName)}<br/>
-                            <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} repeats, ${dist}m</span>
+                             <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} times, ${dist}m</span>
                         </div>
                     </summary>
                     <div class="details-content">
