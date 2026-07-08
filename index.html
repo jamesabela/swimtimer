@@ -148,13 +148,13 @@
 
         button {
             border: none;
-            border-radius: 16px;
-            padding: 16px 18px;
-            min-height: 64px;
+            border-radius: 18px;
+            padding: 18px 22px;
+            min-height: 72px;
             color: #06131f;
             background: var(--accent);
             font-weight: 900;
-            font-size: 1.08rem;
+            font-size: 1.25rem;
             cursor: pointer;
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
             transition: transform 0.08s ease, opacity 0.2s ease, filter 0.2s ease;
@@ -405,11 +405,11 @@
         }
 
         .tab-button {
-            min-height: 54px;
-            padding: 10px 8px;
-            border-radius: 14px;
+            min-height: 60px;
+            padding: 12px 10px;
+            border-radius: 16px;
             box-shadow: none;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             background: #cbd5e1;
         }
 
@@ -505,10 +505,10 @@
             }
 
             .tab-button {
-                min-height: 40px;
-                font-size: 0.72rem;
-                padding: 4px 2px;
-                border-radius: 10px;
+                min-height: 52px;
+                font-size: 0.88rem;
+                padding: 8px 4px;
+                border-radius: 12px;
             }
 
             .panel {
@@ -872,6 +872,109 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        /* Stepper input styles */
+        .stepper-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            height: 58px;
+            transition: border-color 0.15s ease;
+        }
+        
+        .stepper-wrap:focus-within {
+            border-color: var(--accent);
+        }
+        
+        .stepper-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: none;
+            color: var(--text);
+            font-size: 1.8rem;
+            width: 64px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: none;
+            user-select: none;
+        }
+        
+        .stepper-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stepper-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.94);
+        }
+        
+        .stepper-wrap input[type="number"] {
+            background: transparent;
+            border: none;
+            text-align: center;
+            width: 100%;
+            font-size: 1.35rem;
+            font-weight: bold;
+            margin: 0;
+            box-shadow: none;
+            height: 100%;
+            color: var(--text);
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
+        .stepper-wrap input[type="number"]::-webkit-inner-spin-button,
+        .stepper-wrap input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        /* Pill selector styles */
+        .pill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+            width: 100%;
+        }
+        
+        .pill-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 8px;
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+            font-weight: normal;
+            box-shadow: none;
+            user-select: none;
+        }
+        
+        .pill-btn:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .pill-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .pill-btn.active {
+            background: var(--accent);
+            color: #06131f;
+            font-weight: bold;
+            border-color: var(--accent);
+        }
     </style>
 </head>
 
@@ -937,17 +1040,71 @@
                 <div class="panel span-12">
                     <h2>Interval Timer</h2>
                     <div class="form-grid">
-                        <div class="field-2">
-                            <label for="intRepeats">Repeats</label>
-                            <input id="intRepeats" type="number" min="1" value="10" />
+                        <div class="field-6">
+                            <label>Repeats</label>
+                            <select id="intRepeatsSel" style="display: none;">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10" selected>10</option>
+                                <option value="other">Other...</option>
+                            </select>
+                            <div class="pill-grid" id="intRepeatsPills" data-select="intRepeatsSel">
+                                <button type="button" class="pill-btn" data-value="1">1</button>
+                                <button type="button" class="pill-btn" data-value="2">2</button>
+                                <button type="button" class="pill-btn" data-value="3">3</button>
+                                <button type="button" class="pill-btn" data-value="4">4</button>
+                                <button type="button" class="pill-btn" data-value="5">5</button>
+                                <button type="button" class="pill-btn" data-value="6">6</button>
+                                <button type="button" class="pill-btn" data-value="7">7</button>
+                                <button type="button" class="pill-btn" data-value="8">8</button>
+                                <button type="button" class="pill-btn" data-value="9">9</button>
+                                <button type="button" class="pill-btn active" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
                         </div>
-                        <div class="field-2">
-                            <label for="intDistance">Distance (m/yd)</label>
-                            <input id="intDistance" type="number" min="0" value="100" />
+                        <div class="field-6 hidden" id="intRepeatsCustomContainer">
+                            <label for="intRepeats">Custom Repeats</label>
+                            <div class="stepper-wrap">
+                                <button type="button" class="stepper-btn" onclick="stepInput('intRepeats', -1)">−</button>
+                                <input id="intRepeats" type="number" min="1" value="10" />
+                                <button type="button" class="stepper-btn" onclick="stepInput('intRepeats', 1)">+</button>
+                            </div>
                         </div>
-                        <div class="field-2">
-                            <label for="intStroke">Stroke</label>
-                            <select id="intStroke">
+                        <div class="field-6">
+                            <label>Distance (m/yd)</label>
+                            <select id="intDistanceSel" style="display: none;">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100" selected>100</option>
+                                <option value="200">200</option>
+                                <option value="other">Other...</option>
+                            </select>
+                            <div class="pill-grid" id="intDistancePills" data-select="intDistanceSel">
+                                <button type="button" class="pill-btn" data-value="25">25</button>
+                                <button type="button" class="pill-btn" data-value="50">50</button>
+                                <button type="button" class="pill-btn active" data-value="100">100</button>
+                                <button type="button" class="pill-btn" data-value="200">200</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
+                        </div>
+                        <div class="field-6 hidden" id="intDistanceCustomContainer">
+                            <label for="intDistance">Custom Distance (m/yd)</label>
+                            <div class="stepper-wrap">
+                                <button type="button" class="stepper-btn" onclick="stepInput('intDistance', -25)">−</button>
+                                <input id="intDistance" type="number" min="0" step="25" value="100" />
+                                <button type="button" class="stepper-btn" onclick="stepInput('intDistance', 25)">+</button>
+                            </div>
+                        </div>
+                        <div class="field-6">
+                            <label>Stroke</label>
+                            <select id="intStroke" style="display: none;">
                                 <option>Free</option>
                                 <option>Back</option>
                                 <option>Breast</option>
@@ -958,10 +1115,21 @@
                                 <option>Drill</option>
                                 <option>Choice</option>
                             </select>
+                            <div class="pill-grid" id="intStrokePills" data-select="intStroke">
+                                <button type="button" class="pill-btn active" data-value="Free">Free</button>
+                                <button type="button" class="pill-btn" data-value="Back">Back</button>
+                                <button type="button" class="pill-btn" data-value="Breast">Breast</button>
+                                <button type="button" class="pill-btn" data-value="Fly">Fly</button>
+                                <button type="button" class="pill-btn" data-value="IM">IM</button>
+                                <button type="button" class="pill-btn" data-value="Kick">Kick</button>
+                                <button type="button" class="pill-btn" data-value="Pull">Pull</button>
+                                <button type="button" class="pill-btn" data-value="Drill">Drill</button>
+                                <button type="button" class="pill-btn" data-value="Choice">Choice</button>
+                            </div>
                         </div>
-                        <div class="field-3">
-                            <label for="intIntervalSel">Interval</label>
-                            <select id="intIntervalSel">
+                        <div class="field-6">
+                            <label>Interval</label>
+                            <select id="intIntervalSel" style="display: none;">
                                 <option value="0:30">0:30</option>
                                 <option value="1:00">1:00</option>
                                 <option value="1:30">1:30</option>
@@ -972,8 +1140,19 @@
                                 <option value="4:00">4:00</option>
                                 <option value="other">Other...</option>
                             </select>
+                            <div class="pill-grid" id="intIntervalPills" data-select="intIntervalSel">
+                                <button type="button" class="pill-btn" data-value="0:30">0:30</button>
+                                <button type="button" class="pill-btn" data-value="1:00">1:00</button>
+                                <button type="button" class="pill-btn" data-value="1:30">1:30</button>
+                                <button type="button" class="pill-btn active" data-value="2:00">2:00</button>
+                                <button type="button" class="pill-btn" data-value="2:30">2:30</button>
+                                <button type="button" class="pill-btn" data-value="3:00">3:00</button>
+                                <button type="button" class="pill-btn" data-value="3:30">3:30</button>
+                                <button type="button" class="pill-btn" data-value="4:00">4:00</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
                         </div>
-                        <div class="field-3 hidden" id="intIntervalCustomContainer">
+                        <div class="field-6 hidden" id="intIntervalCustomContainer">
                             <label for="intIntervalCustom">Custom Interval (e.g. 1:40)</label>
                             <input id="intIntervalCustom" value="2:00" placeholder="2:00" />
                         </div>
@@ -995,17 +1174,71 @@
                 <div class="panel span-12">
                     <h2>Rest Timer</h2>
                     <div class="form-grid">
-                        <div class="field-2">
-                            <label for="restRepeats">Repeats</label>
-                            <input id="restRepeats" type="number" min="1" value="10" />
+                        <div class="field-6">
+                            <label>Repeats</label>
+                            <select id="restRepeatsSel" style="display: none;">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10" selected>10</option>
+                                <option value="other">Other...</option>
+                            </select>
+                            <div class="pill-grid" id="restRepeatsPills" data-select="restRepeatsSel">
+                                <button type="button" class="pill-btn" data-value="1">1</button>
+                                <button type="button" class="pill-btn" data-value="2">2</button>
+                                <button type="button" class="pill-btn" data-value="3">3</button>
+                                <button type="button" class="pill-btn" data-value="4">4</button>
+                                <button type="button" class="pill-btn" data-value="5">5</button>
+                                <button type="button" class="pill-btn" data-value="6">6</button>
+                                <button type="button" class="pill-btn" data-value="7">7</button>
+                                <button type="button" class="pill-btn" data-value="8">8</button>
+                                <button type="button" class="pill-btn" data-value="9">9</button>
+                                <button type="button" class="pill-btn active" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
                         </div>
-                        <div class="field-2">
-                            <label for="restDistance">Distance (m/yd)</label>
-                            <input id="restDistance" type="number" min="0" value="100" />
+                        <div class="field-6 hidden" id="restRepeatsCustomContainer">
+                            <label for="restRepeats">Custom Repeats</label>
+                            <div class="stepper-wrap">
+                                <button type="button" class="stepper-btn" onclick="stepInput('restRepeats', -1)">−</button>
+                                <input id="restRepeats" type="number" min="1" value="10" />
+                                <button type="button" class="stepper-btn" onclick="stepInput('restRepeats', 1)">+</button>
+                            </div>
                         </div>
-                        <div class="field-2">
-                            <label for="restStroke">Stroke</label>
-                            <select id="restStroke">
+                        <div class="field-6">
+                            <label>Distance (m/yd)</label>
+                            <select id="restDistanceSel" style="display: none;">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100" selected>100</option>
+                                <option value="200">200</option>
+                                <option value="other">Other...</option>
+                            </select>
+                            <div class="pill-grid" id="restDistancePills" data-select="restDistanceSel">
+                                <button type="button" class="pill-btn" data-value="25">25</button>
+                                <button type="button" class="pill-btn" data-value="50">50</button>
+                                <button type="button" class="pill-btn active" data-value="100">100</button>
+                                <button type="button" class="pill-btn" data-value="200">200</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
+                        </div>
+                        <div class="field-6 hidden" id="restDistanceCustomContainer">
+                            <label for="restDistance">Custom Distance (m/yd)</label>
+                            <div class="stepper-wrap">
+                                <button type="button" class="stepper-btn" onclick="stepInput('restDistance', -25)">−</button>
+                                <input id="restDistance" type="number" min="0" step="25" value="100" />
+                                <button type="button" class="stepper-btn" onclick="stepInput('restDistance', 25)">+</button>
+                            </div>
+                        </div>
+                        <div class="field-6">
+                            <label>Stroke</label>
+                            <select id="restStroke" style="display: none;">
                                 <option>Free</option>
                                 <option>Back</option>
                                 <option>Breast</option>
@@ -1016,10 +1249,21 @@
                                 <option>Drill</option>
                                 <option>Choice</option>
                             </select>
+                            <div class="pill-grid" id="restStrokePills" data-select="restStroke">
+                                <button type="button" class="pill-btn active" data-value="Free">Free</button>
+                                <button type="button" class="pill-btn" data-value="Back">Back</button>
+                                <button type="button" class="pill-btn" data-value="Breast">Breast</button>
+                                <button type="button" class="pill-btn" data-value="Fly">Fly</button>
+                                <button type="button" class="pill-btn" data-value="IM">IM</button>
+                                <button type="button" class="pill-btn" data-value="Kick">Kick</button>
+                                <button type="button" class="pill-btn" data-value="Pull">Pull</button>
+                                <button type="button" class="pill-btn" data-value="Drill">Drill</button>
+                                <button type="button" class="pill-btn" data-value="Choice">Choice</button>
+                            </div>
                         </div>
-                        <div class="field-3">
-                            <label for="restTimeSel">Rest Duration</label>
-                            <select id="restTimeSel">
+                        <div class="field-6">
+                            <label>Rest Duration</label>
+                            <select id="restTimeSel" style="display: none;">
                                 <option value="0:10">0:10</option>
                                 <option value="0:15">0:15</option>
                                 <option value="0:20">0:20</option>
@@ -1030,8 +1274,19 @@
                                 <option value="2:00">2:00</option>
                                 <option value="other">Other...</option>
                             </select>
+                            <div class="pill-grid" id="restTimePills" data-select="restTimeSel">
+                                <button type="button" class="pill-btn" data-value="0:10">0:10</button>
+                                <button type="button" class="pill-btn" data-value="0:15">0:15</button>
+                                <button type="button" class="pill-btn" data-value="0:20">0:20</button>
+                                <button type="button" class="pill-btn active" data-value="0:30">0:30</button>
+                                <button type="button" class="pill-btn" data-value="0:45">0:45</button>
+                                <button type="button" class="pill-btn" data-value="1:00">1:00</button>
+                                <button type="button" class="pill-btn" data-value="1:30">1:30</button>
+                                <button type="button" class="pill-btn" data-value="2:00">2:00</button>
+                                <button type="button" class="pill-btn" data-value="other">Other...</button>
+                            </div>
                         </div>
-                        <div class="field-3 hidden" id="restTimeCustomContainer">
+                        <div class="field-6 hidden" id="restTimeCustomContainer">
                             <label for="restTimeCustom">Custom Rest (e.g. 0:40)</label>
                             <input id="restTimeCustom" value="0:30" placeholder="0:30" />
                         </div>
@@ -1498,6 +1753,31 @@
             return appData.currentSet[0] || null;
         }
 
+        window.stepInput = function(id, delta) {
+            const input = $(id);
+            if (!input) return;
+            const min = Number(input.getAttribute("min") ?? 0);
+            let val = (Number(input.value) || 0) + delta;
+            if (val < min) val = min;
+            input.value = val;
+            input.dispatchEvent(new Event("change"));
+        };
+
+        function syncPillsFromSelect(selectId, gridId) {
+            const selectEl = $(selectId);
+            const gridEl = $(gridId);
+            if (selectEl && gridEl) {
+                const val = selectEl.value;
+                gridEl.querySelectorAll(".pill-btn").forEach(btn => {
+                    if (btn.dataset.value === val) {
+                        btn.classList.add("active");
+                    } else {
+                        btn.classList.remove("active");
+                    }
+                });
+            }
+        }
+
         function renderAll() {
             renderForms();
             renderStats();
@@ -1507,10 +1787,34 @@
             renderManualLaps();
         }
 
+        function prefillSelectOrInput(selectId, inputId, containerId, value, defaultVal) {
+            const selectEl = $(selectId);
+            const inputEl = $(inputId);
+            if (!selectEl || !inputEl) return;
+            
+            const val = value ?? defaultVal;
+            inputEl.value = val;
+            
+            let hasOption = false;
+            for (let i = 0; i < selectEl.options.length; i++) {
+                if (selectEl.options[i].value === String(val)) {
+                    hasOption = true;
+                    break;
+                }
+            }
+            
+            if (hasOption) {
+                selectEl.value = String(val);
+            } else {
+                selectEl.value = "other";
+            }
+            toggleCustomInput(selectId, containerId, inputId);
+        }
+
         function renderForms() {
             // Pre-fill Interval Form
-            $("intRepeats").value = appData.settings.lastIntervalRepeats ?? 10;
-            $("intDistance").value = appData.settings.lastIntervalDistance ?? 100;
+            prefillSelectOrInput("intRepeatsSel", "intRepeats", "intRepeatsCustomContainer", appData.settings.lastIntervalRepeats, 10);
+            prefillSelectOrInput("intDistanceSel", "intDistance", "intDistanceCustomContainer", appData.settings.lastIntervalDistance, 100);
             $("intStroke").value = appData.settings.lastIntervalStroke ?? "Free";
             $("intIntervalSel").value = appData.settings.lastIntervalType ?? "2:00";
             $("intIntervalCustom").value = appData.settings.lastIntervalCustom ?? "2:00";
@@ -1518,8 +1822,8 @@
             toggleCustomInput("intIntervalSel", "intIntervalCustomContainer");
 
             // Pre-fill Rest Form
-            $("restRepeats").value = appData.settings.lastRestRepeats ?? 10;
-            $("restDistance").value = appData.settings.lastRestDistance ?? 100;
+            prefillSelectOrInput("restRepeatsSel", "restRepeats", "restRepeatsCustomContainer", appData.settings.lastRestRepeats, 10);
+            prefillSelectOrInput("restDistanceSel", "restDistance", "restDistanceCustomContainer", appData.settings.lastRestDistance, 100);
             $("restStroke").value = appData.settings.lastRestStroke ?? "Free";
             $("restTimeSel").value = appData.settings.lastRestType ?? "0:30";
             $("restTimeCustom").value = appData.settings.lastRestCustom ?? "0:30";
@@ -1531,9 +1835,19 @@
             $("customPoolLength").value = appData.settings.customPoolLength ?? "25m";
             $("soundToggle").value = appData.settings.soundOn ? "on" : "off";
             toggleCustomPoolLength();
+
+            // Sync pills
+            syncPillsFromSelect("intStroke", "intStrokePills");
+            syncPillsFromSelect("restStroke", "restStrokePills");
+            syncPillsFromSelect("intIntervalSel", "intIntervalPills");
+            syncPillsFromSelect("restTimeSel", "restTimePills");
+            syncPillsFromSelect("intRepeatsSel", "intRepeatsPills");
+            syncPillsFromSelect("intDistanceSel", "intDistancePills");
+            syncPillsFromSelect("restRepeatsSel", "restRepeatsPills");
+            syncPillsFromSelect("restDistanceSel", "restDistancePills");
         }
 
-        function toggleCustomInput(selectId, containerId) {
+        function toggleCustomInput(selectId, containerId, targetInputId = null) {
             const selectEl = $(selectId);
             const containerEl = $(containerId);
             if (selectEl && containerEl) {
@@ -1541,6 +1855,9 @@
                     containerEl.classList.remove("hidden");
                 } else {
                     containerEl.classList.add("hidden");
+                    if (targetInputId) {
+                        $(targetInputId).value = selectEl.value;
+                    }
                 }
             }
         }
@@ -2313,6 +2630,22 @@
             document.querySelectorAll(".tab-button").forEach(btn => {
                 btn.addEventListener("click", () => switchTab(btn.dataset.tab));
             });
+
+            // Pill grids select synchronization
+            document.querySelectorAll(".pill-grid").forEach(grid => {
+                const targetSelectId = grid.dataset.select;
+                const selectEl = $(targetSelectId);
+                if (!selectEl) return;
+                
+                grid.querySelectorAll(".pill-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        grid.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        selectEl.value = btn.dataset.value;
+                        selectEl.dispatchEvent(new Event("change"));
+                    });
+                });
+            });
             
             // Dropdown event listeners for custom inputs
             $("intIntervalSel").addEventListener("change", () => {
@@ -2321,7 +2654,47 @@
             $("restTimeSel").addEventListener("change", () => {
                 toggleCustomInput("restTimeSel", "restTimeCustomContainer");
             });
+            $("intRepeatsSel").addEventListener("change", () => {
+                toggleCustomInput("intRepeatsSel", "intRepeatsCustomContainer", "intRepeats");
+            });
+            $("intDistanceSel").addEventListener("change", () => {
+                toggleCustomInput("intDistanceSel", "intDistanceCustomContainer", "intDistance");
+            });
+            $("restRepeatsSel").addEventListener("change", () => {
+                toggleCustomInput("restRepeatsSel", "restRepeatsCustomContainer", "restRepeats");
+            });
+            $("restDistanceSel").addEventListener("change", () => {
+                toggleCustomInput("restDistanceSel", "restDistanceCustomContainer", "restDistance");
+            });
             $("poolLength").addEventListener("change", toggleCustomPoolLength);
+
+            // Sync input updates back to pill grids
+            const bindInputToSelectSync = (inputId, selectId, gridId) => {
+                const inputEl = $(inputId);
+                const selectEl = $(selectId);
+                if (!inputEl || !selectEl) return;
+                inputEl.addEventListener("change", () => {
+                    const val = inputEl.value;
+                    let hasOption = false;
+                    for (let i = 0; i < selectEl.options.length; i++) {
+                        if (selectEl.options[i].value === String(val)) {
+                            hasOption = true;
+                            break;
+                        }
+                    }
+                    if (hasOption) {
+                        selectEl.value = String(val);
+                    } else {
+                        selectEl.value = "other";
+                    }
+                    syncPillsFromSelect(selectId, gridId);
+                });
+            };
+            
+            bindInputToSelectSync("intRepeats", "intRepeatsSel", "intRepeatsPills");
+            bindInputToSelectSync("intDistance", "intDistanceSel", "intDistancePills");
+            bindInputToSelectSync("restRepeats", "restRepeatsSel", "restRepeatsPills");
+            bindInputToSelectSync("restDistance", "restDistanceSel", "restDistancePills");
             
             // Set trigger buttons
             $("startIntervalBtn").addEventListener("click", startIntervalSet);
