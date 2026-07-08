@@ -321,21 +321,25 @@
             cursor: pointer;
             position: relative;
         }
+
         .timer-workout-card:hover {
             border-color: rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.04);
             transform: translateY(-1px);
         }
+
         .timer-workout-card.is-selected-inactive {
             border-color: var(--blue) !important;
             background: rgba(0, 123, 255, 0.08) !important;
             box-shadow: 0 4px 12px rgba(0, 123, 255, 0.12);
         }
+
         .timer-workout-card.is-active-running {
             border-color: var(--accent) !important;
             background: rgba(32, 201, 151, 0.08) !important;
             box-shadow: 0 4px 12px rgba(32, 201, 151, 0.12);
         }
+
         .timer-workout-card.is-completed {
             opacity: 0.5;
         }
@@ -405,11 +409,16 @@
         }
 
         .tab-button {
-            min-height: 60px;
-            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 72px;
+            padding: 8px 6px;
             border-radius: 16px;
             box-shadow: none;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             background: #cbd5e1;
         }
 
@@ -505,10 +514,16 @@
             }
 
             .tab-button {
-                min-height: 52px;
-                font-size: 0.88rem;
-                padding: 8px 4px;
+                min-height: 60px;
+                font-size: 0.72rem;
+                padding: 6px 2px;
                 border-radius: 12px;
+                gap: 3px;
+            }
+
+            .tab-button svg {
+                width: 18px;
+                height: 18px;
             }
 
             .panel {
@@ -693,9 +708,17 @@
         }
 
         @keyframes pulse-border {
-            0% { border-color: rgba(32, 201, 151, 0.4); }
-            50% { border-color: rgba(32, 201, 151, 1); }
-            100% { border-color: rgba(32, 201, 151, 0.4); }
+            0% {
+                border-color: rgba(32, 201, 151, 0.4);
+            }
+
+            50% {
+                border-color: rgba(32, 201, 151, 1);
+            }
+
+            100% {
+                border-color: rgba(32, 201, 151, 0.4);
+            }
         }
 
         .achievement-badge-container {
@@ -714,7 +737,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
         .achievement-badge.distance {
@@ -865,9 +888,11 @@
             outline: none;
             box-sizing: border-box;
         }
+
         .small-input:focus {
             border-color: var(--accent);
         }
+
         .small-input:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -885,11 +910,11 @@
             height: 58px;
             transition: border-color 0.15s ease;
         }
-        
+
         .stepper-wrap:focus-within {
             border-color: var(--accent);
         }
-        
+
         .stepper-btn {
             background: rgba(255, 255, 255, 0.03);
             border: none;
@@ -905,16 +930,16 @@
             box-shadow: none;
             user-select: none;
         }
-        
+
         .stepper-btn:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-        
+
         .stepper-btn:active {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(0.94);
         }
-        
+
         .stepper-wrap input[type="number"] {
             background: transparent;
             border: none;
@@ -930,13 +955,13 @@
             -moz-appearance: textfield;
             appearance: textfield;
         }
-        
+
         .stepper-wrap input[type="number"]::-webkit-inner-spin-button,
         .stepper-wrap input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        
+
         /* Pill selector styles */
         .pill-grid {
             display: grid;
@@ -945,7 +970,7 @@
             margin-top: 6px;
             width: 100%;
         }
-        
+
         .pill-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
@@ -960,15 +985,15 @@
             box-shadow: none;
             user-select: none;
         }
-        
+
         .pill-btn:hover {
             border-color: rgba(255, 255, 255, 0.2);
         }
-        
+
         .pill-btn:active {
             transform: scale(0.95);
         }
-        
+
         .pill-btn.active {
             background: var(--accent);
             color: #06131f;
@@ -987,11 +1012,59 @@
     <main>
         <!-- Sticky Navigation Bar (Hidden when timer is running) -->
         <nav class="tab-bar" aria-label="App sections">
-            <button class="tab-button active" data-tab="intervalTab">Interval</button>
-            <button class="tab-button" data-tab="restTab">Rest</button>
-            <button class="tab-button" data-tab="stopwatchTab">Stopwatch</button>
-            <button class="tab-button" data-tab="historyTab">History</button>
-            <button class="tab-button" data-tab="settingsTab">Settings</button>
+            <button class="tab-button active" data-tab="intervalTab">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3.5" y1="6" x2="6.5" y2="6" stroke-width="2.5" />
+                    <line x1="9" y1="6" x2="12" y2="6" stroke-width="2.5" />
+                    <line x1="10.5" y1="4.5" x2="10.5" y2="7.5" stroke-width="2.5" />
+                    <line x1="14.5" y1="6" x2="17.5" y2="6" stroke-width="2.5" />
+                    <line x1="20" y1="6" x2="23" y2="6" stroke-width="2.5" />
+                    <line x1="21.5" y1="4.5" x2="21.5" y2="7.5" stroke-width="2.5" />
+                    <line x1="3" y1="15" x2="21" y2="15" />
+                    <polyline points="7 11 3 15 7 19" />
+                    <polyline points="17 11 21 15 17 19" />
+                </svg>
+                <span>Interval</span>
+            </button>
+            <button class="tab-button" data-tab="restTab">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M5 2h14M5 22h14M19 2v4a7 7 0 0 1-7 7 7 7 0 0 1-7-7V2M5 22v-4a7 7 0 0 1 7-7 7 7 0 0 1 7 7v4" />
+                </svg>
+                <span>Rest</span>
+            </button>
+            <button class="tab-button" data-tab="stopwatchTab">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 15 15" />
+                    <line x1="12" y1="2" x2="12" y2="4" />
+                </svg>
+                <span>Stpwtch</span>
+            </button>
+            <button class="tab-button" data-tab="historyTab">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+                <span>History</span>
+            </button>
+            <button class="tab-button" data-tab="settingsTab">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                <span>Settings</span>
+            </button>
         </nav>
 
         <!-- Unified Fullscreen Timer view (Active when set is running) -->
@@ -1026,11 +1099,12 @@
                 <button id="skipRepeatBtn" class="warning">Skip</button>
                 <button id="stopBtn" class="danger">Stop</button>
             </div>
-            
+
             <div id="motivationalBanner" class="motivational-banner" style="display: none; margin-top: 14px;"></div>
-            
+
             <div id="liveLapsContainer" style="margin-top: 16px;">
-                <div id="liveLapsWrap" class="notice" style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.</div>
+                <div id="liveLapsWrap" class="notice"
+                    style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.</div>
             </div>
         </div>
 
@@ -1047,12 +1121,12 @@
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                                <option value="5">5</option>
+                                <option value="5" selected>5</option>
                                 <option value="6">6</option>
                                 <option value="7">7</option>
                                 <option value="8">8</option>
                                 <option value="9">9</option>
-                                <option value="10" selected>10</option>
+                                <option value="10">10</option>
                                 <option value="other">Other...</option>
                             </select>
                             <div class="pill-grid" id="intRepeatsPills" data-select="intRepeatsSel">
@@ -1060,21 +1134,23 @@
                                 <button type="button" class="pill-btn" data-value="2">2</button>
                                 <button type="button" class="pill-btn" data-value="3">3</button>
                                 <button type="button" class="pill-btn" data-value="4">4</button>
-                                <button type="button" class="pill-btn" data-value="5">5</button>
+                                <button type="button" class="pill-btn active" data-value="5">5</button>
                                 <button type="button" class="pill-btn" data-value="6">6</button>
                                 <button type="button" class="pill-btn" data-value="7">7</button>
                                 <button type="button" class="pill-btn" data-value="8">8</button>
                                 <button type="button" class="pill-btn" data-value="9">9</button>
-                                <button type="button" class="pill-btn active" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="10">10</button>
                                 <button type="button" class="pill-btn" data-value="other">Other...</button>
                             </div>
                         </div>
                         <div class="field-6 hidden" id="intRepeatsCustomContainer">
                             <label for="intRepeats">Custom Times</label>
                             <div class="stepper-wrap">
-                                <button type="button" class="stepper-btn" onclick="stepInput('intRepeats', -1)">−</button>
-                                <input id="intRepeats" type="number" min="1" value="10" />
-                                <button type="button" class="stepper-btn" onclick="stepInput('intRepeats', 1)">+</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('intRepeats', -1)">−</button>
+                                <input id="intRepeats" type="number" min="1" value="5" />
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('intRepeats', 1)">+</button>
                             </div>
                         </div>
                         <div class="field-6">
@@ -1097,9 +1173,11 @@
                         <div class="field-6 hidden" id="intDistanceCustomContainer">
                             <label for="intDistance">Custom Distance (m/yd)</label>
                             <div class="stepper-wrap">
-                                <button type="button" class="stepper-btn" onclick="stepInput('intDistance', -25)">−</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('intDistance', -25)">−</button>
                                 <input id="intDistance" type="number" min="0" step="25" value="100" />
-                                <button type="button" class="stepper-btn" onclick="stepInput('intDistance', 25)">+</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('intDistance', 25)">+</button>
                             </div>
                         </div>
                         <div class="field-6">
@@ -1181,12 +1259,12 @@
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                                <option value="5">5</option>
+                                <option value="5" selected>5</option>
                                 <option value="6">6</option>
                                 <option value="7">7</option>
                                 <option value="8">8</option>
                                 <option value="9">9</option>
-                                <option value="10" selected>10</option>
+                                <option value="10">10</option>
                                 <option value="other">Other...</option>
                             </select>
                             <div class="pill-grid" id="restRepeatsPills" data-select="restRepeatsSel">
@@ -1194,21 +1272,23 @@
                                 <button type="button" class="pill-btn" data-value="2">2</button>
                                 <button type="button" class="pill-btn" data-value="3">3</button>
                                 <button type="button" class="pill-btn" data-value="4">4</button>
-                                <button type="button" class="pill-btn" data-value="5">5</button>
+                                <button type="button" class="pill-btn active" data-value="5">5</button>
                                 <button type="button" class="pill-btn" data-value="6">6</button>
                                 <button type="button" class="pill-btn" data-value="7">7</button>
                                 <button type="button" class="pill-btn" data-value="8">8</button>
                                 <button type="button" class="pill-btn" data-value="9">9</button>
-                                <button type="button" class="pill-btn active" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="10">10</button>
                                 <button type="button" class="pill-btn" data-value="other">Other...</button>
                             </div>
                         </div>
                         <div class="field-6 hidden" id="restRepeatsCustomContainer">
                             <label for="restRepeats">Custom Times</label>
                             <div class="stepper-wrap">
-                                <button type="button" class="stepper-btn" onclick="stepInput('restRepeats', -1)">−</button>
-                                <input id="restRepeats" type="number" min="1" value="10" />
-                                <button type="button" class="stepper-btn" onclick="stepInput('restRepeats', 1)">+</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('restRepeats', -1)">−</button>
+                                <input id="restRepeats" type="number" min="1" value="5" />
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('restRepeats', 1)">+</button>
                             </div>
                         </div>
                         <div class="field-6">
@@ -1231,9 +1311,11 @@
                         <div class="field-6 hidden" id="restDistanceCustomContainer">
                             <label for="restDistance">Custom Distance (m/yd)</label>
                             <div class="stepper-wrap">
-                                <button type="button" class="stepper-btn" onclick="stepInput('restDistance', -25)">−</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('restDistance', -25)">−</button>
                                 <input id="restDistance" type="number" min="0" step="25" value="100" />
-                                <button type="button" class="stepper-btn" onclick="stepInput('restDistance', 25)">+</button>
+                                <button type="button" class="stepper-btn"
+                                    onclick="stepInput('restDistance', 25)">+</button>
                             </div>
                         </div>
                         <div class="field-6">
@@ -1370,7 +1452,8 @@
                     </div>
 
                     <h3 style="margin-top: 24px;">Session History</h3>
-                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No sessions recorded yet.</div>
+                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No sessions
+                        recorded yet.</div>
                 </div>
             </section>
         </section>
@@ -1410,7 +1493,8 @@
                     <h3>Data Management (CSV)</h3>
                     <div class="button-row">
                         <button id="downloadSessionBtn" class="secondary">Export Session CSV</button>
-                        <button id="downloadSetsBtn" class="secondary" style="display: none;">Export Saved Sets CSV</button> <!-- Hidden but kept for backwards code safety -->
+                        <button id="downloadSetsBtn" class="secondary" style="display: none;">Export Saved Sets
+                            CSV</button> <!-- Hidden but kept for backwards code safety -->
                         <button id="clearHistoryBtn" class="danger">Clear History</button>
                     </div>
                     <div style="margin-top: 12px; display: none;"> <!-- Hidden but kept for CSV structure compat -->
@@ -1426,9 +1510,11 @@
                     </div>
 
                     <h3>Shortcuts</h3>
-                    <div class="notice">Space = Finish Lap / Lap Stopwatch<br />Enter = Start Set / Start Stopwatch<br />S = Stop<br />P = Pause<br />R = Reset</div>
+                    <div class="notice">Space = Finish Lap / Lap Stopwatch<br />Enter = Start Set / Start
+                        Stopwatch<br />S = Stop<br />P = Pause<br />R = Reset</div>
                     <h3>Privacy</h3>
-                    <div class="notice">No server. Settings and history stay in this browser using localStorage. CSV exports and JSON backups are stored locally on your device.</div>
+                    <div class="notice">No server. Settings and history stay in this browser using localStorage. CSV
+                        exports and JSON backups are stored locally on your device.</div>
                 </div>
             </section>
         </section>
@@ -1555,62 +1641,90 @@
         };
 
         const PACE_ACHIEVEMENTS = [
-            { minVal: 180, maxVal: Infinity, achievements: [
-                { name: "Scenic Splash", region: "Pool", msg: "Calm, smooth and majestic. Speed is not the only sparkle." },
-                { name: "Lazy River Legend", region: "Thailand", msg: "Relaxed Thai river energy. Peaceful, floaty, fabulous." }
-            ]},
-            { minVal: 165, maxVal: 180, achievements: [
-                { name: "Canal Cruiser", region: "UK", msg: "Steady pace. Narrowboat energy, but wetter." },
-                { name: "Harbour Breeze", region: "Malta", msg: "Smooth Mediterranean movement. The harbour approves." }
-            ]},
-            { minVal: 150, maxVal: 165, achievements: [
-                { name: "Longtail Cruiser", region: "Thailand", msg: "You are cruising now. Very aquatic. Very composed." },
-                { name: "Langkawi Glide", region: "Malaysia", msg: "Island rhythm unlocked. Palm-tree pace." }
-            ]},
-            { minVal: 135, maxVal: 150, achievements: [
-                { name: "Harbour Cruiser", region: "Malta", msg: "Solid pace. You are becoming suspiciously ferry-like." },
-                { name: "Phuket Paddle Power", region: "Thailand", msg: "Beach pace with bonus sparkle." }
-            ]},
-            { minVal: 120, maxVal: 135, achievements: [
-                { name: "Sliema Shuttle", region: "Malta", msg: "Strong cruising speed. Valletta to Sliema energy unlocked." },
-                { name: "Penang Ferry Fighter", region: "Malaysia", msg: "Ferry energy, but with arms." }
-            ]},
-            { minVal: 110, maxVal: 120, achievements: [
-                { name: "River Racer", region: "UK", msg: "The river-swim fantasy is becoming believable." },
-                { name: "Phi Phi Flyer", region: "Thailand", msg: "Tropical speed with dramatic bubbles." }
-            ]},
-            { minVal: 100, maxVal: 110, achievements: [
-                { name: "Channel Chaser", region: "UK", msg: "There is proper speed in the water today." },
-                { name: "Krabi Kick", region: "Thailand", msg: "Limestone cliff energy, but fast." }
-            ]},
-            { minVal: 90, maxVal: 100, achievements: [
-                { name: "Sea Taxi Supreme", region: "Malta", msg: "Not a boat. Definitely transport." },
-                { name: "Tuk-Tuk Torpedo", region: "Thailand", msg: "Fast, chaotic, iconic. Somehow still swimming." }
-            ]},
-            { minVal: 80, maxVal: 90, achievements: [
-                { name: "Alcatraz Alert", region: "USA", msg: "The prison guards are checking the water." },
-                { name: "Bangkok Bullet", region: "Thailand", msg: "Chao Phraya speed fantasy unlocked." }
-            ]},
-            { minVal: 75, maxVal: 80, achievements: [
-                { name: "Bosphorus Bullet", region: "Europe/Asia", msg: "Cross-continent energy, even in a pool." },
-                { name: "Andaman Arrow", region: "Thailand", msg: "Tropical speed. Ocean drama. Hero bubbles." }
-            ]},
-            { minVal: 70, maxVal: 75, achievements: [
-                { name: "Chlorine Comet", region: "Pool", msg: "You did not swim through the water. You streaked through it." },
-                { name: "KL Rocket", region: "Malaysia", msg: "City speed, pool power, big energy." }
-            ]},
-            { minVal: 65, maxVal: 70, achievements: [
-                { name: "Pool Rocket", region: "Pool", msg: "That pace is spicy. The wall came at you fast." },
-                { name: "Muay Thai Splash", region: "Thailand", msg: "Fast, sharp and full of fight." }
-            ]},
-            { minVal: 60, maxVal: 65, achievements: [
-                { name: "Aquatic Missile", region: "Pool", msg: "The water did not know what hit it." },
-                { name: "Siam Speed Demon", region: "Thailand", msg: "Thailand mode, but make it rapid." }
-            ]},
-            { minVal: 0, maxVal: 60, achievements: [
-                { name: "Elite Dream Machine", region: "Elite", msg: "Sub-minute pace. Welcome to the fantasy race screen." },
-                { name: "Thai Torpedo", region: "Thailand", msg: "Tropical lightning. The pool is still processing it." }
-            ]}
+            {
+                minVal: 180, maxVal: Infinity, achievements: [
+                    { name: "Scenic Splash", region: "Pool", msg: "Calm, smooth and majestic. Speed is not the only sparkle." },
+                    { name: "Lazy River Legend", region: "Thailand", msg: "Relaxed Thai river energy. Peaceful, floaty, fabulous." }
+                ]
+            },
+            {
+                minVal: 165, maxVal: 180, achievements: [
+                    { name: "Canal Cruiser", region: "UK", msg: "Steady pace. Narrowboat energy, but wetter." },
+                    { name: "Harbour Breeze", region: "Malta", msg: "Smooth Mediterranean movement. The harbour approves." }
+                ]
+            },
+            {
+                minVal: 150, maxVal: 165, achievements: [
+                    { name: "Longtail Cruiser", region: "Thailand", msg: "You are cruising now. Very aquatic. Very composed." },
+                    { name: "Langkawi Glide", region: "Malaysia", msg: "Island rhythm unlocked. Palm-tree pace." }
+                ]
+            },
+            {
+                minVal: 135, maxVal: 150, achievements: [
+                    { name: "Harbour Cruiser", region: "Malta", msg: "Solid pace. You are becoming suspiciously ferry-like." },
+                    { name: "Phuket Paddle Power", region: "Thailand", msg: "Beach pace with bonus sparkle." }
+                ]
+            },
+            {
+                minVal: 120, maxVal: 135, achievements: [
+                    { name: "Sliema Shuttle", region: "Malta", msg: "Strong cruising speed. Valletta to Sliema energy unlocked." },
+                    { name: "Penang Ferry Fighter", region: "Malaysia", msg: "Ferry energy, but with arms." }
+                ]
+            },
+            {
+                minVal: 110, maxVal: 120, achievements: [
+                    { name: "River Racer", region: "UK", msg: "The river-swim fantasy is becoming believable." },
+                    { name: "Phi Phi Flyer", region: "Thailand", msg: "Tropical speed with dramatic bubbles." }
+                ]
+            },
+            {
+                minVal: 100, maxVal: 110, achievements: [
+                    { name: "Channel Chaser", region: "UK", msg: "There is proper speed in the water today." },
+                    { name: "Krabi Kick", region: "Thailand", msg: "Limestone cliff energy, but fast." }
+                ]
+            },
+            {
+                minVal: 90, maxVal: 100, achievements: [
+                    { name: "Sea Taxi Supreme", region: "Malta", msg: "Not a boat. Definitely transport." },
+                    { name: "Tuk-Tuk Torpedo", region: "Thailand", msg: "Fast, chaotic, iconic. Somehow still swimming." }
+                ]
+            },
+            {
+                minVal: 80, maxVal: 90, achievements: [
+                    { name: "Alcatraz Alert", region: "USA", msg: "The prison guards are checking the water." },
+                    { name: "Bangkok Bullet", region: "Thailand", msg: "Chao Phraya speed fantasy unlocked." }
+                ]
+            },
+            {
+                minVal: 75, maxVal: 80, achievements: [
+                    { name: "Bosphorus Bullet", region: "Europe/Asia", msg: "Cross-continent energy, even in a pool." },
+                    { name: "Andaman Arrow", region: "Thailand", msg: "Tropical speed. Ocean drama. Hero bubbles." }
+                ]
+            },
+            {
+                minVal: 70, maxVal: 75, achievements: [
+                    { name: "Chlorine Comet", region: "Pool", msg: "You did not swim through the water. You streaked through it." },
+                    { name: "KL Rocket", region: "Malaysia", msg: "City speed, pool power, big energy." }
+                ]
+            },
+            {
+                minVal: 65, maxVal: 70, achievements: [
+                    { name: "Pool Rocket", region: "Pool", msg: "That pace is spicy. The wall came at you fast." },
+                    { name: "Muay Thai Splash", region: "Thailand", msg: "Fast, sharp and full of fight." }
+                ]
+            },
+            {
+                minVal: 60, maxVal: 65, achievements: [
+                    { name: "Aquatic Missile", region: "Pool", msg: "The water did not know what hit it." },
+                    { name: "Siam Speed Demon", region: "Thailand", msg: "Thailand mode, but make it rapid." }
+                ]
+            },
+            {
+                minVal: 0, maxVal: 60, achievements: [
+                    { name: "Elite Dream Machine", region: "Elite", msg: "Sub-minute pace. Welcome to the fantasy race screen." },
+                    { name: "Thai Torpedo", region: "Thailand", msg: "Tropical lightning. The pool is still processing it." }
+                ]
+            }
         ];
 
         const SPRINT_25_ACHIEVEMENTS = [
@@ -1755,7 +1869,7 @@
             return appData.currentSet[0] || null;
         }
 
-        window.stepInput = function(id, delta) {
+        window.stepInput = function (id, delta) {
             const input = $(id);
             if (!input) return;
             const min = Number(input.getAttribute("min") ?? 0);
@@ -1793,10 +1907,10 @@
             const selectEl = $(selectId);
             const inputEl = $(inputId);
             if (!selectEl || !inputEl) return;
-            
+
             const val = value ?? defaultVal;
             inputEl.value = val;
-            
+
             let hasOption = false;
             for (let i = 0; i < selectEl.options.length; i++) {
                 if (selectEl.options[i].value === String(val)) {
@@ -1804,7 +1918,7 @@
                     break;
                 }
             }
-            
+
             if (hasOption) {
                 selectEl.value = String(val);
             } else {
@@ -1815,7 +1929,7 @@
 
         function renderForms() {
             // Pre-fill Interval Form
-            prefillSelectOrInput("intRepeatsSel", "intRepeats", "intRepeatsCustomContainer", appData.settings.lastIntervalRepeats, 10);
+            prefillSelectOrInput("intRepeatsSel", "intRepeats", "intRepeatsCustomContainer", appData.settings.lastIntervalRepeats, 5);
             prefillSelectOrInput("intDistanceSel", "intDistance", "intDistanceCustomContainer", appData.settings.lastIntervalDistance, 100);
             $("intStroke").value = appData.settings.lastIntervalStroke ?? "Free";
             $("intIntervalSel").value = appData.settings.lastIntervalType ?? "2:00";
@@ -1824,7 +1938,7 @@
             toggleCustomInput("intIntervalSel", "intIntervalCustomContainer");
 
             // Pre-fill Rest Form
-            prefillSelectOrInput("restRepeatsSel", "restRepeats", "restRepeatsCustomContainer", appData.settings.lastRestRepeats, 10);
+            prefillSelectOrInput("restRepeatsSel", "restRepeats", "restRepeatsCustomContainer", appData.settings.lastRestRepeats, 5);
             prefillSelectOrInput("restDistanceSel", "restDistance", "restDistanceCustomContainer", appData.settings.lastRestDistance, 100);
             $("restStroke").value = appData.settings.lastRestStroke ?? "Free";
             $("restTimeSel").value = appData.settings.lastRestType ?? "0:30";
@@ -1895,22 +2009,22 @@
 
         function getAchievementsForSession(session) {
             if (!session || !session.length) return [];
-            
+
             const results = session.filter(row => row.swimSeconds !== undefined && row.skipped !== true);
             if (!results.length) return [];
-            
+
             const totalDistance = results.reduce((sum, row) => sum + Number(row.distance || 0), 0);
             const totalTime = results.reduce((sum, row) => sum + Number(row.swimSeconds || 0), 0);
             const avgPace100 = totalDistance > 0 ? (totalTime / totalDistance) * 100 : 0;
-            
+
             const achievements = [];
             const seed = getSessionSeed(session);
-            
+
             if (DISTANCE_ACHIEVEMENTS[totalDistance]) {
                 const item = pickSeededItem(DISTANCE_ACHIEVEMENTS[totalDistance], seed);
                 if (item) achievements.push({ ...item, type: "distance", category: "Distance" });
             }
-            
+
             if (totalDistance > 0) {
                 const paceRange = PACE_ACHIEVEMENTS.find(range => avgPace100 >= range.minVal && avgPace100 < range.maxVal);
                 if (paceRange && paceRange.achievements && paceRange.achievements.length) {
@@ -1918,38 +2032,38 @@
                     if (item) achievements.push({ ...item, type: "speed", category: "Speed" });
                 }
             }
-            
+
             const laps25 = results.filter(row => row.distance === 25);
             if (laps25.length) {
                 const fastest25 = Math.min(...laps25.map(row => row.swimSeconds));
                 const badge = SPRINT_25_ACHIEVEMENTS.find(b => fastest25 <= b.maxTime);
                 if (badge) achievements.push({ ...badge, type: "speed", category: "25m Sprint" });
             }
-            
+
             const laps50 = results.filter(row => row.distance === 50);
             if (laps50.length) {
                 const fastest50 = Math.min(...laps50.map(row => row.swimSeconds));
                 const badge = SPRINT_50_ACHIEVEMENTS.find(b => fastest50 <= b.maxTime);
                 if (badge) achievements.push({ ...badge, type: "speed", category: "50m Sprint" });
             }
-            
+
             const matchedCombo = COMBO_ACHIEVEMENTS.find(combo => totalDistance === combo.dist && totalTime <= combo.maxTime);
             if (matchedCombo) {
                 achievements.push({ ...matchedCombo, type: "combo", category: "Combo" });
             }
-            
+
             return achievements;
         }
 
         function renderAchievementsHTML(achievements) {
             if (!achievements || !achievements.length) return "";
-            
+
             const badgesHtml = achievements.map(ach => {
                 let emoji = "🏅";
                 if (ach.type === "distance") emoji = "📍";
                 else if (ach.type === "speed") emoji = "⚡";
                 else if (ach.type === "combo") emoji = "🔥";
-                
+
                 return `
                 <div class="achievement-badge ${ach.type}">
                     <span class="emoji">${emoji}</span>
@@ -1958,7 +2072,7 @@
                     <span class="achievement-desc">— ${escapeHtml(ach.msg)}</span>
                 </div>`;
             }).join("");
-            
+
             return `
             <div style="margin-top:12px;">
                 <strong style="color: var(--accent); font-size:0.95rem;">Achievements Unlocked:</strong>
@@ -1969,19 +2083,19 @@
         }
 
         function getNextMilestoneMotivation(currentDistance, lapDistance) {
-            const milestones = Object.keys(DISTANCE_ACHIEVEMENTS).map(Number).sort((a,b) => a-b);
+            const milestones = Object.keys(DISTANCE_ACHIEVEMENTS).map(Number).sort((a, b) => a - b);
             const targetDistance = milestones.find(m => m > currentDistance);
             if (!targetDistance) return "";
-            
+
             const remaining = targetDistance - currentDistance;
             const percent = Math.floor((currentDistance / targetDistance) * 100);
-            
+
             if (percent < 70 && targetDistance > 100) return "";
 
             const lapsNeeded = Math.ceil(remaining / lapDistance);
             const candidates = DISTANCE_ACHIEVEMENTS[targetDistance];
             if (!candidates || !candidates.length) return "";
-            
+
             const seed = currentDistance + targetDistance;
             const chosen = pickSeededItem(candidates, seed);
             if (!chosen) return "";
@@ -2024,18 +2138,18 @@
             const distance = Math.max(0, parseInt($("intDistance").value) || 100);
             const stroke = $("intStroke").value;
             const notes = $("intNotes").value.trim();
-            
+
             let intervalStr = $("intIntervalSel").value;
             if (intervalStr === "other") {
                 intervalStr = $("intIntervalCustom").value.trim();
             }
-            
+
             const intervalSeconds = parseTimeToSeconds(intervalStr);
             if (intervalSeconds <= 0) {
                 alert("Please enter a valid interval duration (e.g. 2:00 or 90).");
                 return;
             }
-            
+
             // Save settings presets
             appData.settings.lastIntervalRepeats = repeats;
             appData.settings.lastIntervalDistance = distance;
@@ -2044,7 +2158,7 @@
             appData.settings.lastIntervalCustom = $("intIntervalCustom").value.trim();
             appData.settings.lastIntervalNotes = notes;
             saveData();
-            
+
             appData.currentSet = [{
                 setName: "Interval Set",
                 repeats: repeats,
@@ -2054,7 +2168,7 @@
                 intervalSeconds: intervalSeconds,
                 notes: notes
             }];
-            
+
             startSet();
         }
 
@@ -2063,12 +2177,12 @@
             const distance = Math.max(0, parseInt($("restDistance").value) || 100);
             const stroke = $("restStroke").value;
             const notes = $("restNotes").value.trim();
-            
+
             let restStr = $("restTimeSel").value;
             if (restStr === "other") {
                 restStr = $("restTimeCustom").value.trim();
             }
-            
+
             let restSeconds = 0;
             if (restStr !== "choice") {
                 restSeconds = parseTimeToSeconds(restStr);
@@ -2077,7 +2191,7 @@
                     return;
                 }
             }
-            
+
             // Save settings presets
             appData.settings.lastRestRepeats = repeats;
             appData.settings.lastRestDistance = distance;
@@ -2086,7 +2200,7 @@
             appData.settings.lastRestCustom = $("restTimeCustom").value.trim();
             appData.settings.lastRestNotes = notes;
             saveData();
-            
+
             appData.currentSet = [{
                 setName: "Rest Set",
                 repeats: repeats,
@@ -2096,14 +2210,14 @@
                 intervalSeconds: restSeconds,
                 notes: notes
             }];
-            
+
             startSet();
         }
 
         function startSet() {
             if (!appData.currentSet.length) return;
             appData.sessionResults = [];
-            
+
             intervalState.running = true;
             intervalState.paused = false;
             intervalState.waitingForNext = false;
@@ -2111,11 +2225,11 @@
             intervalState.repeatStartMs = performance.now();
             intervalState.finishRepeatMs = 0;
             intervalState.alreadyBeeped = new Set();
-            
+
             document.body.classList.add("is-running");
             $("pauseBtn").textContent = "Pause ||";
             $("pauseBtn").style.background = "var(--blue)";
-            
+
             const firstLine = getCurrentLine();
             const banner = $("motivationalBanner");
             if (banner && firstLine) {
@@ -2127,7 +2241,7 @@
                     banner.style.display = "none";
                 }
             }
-            
+
             renderLiveLaps();
             startTicker();
             beep(880, 0.18);
@@ -2148,16 +2262,16 @@
                 finishSet();
                 return;
             }
-            
+
             const now = performance.now();
             let remaining = 0;
-            
+
             if (intervalState.waitingForNext) {
                 if (line.intervalSeconds === 0) {
                     updateTimerDisplay();
                     return;
                 }
-                
+
                 if (line.mode === "rest") {
                     const elapsedRest = (now - intervalState.finishRepeatMs) / 1000;
                     remaining = line.intervalSeconds - elapsedRest;
@@ -2165,9 +2279,9 @@
                     const elapsed = (now - intervalState.repeatStartMs) / 1000;
                     remaining = line.intervalSeconds - elapsed;
                 }
-                
+
                 handleBeeps(Math.ceil(remaining));
-                
+
                 if (remaining <= 0) {
                     nextRepeat();
                 } else {
@@ -2189,7 +2303,7 @@
 
         function finishRepeat() {
             if (!intervalState.running) return;
-            
+
             const line = getCurrentLine();
             if (!line) return;
 
@@ -2199,17 +2313,17 @@
                 }
                 return;
             }
-            
+
             const now = performance.now();
             const swimSeconds = (now - intervalState.repeatStartMs) / 1000;
-            
+
             let restSeconds = 0;
             if (line.mode === "interval") {
                 restSeconds = line.intervalSeconds - swimSeconds;
             } else if (line.mode === "rest") {
                 restSeconds = line.intervalSeconds;
             }
-            
+
             appData.sessionResults.push({
                 date: new Date().toISOString().slice(0, 10),
                 setName: line.setName,
@@ -2223,11 +2337,11 @@
                 notes: line.notes || "",
                 skipped: false
             });
-            
+
             intervalState.finishRepeatMs = now;
             saveData();
             renderLiveLaps();
-            
+
             const currentDistance = appData.sessionResults.reduce((sum, row) => sum + Number(row.distance || 0), 0);
             const banner = $("motivationalBanner");
             if (banner) {
@@ -2239,7 +2353,7 @@
                     banner.style.display = "none";
                 }
             }
-            
+
             intervalState.waitingForNext = true;
             updateTimerDisplay();
         }
@@ -2248,7 +2362,7 @@
             if (!intervalState.running) return;
             const line = getCurrentLine();
             if (!line) return;
-            
+
             appData.sessionResults.push({
                 date: new Date().toISOString().slice(0, 10),
                 setName: line.setName,
@@ -2262,7 +2376,7 @@
                 notes: line.notes || "",
                 skipped: true
             });
-            
+
             saveData();
             renderLiveLaps();
             nextRepeat();
@@ -2271,7 +2385,7 @@
         function nextRepeat() {
             const line = getCurrentLine();
             if (!line) return finishSet();
-            
+
             if (line.mode === "rest" && line.intervalSeconds === 0 && intervalState.finishRepeatMs) {
                 const now = performance.now();
                 const actualRest = (now - intervalState.finishRepeatMs) / 1000;
@@ -2283,7 +2397,7 @@
             }
 
             intervalState.waitingForNext = false;
-            
+
             if (intervalState.currentRepeat < Number(line.repeats)) {
                 intervalState.currentRepeat += 1;
                 intervalState.repeatStartMs = performance.now();
@@ -2307,10 +2421,10 @@
             clearInterval(intervalState.timerId);
             document.body.classList.remove("is-running");
             $("timerStatus").textContent = "Stopped";
-            
+
             const banner = $("motivationalBanner");
             if (banner) banner.style.display = "none";
-            
+
             saveData();
             renderStats();
             renderSessionSummary();
@@ -2350,17 +2464,17 @@
         function updateTimerDisplay(remaining = 0) {
             const line = getCurrentLine();
             if (!line || !intervalState.running) return;
-            
+
             const now = performance.now();
             const elapsed = (now - intervalState.repeatStartMs) / 1000;
-            
+
             $("repeatInfo").textContent = `${intervalState.currentRepeat} / ${line.repeats}`;
             $("distanceInfo").textContent = `${line.distance}m`;
             $("strokeInfo").textContent = line.stroke;
-            
+
             $("intervalInfoLabel").textContent = line.mode === "rest" ? "Rest" : "Interval";
             $("intervalInfo").textContent = line.intervalSeconds === 0 ? "Choice" : formatSeconds(line.intervalSeconds);
-            
+
             if (intervalState.waitingForNext) {
                 if (line.intervalSeconds === 0) {
                     const elapsedRest = intervalState.finishRepeatMs ? (now - intervalState.finishRepeatMs) / 1000 : 0;
@@ -2383,7 +2497,7 @@
                 $("finishRepeatBtn").style.background = "";
                 $("finishRepeatBtn").style.color = "";
             }
-            
+
             $("swimTime").textContent = intervalState.waitingForNext && appData.sessionResults.length > 0
                 ? appData.sessionResults[appData.sessionResults.length - 1].swimTime
                 : formatSeconds(elapsed, true);
@@ -2679,7 +2793,7 @@
                 const targetSelectId = grid.dataset.select;
                 const selectEl = $(targetSelectId);
                 if (!selectEl) return;
-                
+
                 grid.querySelectorAll(".pill-btn").forEach(btn => {
                     btn.addEventListener("click", () => {
                         grid.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
@@ -2689,7 +2803,7 @@
                     });
                 });
             });
-            
+
             // Dropdown event listeners for custom inputs
             $("intIntervalSel").addEventListener("change", () => {
                 toggleCustomInput("intIntervalSel", "intIntervalCustomContainer");
@@ -2733,22 +2847,22 @@
                     syncPillsFromSelect(selectId, gridId);
                 });
             };
-            
+
             bindInputToSelectSync("intRepeats", "intRepeatsSel", "intRepeatsPills");
             bindInputToSelectSync("intDistance", "intDistanceSel", "intDistancePills");
             bindInputToSelectSync("restRepeats", "restRepeatsSel", "restRepeatsPills");
             bindInputToSelectSync("restDistance", "restDistanceSel", "restDistancePills");
-            
+
             // Set trigger buttons
             $("startIntervalBtn").addEventListener("click", startIntervalSet);
             $("startRestBtn").addEventListener("click", startRestSet);
-            
+
             // Running timer buttons
             $("finishRepeatBtn").addEventListener("click", finishRepeat);
             $("pauseBtn").addEventListener("click", togglePause);
             $("skipRepeatBtn").addEventListener("click", skipRepeat);
             $("stopBtn").addEventListener("click", stopSet);
-            
+
             // Settings and Backup buttons
             $("saveSettingsBtn").addEventListener("click", saveSettings);
             $("testBeepBtn").addEventListener("click", () => beep(800, 0.15));
@@ -2757,13 +2871,13 @@
             $("backupJsonBtn").addEventListener("click", backupFullJson);
             $("restoreJsonBtn").addEventListener("click", () => $("jsonImport").click());
             $("jsonImport").addEventListener("change", restoreFullJson);
-            
+
             // Manual stopwatch buttons
             $("manualStartBtn").addEventListener("click", startManual);
             $("manualLapBtn").addEventListener("click", lapManual);
             $("manualStopBtn").addEventListener("click", stopManual);
             $("manualResetBtn").addEventListener("click", resetManual);
-            
+
             document.addEventListener("keydown", handleKeyboard);
         }
 
