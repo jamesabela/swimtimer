@@ -1,4 +1,4 @@
-const CACHE_NAME = "swim-timer-v2";
+const CACHE_NAME = "swim-timer-v3";
 const ASSETS = [
   "./",
   "./index.html",
