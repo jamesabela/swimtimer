@@ -5,6 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Swim Interval Timer</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#071827" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Swim Timer" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
     <style>
         :root {
             --bg: #071827;
@@ -303,6 +309,35 @@
             padding: 12px;
             border-radius: 12px;
             line-height: 1.45;
+        }
+
+        .timer-workout-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .timer-workout-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-1px);
+        }
+        .timer-workout-card.is-selected-inactive {
+            border-color: var(--blue) !important;
+            background: rgba(0, 123, 255, 0.08) !important;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.12);
+        }
+        .timer-workout-card.is-active-running {
+            border-color: var(--accent) !important;
+            background: rgba(32, 201, 151, 0.08) !important;
+            box-shadow: 0 4px 12px rgba(32, 201, 151, 0.12);
+        }
+        .timer-workout-card.is-completed {
+            opacity: 0.5;
         }
 
         .summary-grid {
@@ -670,6 +705,203 @@
             font-size: 0.95em;
             line-height: 1.6;
         }
+
+        /* Achievements & Motivation Styles */
+        .motivational-banner {
+            background: linear-gradient(90deg, rgba(32, 201, 151, 0.15) 0%, rgba(7, 24, 39, 0.3) 100%);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-top: 14px;
+            font-size: 0.95rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(32, 201, 151, 0.05);
+            animation: pulse-border 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: rgba(32, 201, 151, 0.4); }
+            50% { border-color: rgba(32, 201, 151, 1); }
+            100% { border-color: rgba(32, 201, 151, 0.4); }
+        }
+
+        .achievement-badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, var(--panel-light) 0%, #1c4b75 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .achievement-badge.distance {
+            border-left: 4px solid var(--accent);
+        }
+
+        .achievement-badge.speed {
+            border-left: 4px solid var(--blue);
+        }
+
+        .achievement-badge.combo {
+            border-left: 4px solid var(--warning);
+        }
+
+        .achievement-badge .emoji {
+            font-size: 1rem;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .achievement-desc {
+            color: var(--muted);
+            margin-left: 4px;
+        }
+
+        /* Edit Workout Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(4, 17, 29, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .edit-workout-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .edit-workout-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            touch-action: none;
+            position: relative;
+            user-select: none;
+        }
+
+        .edit-workout-container.dragging {
+            opacity: 0.5;
+            background: rgba(32, 201, 151, 0.1);
+            border-color: var(--accent);
+            pointer-events: none;
+        }
+
+        .drag-handle {
+            cursor: grab;
+            font-size: 1.4rem;
+            color: var(--muted);
+            padding: 4px 8px;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .edit-item-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .delete-item-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 1.2rem;
+            cursor: pointer;
+            min-height: auto;
+            padding: 6px;
+            box-shadow: none;
+        }
+
+        .small-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            background: #04111d;
+            border: 1px solid var(--border);
+            color: var(--text);
+            outline: none;
+            box-sizing: border-box;
+        }
+        .small-input:focus {
+            border-color: var(--accent);
+        }
+        .small-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -733,12 +965,19 @@
                             style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.
                         </div>
                     </div>
+                    </div>
+                    <div id="motivationalBanner" class="motivational-banner" style="display: none; margin-top: 14px;"></div>
                 </div>
 
                 <div class="panel span-5">
-                    <h2>Current Set</h2>
-                    <div class="notice" id="currentSetNotice">Add set lines, or load a saved set. Then press Start Set.
+                    <h2>Today's Workout</h2>
+                    <div class="notice" id="currentSetNotice" style="margin-bottom: 12px;">No sets loaded yet.</div>
+                    <div id="timerWorkoutWrap" style="max-height: 45vh; overflow-y: auto; text-align: left; margin-bottom: 12px;"></div>
+                    <div class="button-row" style="margin-top: 12px;">
+                        <button id="editWorkoutBtn" class="secondary" style="min-height: 48px; padding: 10px 14px;">Edit Workout</button>
+                        <button id="clearWorkoutBtn" class="danger hidden-when-running" style="min-height: 48px; padding: 10px 14px;">Clear Workout</button>
                     </div>
+                </div>
             </section>
         </section>
 
@@ -824,6 +1063,7 @@
                             <div class="info-value" id="summaryDistance">0m</div>
                         </div>
                     </div>
+                    <div id="currentSessionAchievements"></div>
                     <div class="button-row" style="margin-top: 12px; margin-bottom: 24px;">
                         <button id="copyStatsTsvBtn" class="secondary">Copy Session as TSV</button>
                     </div>
@@ -838,11 +1078,12 @@
                             <div class="info-label">Total Sessions</div>
                             <div class="info-value" id="statsTotalSessions">0</div>
                         </div>
-
-                        <h3 style="margin-top: 24px;">Session History</h3>
-                        <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No
-                            sessions recorded yet.</div>
                     </div>
+
+                    <h3 style="margin-top: 24px;">Session History</h3>
+                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No
+                        sessions recorded yet.</div>
+                </div>
             </section>
         </section>
 
@@ -893,6 +1134,7 @@
                     <div class="button-row">
                         <button id="downloadSessionBtn" class="secondary">Export Session CSV</button>
                         <button id="downloadSetsBtn" class="secondary">Export Saved Sets CSV</button>
+                        <button id="addDefaultSetsBtn" class="secondary">Add Default Sets</button>
                         <button id="clearSavedSetsBtn" class="danger">Clear Library</button>
                         <button id="clearHistoryBtn" class="danger">Clear History</button>
                     </div>
@@ -923,6 +1165,32 @@
         <div class="footer-note">First draft - simple, local, CSV-friendly and editable.</div>
     </main>
 
+    <!-- Edit Workout Modal -->
+    <div id="editWorkoutModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Edit Today's Workout</h3>
+                <button type="button" class="delete-item-btn" id="closeWorkoutEditorX" style="font-size: 1.5rem; font-weight: bold; min-height: auto; padding: 0;">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="notice" style="margin-bottom: 12px; font-size: 0.9em;">
+                    Drag the handle ☰ to reorder sets. Tap ✕ to delete.
+                </div>
+                <div id="editWorkoutList" class="edit-workout-list"></div>
+                
+                <div style="margin-top: 20px;">
+                    <label for="editorAddSetSelect"><strong>Add set from library</strong></label>
+                    <select id="editorAddSetSelect" style="margin-top: 6px;">
+                        <option value="">-- Choose Set --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveWorkoutEditorBtn" style="flex: 1; min-height: 48px; padding: 10px; background: var(--accent); color: #06131f;">Done</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Swim Interval Timer - first draft
         // Everything is kept in this one file for simple editing and sharing.
@@ -930,6 +1198,228 @@
         const STORAGE_KEY = "swimIntervalTimerDraft";
 
         const strokes = ["Free", "Back", "Breast", "Fly", "IM", "Kick", "Pull", "Drill", "Choice"];
+
+        const DISTANCE_ACHIEVEMENTS = {
+            100: [
+                { name: "Splash Starter", region: "Pool", msg: "The journey begins. The water is nervous." },
+                { name: "Longtail Launch", region: "Thailand", msg: "First splash complete. The imaginary longtail boat is watching." }
+            ],
+            200: [
+                { name: "Warm-Up Wonder", region: "Pool", msg: "Tiny waves, big energy." },
+                { name: "Kampung Current", region: "Malaysia", msg: "A short swim with tropical river vibes." }
+            ],
+            250: [
+                { name: "Ten-Length Talent", region: "Pool", msg: "Ten lengths in a 25 m pool. Small badge, strong vibes." },
+                { name: "Village Pond Hero", region: "UK", msg: "A tiny British swim adventure. Tea afterwards is compulsory." }
+            ],
+            400: [
+                { name: "IM Spark", region: "Pool", msg: "Enough distance for a full 400 m IM. Four strokes, one legend." },
+                { name: "Floating Market Glide", region: "Thailand", msg: "You have glided through floating-market fantasy waters." }
+            ],
+            500: [
+                { name: "Blue Lagoon Paddle", region: "Malta", msg: "A mini Comino-style swim. Tourist mode activated." },
+                { name: "Phuket Beach Paddle", region: "Thailand", msg: "Half a kilometre of tropical beach energy. Sunscreen not included." },
+                { name: "Langkawi Lagoon", region: "Malaysia", msg: "Island swim vibes unlocked. The palm trees approve." }
+            ],
+            600: [
+                { name: "Malta Mini Crossing", region: "Malta", msg: "Small harbour-crossing energy. Very Mediterranean." },
+                { name: "Krabi Karst Cruiser", region: "Thailand", msg: "Limestone cliffs, clear water and chlorine. Beautifully confusing." }
+            ],
+            750: [
+                { name: "Sprint Tri Star", region: "Triathlon", msg: "You swam the distance of a sprint triathlon swim. Triathletes are watching." },
+                { name: "Phi Phi Splash", region: "Thailand", msg: "You have unlocked island-hopping imagination mode." }
+            ],
+            800: [
+                { name: "River Rookie", region: "UK", msg: "A proper little river-swim distance. Very brave, very British." },
+                { name: "Melaka River Mood", region: "Malaysia", msg: "Historic river energy, but without the boats." }
+            ],
+            1000: [
+                { name: "Sliema Ferry Dodger", region: "Malta", msg: "Valletta to Sliema energy unlocked. The ferry has competition." },
+                { name: "Kilometre Royalty", region: "Pool", msg: "One kilometre complete. The pool bows politely." },
+                { name: "Thai Island Hopper", region: "Thailand", msg: "One kilometre of tropical crossing energy. Very splashy, very scenic." },
+                { name: "Thames Mini Mission", region: "UK", msg: "A kilometre of river-swim fantasy. The ducks are impressed." }
+            ],
+            1200: [
+                { name: "Petronas Power", region: "Malaysia", msg: "More than twice the height of the Petronas Towers. Horizontally, thank goodness." },
+                { name: "Temple Bell Tide", region: "Thailand", msg: "Calm power, golden temples and one very committed swimmer." }
+            ],
+            1500: [
+                { name: "Olympic Tri Dreamer", region: "Olympic triathlon", msg: "Olympic triathlon swim distance complete. Gold medal imagination unlocked." },
+                { name: "Koh Samui Swimmer", region: "Thailand", msg: "Island-distance energy unlocked. The beach towel awaits." },
+                { name: "Tunku Abdul Rahman Splash", region: "Malaysia", msg: "Island park daydream mode activated." }
+            ],
+            1600: [
+                { name: "Henley Mile Hero", region: "UK", msg: "A classic river-mile style swim. Very British. Very brave." },
+                { name: "Chao Phraya Challenger", region: "Thailand", msg: "River-crossing fantasy unlocked. Bangkok bubbles included." }
+            ],
+            1750: [
+                { name: "Almost Two-K Royalty", region: "Pool", msg: "You are close to 2K. The crown is getting wet." },
+                { name: "Grand Harbour Glow", region: "Malta", msg: "Big harbour energy. The stone walls are clapping." }
+            ],
+            1900: [
+                { name: "Half Iron Heart", region: "Half Ironman", msg: "Half Ironman swim distance complete. Big lungs, bigger vibes." },
+                { name: "Andaman Adventurer", region: "Thailand", msg: "Serious tropical swim energy. The sea has noticed." }
+            ],
+            2000: [
+                { name: "Harbour Hopper", region: "Malta", msg: "Two kilometres complete. Island-crossing imagination unlocked." },
+                { name: "Phuket Channel Dreamer", region: "Thailand", msg: "Two kilometres of Thai sea-crossing fantasy. Longtail boats beware." },
+                { name: "Penang Harbour Pulse", region: "Malaysia", msg: "Two kilometres of Malaysian channel energy. Strong stuff." }
+            ],
+            2250: [
+                { name: "Tropical Traveller", region: "Malaysia", msg: "You have entered tropical open-water fantasy mode." },
+                { name: "Railay Rock Swimmer", region: "Thailand", msg: "Cliffs, turquoise water and heroic bubbles." }
+            ],
+            2400: [
+                { name: "Alcatraz Escaper", region: "USA", msg: "You swam far enough to escape Alcatraz. Freedom tastes like chlorine." },
+                { name: "James Bond Island Dash", region: "Thailand", msg: "Secret-agent sea-swim energy unlocked. Dramatic music recommended." }
+            ],
+            2500: [
+                { name: "Hundred-Length Legend", region: "Pool", msg: "100 lengths of a 25 m pool. The lane rope knows your name." },
+                { name: "Lake District Legend", region: "UK", msg: "Proper lake-swim fantasy. Bring a flask and courage." },
+                { name: "Maya Bay Marathon-ish", region: "Thailand", msg: "Big beach-movie energy. You are the main character." }
+            ],
+            2750: [
+                { name: "Maltese Coast Chaser", region: "Malta", msg: "The Mediterranean soundtrack is getting louder." },
+                { name: "Koh Tao Turtle Trail", region: "Thailand", msg: "Island swim energy with turtle-level wisdom." }
+            ],
+            3000: [
+                { name: "Three-K Thames Thunder", region: "UK", msg: "Three kilometres complete. That is a proper endurance swim." },
+                { name: "Thai Sea Quest", region: "Thailand", msg: "Three kilometres of tropical adventure. The beach is impressed." },
+                { name: "KL Pool Machine", region: "Malaysia", msg: "Three kilometres in the pool. Serious session behaviour." }
+            ],
+            3200: [
+                { name: "Current Crusher", region: "USA", msg: "Alcatraz with imaginary current drift. You crushed it." },
+                { name: "Andaman Current Crusher", region: "Thailand", msg: "Tropical current fantasy defeated. Hero bubbles everywhere." }
+            ],
+            3800: [
+                { name: "Iron Swim Icon", region: "Ironman", msg: "Full Ironman swim distance complete. Icon behaviour." },
+                { name: "Full Moon Swim Beast", region: "Thailand", msg: "Big island energy. The moonlight applauds." }
+            ],
+            4000: [
+                { name: "Lake Legend", region: "UK", msg: "Four kilometres. You are now in lake-monster territory." },
+                { name: "Phuket Power Swim", region: "Thailand", msg: "Four kilometres of tropical power. Absolutely massive." }
+            ],
+            4500: [
+                { name: "Malta Sea Quest", region: "Malta", msg: "Pool swimmer to sea-adventure daydreamer. Upgrade complete." },
+                { name: "Siam Sea Serpent", region: "Thailand", msg: "You are becoming part swimmer, part legend." }
+            ],
+            5000: [
+                { name: "Five-K Sea Monster", region: "Open water", msg: "Five kilometres complete. You are now part swimmer, part myth." },
+                { name: "Thai Island Ultra", region: "Thailand", msg: "Five kilometres of island-hopping glory. The ocean salutes you." }
+            ]
+        };
+
+        const PACE_ACHIEVEMENTS = [
+            { minVal: 180, maxVal: Infinity, achievements: [
+                { name: "Scenic Splash", region: "Pool", msg: "Calm, smooth and majestic. Speed is not the only sparkle." },
+                { name: "Lazy River Legend", region: "Thailand", msg: "Relaxed Thai river energy. Peaceful, floaty, fabulous." }
+            ]},
+            { minVal: 165, maxVal: 180, achievements: [
+                { name: "Canal Cruiser", region: "UK", msg: "Steady pace. Narrowboat energy, but wetter." },
+                { name: "Harbour Breeze", region: "Malta", msg: "Smooth Mediterranean movement. The harbour approves." }
+            ]},
+            { minVal: 150, maxVal: 165, achievements: [
+                { name: "Longtail Cruiser", region: "Thailand", msg: "You are cruising now. Very aquatic. Very composed." },
+                { name: "Langkawi Glide", region: "Malaysia", msg: "Island rhythm unlocked. Palm-tree pace." }
+            ]},
+            { minVal: 135, maxVal: 150, achievements: [
+                { name: "Harbour Cruiser", region: "Malta", msg: "Solid pace. You are becoming suspiciously ferry-like." },
+                { name: "Phuket Paddle Power", region: "Thailand", msg: "Beach pace with bonus sparkle." }
+            ]},
+            { minVal: 120, maxVal: 135, achievements: [
+                { name: "Sliema Shuttle", region: "Malta", msg: "Strong cruising speed. Valletta to Sliema energy unlocked." },
+                { name: "Penang Ferry Fighter", region: "Malaysia", msg: "Ferry energy, but with arms." }
+            ]},
+            { minVal: 110, maxVal: 120, achievements: [
+                { name: "River Racer", region: "UK", msg: "The river-swim fantasy is becoming believable." },
+                { name: "Phi Phi Flyer", region: "Thailand", msg: "Tropical speed with dramatic bubbles." }
+            ]},
+            { minVal: 100, maxVal: 110, achievements: [
+                { name: "Channel Chaser", region: "UK", msg: "There is proper speed in the water today." },
+                { name: "Krabi Kick", region: "Thailand", msg: "Limestone cliff energy, but fast." }
+            ]},
+            { minVal: 90, maxVal: 100, achievements: [
+                { name: "Sea Taxi Supreme", region: "Malta", msg: "Not a boat. Definitely transport." },
+                { name: "Tuk-Tuk Torpedo", region: "Thailand", msg: "Fast, chaotic, iconic. Somehow still swimming." }
+            ]},
+            { minVal: 80, maxVal: 90, achievements: [
+                { name: "Alcatraz Alert", region: "USA", msg: "The prison guards are checking the water." },
+                { name: "Bangkok Bullet", region: "Thailand", msg: "Chao Phraya speed fantasy unlocked." }
+            ]},
+            { minVal: 75, maxVal: 80, achievements: [
+                { name: "Bosphorus Bullet", region: "Europe/Asia", msg: "Cross-continent energy, even in a pool." },
+                { name: "Andaman Arrow", region: "Thailand", msg: "Tropical speed. Ocean drama. Hero bubbles." }
+            ]},
+            { minVal: 70, maxVal: 75, achievements: [
+                { name: "Chlorine Comet", region: "Pool", msg: "You did not swim through the water. You streaked through it." },
+                { name: "KL Rocket", region: "Malaysia", msg: "City speed, pool power, big energy." }
+            ]},
+            { minVal: 65, maxVal: 70, achievements: [
+                { name: "Pool Rocket", region: "Pool", msg: "That pace is spicy. The wall came at you fast." },
+                { name: "Muay Thai Splash", region: "Thailand", msg: "Fast, sharp and full of fight." }
+            ]},
+            { minVal: 60, maxVal: 65, achievements: [
+                { name: "Aquatic Missile", region: "Pool", msg: "The water did not know what hit it." },
+                { name: "Siam Speed Demon", region: "Thailand", msg: "Thailand mode, but make it rapid." }
+            ]},
+            { minVal: 0, maxVal: 60, achievements: [
+                { name: "Elite Dream Machine", region: "Elite", msg: "Sub-minute pace. Welcome to the fantasy race screen." },
+                { name: "Thai Torpedo", region: "Thailand", msg: "Tropical lightning. The pool is still processing it." }
+            ]}
+        ];
+
+        const SPRINT_25_ACHIEVEMENTS = [
+            { maxTime: 17, name: "Pocket Tuk-Tuk", region: "Thailand", msg: "Tiny distance. Huge chaotic speed." },
+            { maxTime: 20, name: "Wall Warrior", region: "UK", msg: "Wall to wall with serious intent." },
+            { maxTime: 25, name: "Mini Rocket", region: "Pool", msg: "Short, sharp, splashy brilliance." }
+        ];
+
+        const SPRINT_50_ACHIEVEMENTS = [
+            { maxTime: 35, name: "Human Speedboat", region: "Pool", msg: "That was not swimming. That was aquatic acceleration." },
+            { maxTime: 40, name: "Longtail Lightning", region: "Thailand", msg: "Other swimmers felt the ripple." },
+            { maxTime: 45, name: "Dolphin Apprentice", region: "Malaysia", msg: "Not quite dolphin, but definitely in training." },
+            { maxTime: 50, name: "Fifty Fire", region: "Thailand", msg: "Under 50 seconds. Hot lap, hot climate, hot badge." },
+            { maxTime: 55, name: "Harbour Heat", region: "Malta", msg: "That 50 m had Mediterranean zip." },
+            { maxTime: 60, name: "Minute Breaker", region: "Pool", msg: "You broke the minute. The pool clock salutes you." }
+        ];
+
+        const COMBO_ACHIEVEMENTS = [
+            { dist: 500, maxTime: 600, name: "Langkawi Lightning", region: "Malaysia", msg: "Half a kilometre in under ten. Island speed unlocked." },
+            { dist: 500, maxTime: 720, name: "Blue Lagoon Hustle", region: "Malta", msg: "Half a kilometre with Mediterranean sparkle." },
+            { dist: 500, maxTime: 900, name: "Phuket Beach Cruiser", region: "Thailand", msg: "Half a kilometre with tropical style. Smooth work." },
+            { dist: 750, maxTime: 900, name: "Phi Phi Flyer", region: "Thailand", msg: "Island-hop distance with real pace." },
+            { dist: 750, maxTime: 1200, name: "Sprint Tri Smiler", region: "Triathlon", msg: "Sprint tri swim distance done with photo energy." },
+            { dist: 1000, maxTime: 1080, name: "KL Kilometre Rocket", region: "Malaysia", msg: "Fast kilometre. Big city sparkle." },
+            { dist: 1000, maxTime: 1200, name: "Thai Island Speed Hop", region: "Thailand", msg: "One kilometre of tropical speed. The longtail boats are nervous." },
+            { dist: 1000, maxTime: 1320, name: "Thames Kilometre Glow", region: "UK", msg: "A kilometre with river-race rhythm. Lovely work." },
+            { dist: 1000, maxTime: 1500, name: "Sliema Ferry Cruiser", region: "Malta", msg: "You crossed the imaginary harbour at a smooth ferry-challenging pace." },
+            { dist: 1500, maxTime: 1620, name: "Tunku Park Threat", region: "Malaysia", msg: "Island park distance with serious pace." },
+            { dist: 1500, maxTime: 1800, name: "Koh Samui Strider", region: "Thailand", msg: "This is proper island-training territory." },
+            { dist: 1500, maxTime: 2100, name: "Olympic Tourist", region: "Olympic triathlon", msg: "You completed the Olympic tri swim distance and still had photo energy." },
+            { dist: 1600, maxTime: 1800, name: "Chao Phraya Hustle", region: "Thailand", msg: "River-crossing fantasy with Bangkok bubbles." },
+            { dist: 1600, maxTime: 2100, name: "Henley Hero", region: "UK", msg: "A river-mile style swim with elegance and effort." },
+            { dist: 1900, maxTime: 2100, name: "Penang Power Swim", region: "Malaysia", msg: "This swim had race-day channel energy." },
+            { dist: 1900, maxTime: 2400, name: "Andaman Engine", region: "Thailand", msg: "Strong pace, strong lungs, tropical glow." },
+            { dist: 1900, maxTime: 2700, name: "Half Iron Hopeful", region: "Half Ironman", msg: "Half Iron distance completed with dignity and sparkle." },
+            { dist: 2000, maxTime: 2400, name: "Penang Harbour Hero", region: "Malaysia", msg: "The imaginary harbour crossing had proper pace." },
+            { dist: 2000, maxTime: 2700, name: "Phuket Channel Glow", region: "Thailand", msg: "Two kilometres with island energy and serious rhythm." },
+            { dist: 2000, maxTime: 3000, name: "Harbour Cruiser", region: "Malta", msg: "Two kilometres of Maltese harbour fantasy, completed with style." },
+            { dist: 2400, maxTime: 3000, name: "Alcatraz Flyer", region: "USA", msg: "The guards never stood a chance." },
+            { dist: 2400, maxTime: 3300, name: "James Bond Breakout", region: "Thailand", msg: "Secret-agent sea-swim energy. Freedom, but tropical." },
+            { dist: 2400, maxTime: 3600, name: "Alcatraz Achiever", region: "USA", msg: "You escaped Alcatraz with steady style." },
+            { dist: 2500, maxTime: 3000, name: "Lake District Charger", region: "UK", msg: "100 lengths with lake-monster swagger." },
+            { dist: 2500, maxTime: 3300, name: "Maya Bay Momentum", region: "Thailand", msg: "Big beach-movie energy with serious pace." },
+            { dist: 2500, maxTime: 3600, name: "Hundred-Length Hero", region: "Pool", msg: "100 lengths in under an hour. Wonderful work." },
+            { dist: 3000, maxTime: 3600, name: "KL 3K Beast", region: "Malaysia", msg: "Three kilometres in under an hour. Beast mode confirmed." },
+            { dist: 3000, maxTime: 4200, name: "Thai Sea Engine", region: "Thailand", msg: "Tropical endurance with a strong rhythm." },
+            { dist: 3000, maxTime: 4500, name: "3K River Rambler", region: "UK", msg: "Three kilometres complete. Strong, steady, scenic." },
+            { dist: 3800, maxTime: 4500, name: "Iron Harbour Icon", region: "Malta", msg: "Big distance. Big pace. Big Mediterranean drama." },
+            { dist: 3800, maxTime: 5100, name: "Full Moon Iron Engine", region: "Thailand", msg: "Big island energy, big lungs, big badge." },
+            { dist: 3800, maxTime: 5700, name: "Iron Survivor", region: "Ironman", msg: "Iron swim distance conquered. Huge achievement." },
+            { dist: 5000, maxTime: 6300, name: "5K Sea Monster", region: "Open water", msg: "Five kilometres with serious speed. Mythical behaviour." },
+            { dist: 5000, maxTime: 7200, name: "Thai Island Ultra", region: "Thailand", msg: "Five kilometres at a strong pace. Outstanding." },
+            { dist: 5000, maxTime: 8100, name: "5K Finisher", region: "Open water", msg: "Five kilometres completed. Massive swim." }
+        ];
 
         let appData = {
             savedSets: [],
@@ -1042,13 +1532,14 @@
             const notice = $("currentSetNotice");
             if (!appData.currentSet.length) {
                 wrap.innerHTML = `<div class="notice">No set lines yet.</div>`;
-                notice.textContent = "Add set lines below, or load a saved set. Then press Start Set.";
+                if (notice) notice.textContent = "Add set lines below, or load a saved set. Then press Start Set.";
+                renderTimerWorkout();
                 return;
             }
 
             const totalDistance = appData.currentSet.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
             const setNames = [...new Set(appData.currentSet.map(line => line.setName))].join(", ");
-            notice.textContent = `${setNames} - ${getTotalRepeats()} repeats - ${totalDistance}m total`;
+            if (notice) notice.textContent = `${setNames} - ${getTotalRepeats()} repeats - ${totalDistance}m total`;
 
             const rows = appData.currentSet.map((line, index) => {
                 let intervalDisplay = formatSeconds(line.intervalSeconds);
@@ -1079,7 +1570,117 @@
           <tbody>${rows}</tbody>
         </table>
       `;
+            renderTimerWorkout();
         }
+
+        function renderTimerWorkout() {
+            const wrap = $("timerWorkoutWrap");
+            if (!wrap) return;
+            if (!appData.currentSet.length) {
+                wrap.innerHTML = `<div class="notice">Add default sets in Settings, use the Builder, or browse the Sets library to compile your workout!</div>`;
+                return;
+            }
+
+            const blocks = groupWorkoutIntoBlocks();
+            const rows = blocks.map((block, blockIdx) => {
+                const originalIndices = block.lines.map(l => l.originalIndex);
+                
+                const isSelected = intervalState.currentLineIndex !== undefined && intervalState.currentLineIndex !== null && originalIndices.includes(intervalState.currentLineIndex);
+                const isActive = intervalState.running && isSelected;
+                const isCompleted = intervalState.running && originalIndices.every(idx => idx < intervalState.currentLineIndex);
+                
+                let cardClass = "timer-workout-card";
+                if (isActive) {
+                    cardClass += " is-active-running";
+                } else if (isSelected && !intervalState.running) {
+                    cardClass += " is-selected-inactive";
+                } else if (isCompleted) {
+                    cardClass += " is-completed";
+                }
+                
+                const linesHtml = block.lines.map(line => {
+                    const idx = line.originalIndex;
+                    const isActiveLine = intervalState.running && intervalState.currentLineIndex === idx;
+                    const isCompletedLine = intervalState.running && idx < intervalState.currentLineIndex;
+                    
+                    let lineStyle = "padding: 6px; border-radius: 6px; margin: 4px 0; font-size: 0.9em;";
+                    let indicator = "";
+                    if (isActiveLine) {
+                        lineStyle += " background: rgba(32, 201, 151, 0.15); font-weight: bold; border-left: 3px solid var(--accent); padding-left: 8px;";
+                        indicator = "▶ ";
+                    } else if (isCompletedLine) {
+                        lineStyle += " opacity: 0.6; text-decoration: line-through;";
+                        indicator = "✓ ";
+                    }
+                    
+                    let intervalDisplay = formatSeconds(line.intervalSeconds);
+                    if (line.mode === "rest") intervalDisplay = `${intervalDisplay} Rest`;
+                    else if (line.mode === "continuous") intervalDisplay = `Continuous`;
+                    else if (line.mode === "ready") intervalDisplay = `Ready (Manual)`;
+                    
+                    return `
+                    <div style="${lineStyle}">
+                        ${indicator}<strong>${line.repeats} x ${line.distance}m ${escapeHtml(line.stroke)}</strong> on ${intervalDisplay}
+                        ${line.notes ? `<br/><span style="font-size: 0.85em; color: var(--muted);">${escapeHtml(line.notes)}</span>` : ""}
+                    </div>`;
+                }).join("");
+
+                const totalDist = block.lines.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
+                const repeats = block.lines.reduce((sum, line) => sum + Number(line.repeats), 0);
+
+                const startBtnText = isActive ? "Restart" : "Start";
+                const startBtnClass = isActive ? "small-action secondary" : "small-action";
+                const startBtnStyle = isActive ? "min-height: auto; padding: 4px 10px; font-size: 0.85em;" : "background: var(--accent); color: #06131f; min-height: auto; padding: 4px 10px; font-size: 0.85em;";
+
+                return `
+                <div class="${cardClass}" onclick="selectBlock(${originalIndices[0]}, event)">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <div>
+                            <strong style="font-size: 1.1em; color: ${isActive ? 'var(--accent)' : (isSelected && !intervalState.running ? 'var(--blue)' : 'var(--text)')};">
+                                ${escapeHtml(block.setName)}
+                            </strong>
+                            <div style="font-size: 0.8em; color: var(--muted); margin-top: 2px;">
+                                ${block.lines.length} lines • ${repeats} reps • ${totalDist}m
+                            </div>
+                        </div>
+                        <div class="button-row" style="margin-top: 0; min-height: auto; gap: 6px;" onclick="event.stopPropagation();">
+                            <button class="${startBtnClass}" style="${startBtnStyle}" onclick="selectAndStartBlock(${originalIndices[0]})">${startBtnText}</button>
+                            <button class="small-action secondary" style="min-height: auto; padding: 4px 10px; font-size: 0.85em;" onclick="openWorkoutEditorForBlock(${blockIdx})">Edit</button>
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px;">
+                        ${linesHtml}
+                    </div>
+                </div>`;
+            }).join("");
+            
+            wrap.innerHTML = rows;
+        }
+
+        window.selectBlock = function(startIndex, event) {
+            intervalState.currentLineIndex = startIndex;
+            intervalState.currentRepeat = 1;
+            updateTimerDisplay();
+            renderTimerWorkout();
+        };
+
+        window.selectAndStartBlock = function(startIndex) {
+            if (intervalState.running) {
+                if (!confirm("Are you sure you want to jump to this set and start it? Current progress will be lost.")) {
+                    return;
+                }
+            }
+            intervalState.currentLineIndex = startIndex;
+            startSet(startIndex);
+        };
+
+        window.openWorkoutEditorForBlock = function(blockIdx) {
+            openWorkoutEditor();
+            const el = $(`inlineEditBlock-${blockIdx}`);
+            if (el) {
+                el.style.display = "block";
+            }
+        };
 
         function renderSavedSets() {
             const wrap = $("savedSetsWrap");
@@ -1094,11 +1695,11 @@
                 const repeats = lines.reduce((sum, line) => sum + Number(line.repeats || 0), 0);
                 const distance = lines.reduce((sum, line) => sum + Number(line.repeats || 0) * Number(line.distance || 0), 0);
                 return `
-          <div class="notice" style="margin-bottom: 10px;">
+           <div class="notice" style="margin-bottom: 10px;">
             <strong>${escapeHtml(name)}</strong><br />
             ${lines.length} line(s), ${repeats} repeats, ${distance}m<br />
             <div class="button-row">
-              <button class="small-action secondary" onclick="loadSavedSet('${escapeJs(name)}')">Start This Set</button>
+              <button class="small-action secondary" onclick="addSavedSetToWorkout('${escapeJs(name)}')">Add to Today's Workout</button>
               <button class="small-action secondary" onclick="editSavedSet('${escapeJs(name)}')">Edit</button>
               <button class="small-action secondary" onclick="copySavedSet('${escapeJs(name)}')">Copy</button>
               <button class="small-action danger" onclick="deleteSavedSet('${escapeJs(name)}')">Delete</button>
@@ -1117,6 +1718,119 @@
             $("interval").value = appData.settings.lastInterval;
         }
 
+        function getSeededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function pickSeededItem(array, seed) {
+            if (!array || !array.length) return null;
+            const index = Math.floor(getSeededRandom(seed) * array.length);
+            return array[index];
+        }
+
+        function getSessionSeed(session) {
+            const sum = session.reduce((total, row) => total + (row.swimSeconds || 0), 0);
+            return Math.floor(sum * 100) || 1;
+        }
+
+        function getAchievementsForSession(session) {
+            if (!session || !session.length) return [];
+            
+            const results = session.filter(row => row.swimSeconds !== undefined && row.skipped !== true);
+            if (!results.length) return [];
+            
+            const totalDistance = results.reduce((sum, row) => sum + Number(row.distance || 0), 0);
+            const totalTime = results.reduce((sum, row) => sum + Number(row.swimSeconds || 0), 0);
+            const avgPace100 = totalDistance > 0 ? (totalTime / totalDistance) * 100 : 0;
+            
+            const achievements = [];
+            const seed = getSessionSeed(session);
+            
+            if (DISTANCE_ACHIEVEMENTS[totalDistance]) {
+                const item = pickSeededItem(DISTANCE_ACHIEVEMENTS[totalDistance], seed);
+                if (item) achievements.push({ ...item, type: "distance", category: "Distance" });
+            }
+            
+            if (totalDistance > 0) {
+                const paceRange = PACE_ACHIEVEMENTS.find(range => avgPace100 >= range.minVal && avgPace100 < range.maxVal);
+                if (paceRange && paceRange.achievements && paceRange.achievements.length) {
+                    const item = pickSeededItem(paceRange.achievements, seed + 1);
+                    if (item) achievements.push({ ...item, type: "speed", category: "Speed" });
+                }
+            }
+            
+            const laps25 = results.filter(row => row.distance === 25);
+            if (laps25.length) {
+                const fastest25 = Math.min(...laps25.map(row => row.swimSeconds));
+                const badge = SPRINT_25_ACHIEVEMENTS.find(b => fastest25 <= b.maxTime);
+                if (badge) achievements.push({ ...badge, type: "speed", category: "25m Sprint" });
+            }
+            
+            const laps50 = results.filter(row => row.distance === 50);
+            if (laps50.length) {
+                const fastest50 = Math.min(...laps50.map(row => row.swimSeconds));
+                const badge = SPRINT_50_ACHIEVEMENTS.find(b => fastest50 <= b.maxTime);
+                if (badge) achievements.push({ ...badge, type: "speed", category: "50m Sprint" });
+            }
+            
+            const matchedCombo = COMBO_ACHIEVEMENTS.find(combo => totalDistance === combo.dist && totalTime <= combo.maxTime);
+            if (matchedCombo) {
+                achievements.push({ ...matchedCombo, type: "combo", category: "Combo" });
+            }
+            
+            return achievements;
+        }
+
+        function renderAchievementsHTML(achievements) {
+            if (!achievements || !achievements.length) return "";
+            
+            const badgesHtml = achievements.map(ach => {
+                let emoji = "🏅";
+                if (ach.type === "distance") emoji = "📍";
+                else if (ach.type === "speed") emoji = "⚡";
+                else if (ach.type === "combo") emoji = "🔥";
+                
+                return `
+                <div class="achievement-badge ${ach.type}">
+                    <span class="emoji">${emoji}</span>
+                    <span class="achievement-title">${escapeHtml(ach.name)}</span>
+                    <span style="font-size:0.8em; color:var(--muted);">(${escapeHtml(ach.region)})</span>
+                    <span class="achievement-desc">— ${escapeHtml(ach.msg)}</span>
+                </div>`;
+            }).join("");
+            
+            return `
+            <div style="margin-top:12px;">
+                <strong style="color: var(--accent); font-size:0.95rem;">Achievements Unlocked:</strong>
+                <div class="achievement-badge-container">
+                    ${badgesHtml}
+                </div>
+            </div>`;
+        }
+
+        function getNextMilestoneMotivation(currentDistance, lapDistance) {
+            const milestones = Object.keys(DISTANCE_ACHIEVEMENTS).map(Number).sort((a,b) => a-b);
+            const targetDistance = milestones.find(m => m > currentDistance);
+            if (!targetDistance) return "";
+            
+            const remaining = targetDistance - currentDistance;
+            const percent = Math.floor((currentDistance / targetDistance) * 100);
+            
+            if (percent < 70 && targetDistance > 100) return "";
+
+            const lapsNeeded = Math.ceil(remaining / lapDistance);
+            const candidates = DISTANCE_ACHIEVEMENTS[targetDistance];
+            if (!candidates || !candidates.length) return "";
+            
+            const seed = currentDistance + targetDistance;
+            const chosen = pickSeededItem(candidates, seed);
+            if (!chosen) return "";
+
+            const percentOff = 100 - percent;
+            return `🔥 <strong>Only ${percentOff}% more</strong> (${remaining}m / ${lapsNeeded} lap${lapsNeeded > 1 ? 's' : ''}) to unlock <strong>${chosen.name}</strong> (${chosen.region}: ${chosen.msg})`;
+        }
+
         function renderSessionSummary() {
             const results = appData.sessionResults.filter(row => row.swimSeconds !== undefined && row.skipped !== true);
             $("summaryCompleted").textContent = results.length;
@@ -1126,6 +1840,8 @@
                 $("summarySlowest").textContent = "-";
                 $("summaryAverage").textContent = "-";
                 $("summaryDistance").textContent = "0m";
+                const achWrap = $("currentSessionAchievements");
+                if (achWrap) achWrap.innerHTML = "";
                 return;
             }
 
@@ -1139,6 +1855,12 @@
             $("summarySlowest").textContent = formatSeconds(slowest, true);
             $("summaryAverage").textContent = formatSeconds(average, true);
             $("summaryDistance").textContent = `${distance}m`;
+
+            const achWrap = $("currentSessionAchievements");
+            if (achWrap) {
+                const achievements = getAchievementsForSession(appData.sessionResults);
+                achWrap.innerHTML = renderAchievementsHTML(achievements);
+            }
         }
 
         function renderLiveLaps() {
@@ -1185,6 +1907,9 @@
                     return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
                 }).join("<br />");
 
+                const achievements = getAchievementsForSession(session);
+                const achievementsHtml = renderAchievementsHTML(achievements);
+
                 return `
                 <details>
                     <summary>
@@ -1195,6 +1920,7 @@
                     </summary>
                     <div class="details-content">
                         ${lapRows}
+                        ${achievementsHtml}
                     </div>
                 </details>`;
             });
@@ -1237,6 +1963,7 @@
         function clearCurrentSet() {
             if (!confirm("Clear the current set?")) return;
             appData.currentSet = [];
+            intervalState.currentLineIndex = 0;
             saveData();
             renderAll();
         }
@@ -1254,9 +1981,14 @@
             alert(`Saved set: ${setName}`);
         }
 
-        window.loadSavedSet = function (name) {
+        window.addSavedSetToWorkout = function (name) {
             const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
-            appData.currentSet = lines.map(line => ({ ...line }));
+            const startOrder = appData.currentSet.length;
+            const copied = lines.map((line, idx) => ({ 
+                ...line, 
+                order: startOrder + idx + 1 
+            }));
+            appData.currentSet.push(...copied);
             saveData();
             renderAll();
             switchTab('timerTab');
@@ -1270,6 +2002,223 @@
             renderAll();
             switchTab('builderTab');
         };
+
+        function groupWorkoutIntoBlocks() {
+            const blocks = [];
+            let currentBlock = null;
+            
+            appData.currentSet.forEach((line, index) => {
+                if (currentBlock && currentBlock.setName === line.setName) {
+                    currentBlock.lines.push({ ...line, originalIndex: index });
+                } else {
+                    if (currentBlock) blocks.push(currentBlock);
+                    currentBlock = {
+                        setName: line.setName,
+                        lines: [{ ...line, originalIndex: index }]
+                    };
+                }
+            });
+            if (currentBlock) blocks.push(currentBlock);
+            return blocks;
+        }
+
+        function reorderWorkoutFromBlocks(newBlockOrder) {
+            if (intervalState.running) {
+                const activeLine = appData.currentSet[intervalState.currentLineIndex];
+                if (activeLine) activeLine.isActiveFlag = true;
+            }
+
+            const newLines = [];
+            let currentOrder = 1;
+            newBlockOrder.forEach(block => {
+                block.lines.forEach(line => {
+                    newLines.push({
+                        ...line,
+                        order: currentOrder++
+                    });
+                });
+            });
+            appData.currentSet = newLines;
+
+            if (intervalState.running) {
+                const newActiveIndex = appData.currentSet.findIndex(line => line.isActiveFlag);
+                if (newActiveIndex !== -1) {
+                    intervalState.currentLineIndex = newActiveIndex;
+                } else {
+                    stopSet();
+                }
+                appData.currentSet.forEach(line => delete line.isActiveFlag);
+            }
+
+            saveData();
+            renderAll();
+            renderLiveLaps();
+        }
+
+        function addSetToWorkoutFromEditor(setName) {
+            const lines = appData.savedSets.filter(line => line.setName === setName).sort((a, b) => a.order - b.order);
+            const startOrder = appData.currentSet.length;
+            const copied = lines.map((line, idx) => ({ 
+                ...line, 
+                order: startOrder + idx + 1 
+            }));
+            appData.currentSet.push(...copied);
+            saveData();
+            renderAll();
+            renderWorkoutEditorList();
+        }
+
+        window.deleteBlockFromEditor = function(blockIndex) {
+            const blocks = groupWorkoutIntoBlocks();
+            blocks.splice(blockIndex, 1);
+            reorderWorkoutFromBlocks(blocks);
+            renderWorkoutEditorList();
+        };
+
+        window.toggleEditBlockInline = function(blockIndex) {
+            const el = $(`inlineEditBlock-${blockIndex}`);
+            if (el) {
+                el.style.display = el.style.display === "none" ? "block" : "none";
+            }
+        };
+
+        function renderWorkoutEditorList() {
+            const listContainer = $("editWorkoutList");
+            const select = $("editorAddSetSelect");
+            if (!listContainer) return;
+            
+            const savedNames = [...new Set(appData.savedSets.map(line => line.setName))];
+            select.innerHTML = `<option value="">-- Choose Set --</option>` + 
+                savedNames.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
+            
+            const blocks = groupWorkoutIntoBlocks();
+            if (!blocks.length) {
+                listContainer.innerHTML = `<div class="notice">Today's workout is empty.</div>`;
+                return;
+            }
+            
+            const strokes = ["Free", "Back", "Breast", "Fly", "IM", "Kick", "Pull", "Drill", "Choice"];
+            
+            listContainer.innerHTML = blocks.map((block, index) => {
+                const totalDist = block.lines.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
+                const repeats = block.lines.reduce((sum, line) => sum + Number(line.repeats), 0);
+                
+                const linesForm = block.lines.map((line, lineIdx) => {
+                    const isInt = line.mode !== "continuous" && line.mode !== "ready";
+                    const formattedInt = isInt ? formatSeconds(line.intervalSeconds) : "-";
+                    return `
+                    <div style="margin-bottom: 12px; font-size: 0.9em; border-left: 2px solid var(--accent); padding-left: 10px;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px;">
+                            <div>
+                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Reps</label>
+                                <input type="number" class="small-input edit-rep" data-orig-idx="${line.originalIndex}" value="${line.repeats}" min="1" style="height: 32px; padding: 4px;" />
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Dist (m)</label>
+                                <input type="number" class="small-input edit-dist" data-orig-idx="${line.originalIndex}" value="${line.distance}" min="0" step="25" style="height: 32px; padding: 4px;" />
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Stroke</label>
+                                <select class="small-input edit-stroke" data-orig-idx="${line.originalIndex}" style="height: 32px; padding: 4px;">
+                                    ${strokes.map(st => `<option ${st === line.stroke ? 'selected' : ''}>${st}</option>`).join("")}
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Interval</label>
+                                <input type="text" class="small-input edit-int" data-orig-idx="${line.originalIndex}" value="${formattedInt}" ${isInt ? '' : 'disabled'} style="height: 32px; padding: 4px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Notes</label>
+                            <input type="text" class="small-input edit-notes" data-orig-idx="${line.originalIndex}" value="${escapeHtml(line.notes || '')}" style="height: 32px; padding: 4px;" />
+                        </div>
+                    </div>
+                    ${lineIdx < block.lines.length - 1 ? '<hr style="border: 0; border-top: 1px solid var(--border); margin: 8px 0;" />' : ''}
+                    `;
+                }).join("");
+                
+                return `
+                <div class="edit-workout-container" data-index="${index}" style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.02); margin-bottom: 8px;">
+                    <div class="edit-workout-item" style="border: none; border-radius: 0; background: none; margin-bottom: 0;">
+                        <div class="drag-handle" style="touch-action: none;">☰</div>
+                        <div class="edit-item-details">
+                            <strong>${escapeHtml(block.setName)}</strong><br/>
+                            <span style="font-size:0.85em; color:var(--muted);">${block.lines.length} lines, ${repeats} repeats, ${totalDist}m</span>
+                        </div>
+                        <div class="button-row" style="margin-top: 0; min-height: auto; gap: 6px;">
+                            <button class="small-action secondary" onclick="toggleEditBlockInline(${index})" style="min-height: auto; padding: 6px 10px; font-size: 0.85em;">Edit</button>
+                            <button class="delete-item-btn" onclick="deleteBlockFromEditor(${index})" style="min-height: auto; padding: 6px; box-shadow: none;">✕</button>
+                        </div>
+                    </div>
+                    <div id="inlineEditBlock-${index}" style="display: none; background: rgba(0, 0, 0, 0.2); padding: 12px; border-top: 1px solid var(--border);">
+                        ${linesForm}
+                    </div>
+                </div>`;
+            }).join("");
+            
+            setupTouchDragReordering();
+        }
+
+        function setupTouchDragReordering() {
+            const list = $("editWorkoutList");
+            const containers = list.querySelectorAll(".edit-workout-container");
+            let dragEl = null;
+            let activeIndex = -1;
+            
+            containers.forEach(container => {
+                const handle = container.querySelector(".drag-handle");
+                if (!handle) return;
+                
+                handle.addEventListener("touchstart", function(e) {
+                    dragEl = container;
+                    activeIndex = Number(container.dataset.index);
+                    dragEl.classList.add("dragging");
+                }, { passive: true });
+            });
+            
+            list.addEventListener("touchmove", function(e) {
+                if (!dragEl) return;
+                e.preventDefault();
+                
+                const touch = e.touches[0];
+                const clientY = touch.clientY;
+                
+                const target = document.elementFromPoint(touch.clientX, clientY);
+                if (!target) return;
+                
+                const sibling = target.closest(".edit-workout-container");
+                if (sibling && sibling !== dragEl) {
+                    const rect = sibling.getBoundingClientRect();
+                    const next = (clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+                    list.insertBefore(dragEl, next ? sibling.nextSibling : sibling);
+                }
+            }, { passive: false });
+            
+            function handleEnd() {
+                if (!dragEl) return;
+                dragEl.classList.remove("dragging");
+                
+                const newOrderIndexes = Array.from(list.querySelectorAll(".edit-workout-container")).map(container => Number(container.dataset.index));
+                const blocks = groupWorkoutIntoBlocks();
+                const newBlocks = newOrderIndexes.map(idx => blocks[idx]);
+                
+                reorderWorkoutFromBlocks(newBlocks);
+                dragEl = null;
+                renderWorkoutEditorList();
+            }
+            
+            list.addEventListener("touchend", handleEnd);
+            list.addEventListener("touchcancel", handleEnd);
+        }
+
+        function openWorkoutEditor() {
+            renderWorkoutEditorList();
+            $("editWorkoutModal").style.display = "flex";
+        }
+
+        function closeWorkoutEditor() {
+            $("editWorkoutModal").style.display = "none";
+        }
 
         window.copySavedSet = function (name) {
             const dateStr = new Date().toISOString().slice(0, 10);
@@ -1301,7 +2250,7 @@
             renderAll();
         }
 
-        function startSet() {
+        function startSet(startIndex = null) {
             if (!appData.currentSet.length) {
                 alert("Add or load a set first.");
                 return;
@@ -1310,7 +2259,13 @@
             intervalState.running = true;
             intervalState.paused = false;
             intervalState.waitingForNext = false;
-            intervalState.currentLineIndex = 0;
+            
+            if (typeof startIndex === "number") {
+                intervalState.currentLineIndex = startIndex;
+            } else if (intervalState.currentLineIndex === undefined || intervalState.currentLineIndex === null || intervalState.currentLineIndex >= appData.currentSet.length) {
+                intervalState.currentLineIndex = 0;
+            }
+            
             intervalState.currentRepeat = 1;
             intervalState.repeatStartMs = performance.now();
             intervalState.lineStartMs = performance.now();
@@ -1320,11 +2275,25 @@
             $("pauseBtn").textContent = "Pause ||";
             $("pauseBtn").style.background = "var(--blue)";
 
+            // Set initial motivational banner if appropriate
+            const firstLine = getCurrentLine();
+            const banner = $("motivationalBanner");
+            if (banner && firstLine) {
+                const motivation = getNextMilestoneMotivation(0, firstLine.distance);
+                if (motivation) {
+                    banner.innerHTML = motivation;
+                    banner.style.display = "flex";
+                } else {
+                    banner.style.display = "none";
+                }
+            }
+
             switchTab("timerTab");
             renderLiveLaps();
             startTicker();
             beep(880, 0.18);
             flashGo();
+            renderTimerWorkout();
         }
 
         function startTicker() {
@@ -1413,6 +2382,18 @@
             renderSessionSummary();
             renderLiveLaps();
 
+            const currentDistance = appData.sessionResults.reduce((sum, row) => sum + Number(row.distance || 0), 0);
+            const banner = $("motivationalBanner");
+            if (banner) {
+                const motivation = getNextMilestoneMotivation(currentDistance, line.distance);
+                if (motivation) {
+                    banner.innerHTML = motivation;
+                    banner.style.display = "flex";
+                } else {
+                    banner.style.display = "none";
+                }
+            }
+
             if (line.mode === "continuous") {
                 nextRepeat();
             } else if (line.mode === "ready") {
@@ -1489,6 +2470,20 @@
             beep(980, 0.24);
             flashGo();
             updateTimerDisplay();
+
+            const nextL = getCurrentLine();
+            const currentDistance = appData.sessionResults.reduce((sum, row) => sum + Number(row.distance || 0), 0);
+            const banner = $("motivationalBanner");
+            if (banner && nextL) {
+                const motivation = getNextMilestoneMotivation(currentDistance, nextL.distance);
+                if (motivation) {
+                    banner.innerHTML = motivation;
+                    banner.style.display = "flex";
+                } else {
+                    banner.style.display = "none";
+                }
+            }
+            renderTimerWorkout();
         }
 
         function stopSet() {
@@ -1501,6 +2496,11 @@
             clearInterval(intervalState.timerId);
             document.body.classList.remove("is-running");
             $("timerStatus").textContent = "Stopped";
+            
+            const banner = $("motivationalBanner");
+            if (banner) banner.style.display = "none";
+            renderTimerWorkout();
+
             saveData();
             renderStats();
         }
@@ -1551,15 +2551,20 @@
             const line = getCurrentLine();
             if (!line || !intervalState.running) {
                 if (!intervalState.running && appData.currentSet.length) {
-                    const first = appData.currentSet[0];
-                    $("repeatInfo").textContent = `0 / ${getTotalRepeats()}`;
-                    $("distanceInfo").textContent = `${first.distance}m`;
-                    $("strokeInfo").textContent = first.stroke;
+                    const targetIdx = (intervalState.currentLineIndex !== undefined && intervalState.currentLineIndex !== null && intervalState.currentLineIndex < appData.currentSet.length)
+                        ? intervalState.currentLineIndex
+                        : 0;
+                    const targetLine = appData.currentSet[targetIdx];
+                    if (targetLine) {
+                        $("repeatInfo").textContent = `${getCompletedRepeatsBeforeLine(targetIdx)} / ${getTotalRepeats()}`;
+                        $("distanceInfo").textContent = `${targetLine.distance}m`;
+                        $("strokeInfo").textContent = targetLine.stroke;
 
-                    $("intervalInfoLabel").textContent = first.mode === "rest" ? "Rest" : "Interval";
-                    $("intervalInfo").textContent = (first.mode === "continuous" || first.mode === "ready") ? "-" : formatSeconds(first.intervalSeconds);
-                    $("intervalInfoLabel").style.opacity = (first.mode === "continuous" || first.mode === "ready") ? "0.3" : "1";
-                    $("intervalInfo").style.opacity = (first.mode === "continuous" || first.mode === "ready") ? "0.3" : "1";
+                        $("intervalInfoLabel").textContent = targetLine.mode === "rest" ? "Rest" : "Interval";
+                        $("intervalInfo").textContent = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "-" : formatSeconds(targetLine.intervalSeconds);
+                        $("intervalInfoLabel").style.opacity = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "0.3" : "1";
+                        $("intervalInfo").style.opacity = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "0.3" : "1";
+                    }
                 }
                 return;
             }
@@ -1912,6 +2917,58 @@
             $("downloadSetsBtn").addEventListener("click", downloadSavedSetsCSV);
             $("clearSavedSetsBtn").addEventListener("click", clearSavedSets);
             $("clearHistoryBtn").addEventListener("click", clearHistory);
+            $("addDefaultSetsBtn").addEventListener("click", addDefaultSets);
+            $("clearWorkoutBtn").addEventListener("click", clearCurrentSet);
+            $("editWorkoutBtn").addEventListener("click", openWorkoutEditor);
+            $("saveWorkoutEditorBtn").addEventListener("click", closeWorkoutEditor);
+            $("closeWorkoutEditorX").addEventListener("click", closeWorkoutEditor);
+            $("editWorkoutList").addEventListener("change", function(e) {
+                const target = e.target;
+                const origIdx = Number(target.dataset.origIdx);
+                if (isNaN(origIdx)) return;
+                
+                const line = appData.currentSet[origIdx];
+                if (!line) return;
+                
+                if (target.classList.contains("edit-rep")) {
+                    line.repeats = Math.max(1, Number(target.value || 1));
+                } else if (target.classList.contains("edit-dist")) {
+                    line.distance = Math.max(1, Number(target.value || 1));
+                } else if (target.classList.contains("edit-stroke")) {
+                    line.stroke = target.value;
+                } else if (target.classList.contains("edit-int")) {
+                    if (line.mode !== "continuous" && line.mode !== "ready") {
+                        line.intervalSeconds = parseTimeToSeconds(target.value) || line.intervalSeconds;
+                    }
+                } else if (target.classList.contains("edit-notes")) {
+                    line.notes = target.value.trim();
+                }
+                
+                saveData();
+                renderAll();
+                
+                const container = target.closest(".edit-workout-container");
+                if (container) {
+                    const blockIndex = Number(container.dataset.index);
+                    const blocks = groupWorkoutIntoBlocks();
+                    const block = blocks.find(b => b.lines.some(l => l.originalIndex === origIdx));
+                    if (block) {
+                        const totalDist = block.lines.reduce((sum, l) => sum + (Number(l.repeats) * Number(l.distance)), 0);
+                        const repeats = block.lines.reduce((sum, l) => sum + Number(l.repeats), 0);
+                        const summarySpan = container.querySelector(".edit-item-details span");
+                        if (summarySpan) {
+                            summarySpan.textContent = `${block.lines.length} lines, ${repeats} repeats, ${totalDist}m`;
+                        }
+                    }
+                }
+            });
+            $("editorAddSetSelect").addEventListener("change", function(e) {
+                const name = e.target.value;
+                if (name) {
+                    addSetToWorkoutFromEditor(name);
+                    e.target.value = "";
+                }
+            });
             $("csvImport").addEventListener("change", importSavedSetsCSV);
 
             $("copyStatsTsvBtn").addEventListener("click", copySessionTSV);
@@ -1928,17 +2985,82 @@
             document.addEventListener("keydown", handleKeyboard);
         }
 
+        function getDefaultSets() {
+            return [
+                // Set 1: Free sprint base
+                { setName: "Free Stroke - River rapids sprint", order: 1, repeats: 12, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 60, notes: "25 fast / 25 easy" },
+                
+                // Set 2: Fly strength
+                { setName: "Fly Stroke - Fly like Phelps", order: 1, repeats: 8, distance: 25, stroke: "Fly", mode: "interval", intervalSeconds: 45, notes: "strength" },
+                { setName: "Fly Stroke - Fly like Phelps", order: 2, repeats: 8, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 65, notes: "steady" },
+                
+                // Set 3: IM technique
+                { setName: "IM Stroke - Medley master class", order: 1, repeats: 8, distance: 50, stroke: "IM", mode: "interval", intervalSeconds: 75, notes: "drill" },
+                { setName: "IM Stroke - Medley master class", order: 2, repeats: 4, distance: 100, stroke: "IM", mode: "interval", intervalSeconds: 135, notes: "technique" },
+                
+                // Set 4: 100 free pace
+                { setName: "Free Stroke - Century cruise control", order: 1, repeats: 6, distance: 100, stroke: "Free", mode: "interval", intervalSeconds: 120, notes: "hold best steady pace" },
+                
+                // Set 5: Kick power
+                { setName: "Kick Stroke - Motorboat engine builder", order: 1, repeats: 10, distance: 50, stroke: "Kick", mode: "interval", intervalSeconds: 80, notes: "kick power" },
+                { setName: "Kick Stroke - Motorboat engine builder", order: 2, repeats: 8, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 40, notes: "sprint" },
+                
+                // Set 6: Fly/free combo
+                { setName: "Fly/Free Combo - Butterfly metamorphosis", order: 1, repeats: 8, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 70, notes: "25 fly / 25 free" },
+                
+                // Set 7: Speed endurance
+                { setName: "Free Stroke - Oxygen debt sprint", order: 1, repeats: 16, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 35, notes: "sprint" },
+                
+                // Set 8: IM strength
+                { setName: "IM Stroke - Iron Man medley power", order: 1, repeats: 4, distance: 100, stroke: "IM", mode: "interval", intervalSeconds: 140, notes: "strength" },
+                { setName: "IM Stroke - Iron Man medley power", order: 2, repeats: 8, distance: 50, stroke: "Pull", mode: "interval", intervalSeconds: 65, notes: "free pull" },
+                
+                // Set 9: Broken 100 free
+                { setName: "Free Stroke - Shattered century challenge", order: 1, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
+                { setName: "Free Stroke - Shattered century challenge", order: 2, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
+                { setName: "Free Stroke - Shattered century challenge", order: 3, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
+                { setName: "Free Stroke - Shattered century challenge", order: 4, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
+                { setName: "Free Stroke - Shattered century challenge", order: 5, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
+                { setName: "Free Stroke - Shattered century challenge", order: 6, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
+                { setName: "Free Stroke - Shattered century challenge", order: 7, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
+                
+                // Set 10: Race skills
+                { setName: "Free Stroke - Olympic start & glide", order: 1, repeats: 12, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 45, notes: "strong push, easy recovery" }
+            ];
+        }
+
         function seedExampleIfEmpty() {
             if (appData.currentSet.length || appData.savedSets.length) return;
-            appData.currentSet = [
-                { setName: "Sample 10 x 100 Free", order: 1, repeats: 10, distance: 100, stroke: "Free", intervalSeconds: 120, notes: "steady pace" }
-            ];
+            const defaults = getDefaultSets();
+            appData.savedSets = defaults;
+            appData.currentSet = defaults.filter(line => line.setName === "Free Stroke - River rapids sprint").map(line => ({ ...line }));
+            saveData();
+        }
+
+        function addDefaultSets() {
+            if (appData.savedSets.length > 0 && !confirm("Add the 10 default sets to your library? This will append them to your current library.")) {
+                return;
+            }
+            const defaults = getDefaultSets();
+            appData.savedSets.push(...defaults.map(line => ({ ...line })));
+            saveData();
+            renderAll();
+            alert("Added 10 default sets to your library!");
         }
 
         loadData();
         seedExampleIfEmpty();
         bindEvents();
         renderAll();
+
+        // Register Service Worker for PWA offline capabilities
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered successfully with scope:', reg.scope))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
     </script>
 </body>
 

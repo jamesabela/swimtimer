@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#173b5c" />
+      <stop offset="50%" stop-color="#071827" />
+      <stop offset="100%" stop-color="#04111d" />
+    </radialGradient>
+    
+    <!-- Wave / Swimmer Gradient -->
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#20c997" />
+      <stop offset="50%" stop-color="#00bcd4" />
+      <stop offset="100%" stop-color="#5dade2" />
+    </linearGradient>
+
+    <!-- Dial Gradient -->
+    <linearGradient id="dialGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#20c997" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#20c997" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Outer Glow Ring -->
+  <rect x="12" y="12" width="488" height="488" rx="100" fill="none" stroke="#20c997" stroke-width="1.5" stroke-opacity="0.3" />
+
+  <!-- Swimmer & Stopwatch Graphic Container -->
+  <g transform="translate(256, 256)">
+    <!-- Stopwatch Dial Path (Bottom half) -->
+    <path d="M -150, 0 A 150,150 0 1,0 150,0" fill="none" stroke="url(#dialGrad)" stroke-width="12" stroke-linecap="round" />
+    
+    <!-- Stopwatch Ticks -->
+    <circle cx="0" cy="150" r="4" fill="#20c997" />
+    <circle cx="-106" cy="106" r="4" fill="#20c997" />
+    <circle cx="106" cy="106" r="4" fill="#20c997" opacity="0.6" />
+    <circle cx="-150" cy="0" r="5" fill="#20c997" />
+    <circle cx="150" cy="0" r="5" fill="#20c997" />
+
+    <!-- Wave 1 (Base Wave) -->
+    <path d="M -160, -20 C -80, -90 -20, 20 60, -30 C 110, -60 140, -50 160, -20 C 130, -70 90, -80 40, -50 C -40, -10 -90, -110 -160, -20 Z" fill="url(#waveGrad)" />
+
+    <!-- Wave 2 (Swimmer Back Wave) -->
+    <path d="M -110, -50 C -60, -110 -20, -70 20, -100 C 50, -120 80, -100 110, -70 C 80, -110 40, -130 0, -110 C -40, -90 -70, -120 -110, -50 Z" fill="url(#waveGrad)" opacity="0.8" />
+
+    <!-- Swimmer Figure (Minimalist Style) -->
+    <!-- Head -->
+    <circle cx="65" cy="-85" r="16" fill="#f4fbff" />
+    <!-- Arm & Torso Wave -->
+    <path d="M -50,-65 C -20,-75 10,-95 45,-90 C 30,-75 10,-70 -10,-60 C -30,-50 -45,-55 -50,-65 Z" fill="#f4fbff" />
+    <!-- Forward Arm/Splash -->
+    <path d="M 45, -90 C 70, -85 90, -60 95, -45 C 88, -55 75, -70 50, -80 Z" fill="#20c997" />
+
+    <!-- Stopwatch Hand -->
+    <g transform="rotate(135)">
+      <line x1="0" y1="0" x2="0" y2="-120" stroke="#ffd166" stroke-width="8" stroke-linecap="round" />
+      <circle cx="0" cy="0" r="12" fill="#ffd166" />
+      <circle cx="0" cy="0" r="4" fill="#071827" />
+    </g>
+  </g>
+</svg>
