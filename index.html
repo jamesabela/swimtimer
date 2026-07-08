@@ -338,17 +338,43 @@
             display: none !important;
         }
 
-        .hidden-when-running { display: flex; align-items: center; justify-content: center; }
-        body.is-running .hidden-when-running { display: none !important; }
+        .hidden-when-running {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        .hidden-when-stopped { display: none !important; }
-        body.is-running .hidden-when-stopped { display: flex !important; align-items: center; justify-content: center; }
-        
-        .hidden-when-stopped-block { display: none !important; }
-        body.is-running .hidden-when-stopped-block { display: block !important; }
-        
-        #startSetBtn { grid-column: span 12; }
-        @media (max-width: 900px) { #startSetBtn { grid-column: span 2; } }
+        body.is-running .hidden-when-running {
+            display: none !important;
+        }
+
+        .hidden-when-stopped {
+            display: none !important;
+        }
+
+        body.is-running .hidden-when-stopped {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hidden-when-stopped-block {
+            display: none !important;
+        }
+
+        body.is-running .hidden-when-stopped-block {
+            display: block !important;
+        }
+
+        #startSetBtn {
+            grid-column: span 12;
+        }
+
+        @media (max-width: 900px) {
+            #startSetBtn {
+                grid-column: span 2;
+            }
+        }
 
         .footer-note {
             text-align: center;
@@ -598,6 +624,52 @@
                 display: none;
             }
         }
+
+        details {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.03);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        summary::after {
+            content: '▼';
+            font-size: 0.8em;
+            color: var(--muted);
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .details-content {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
     </style>
 </head>
 
@@ -648,7 +720,8 @@
                     <div class="big-button-row">
                         <button id="startSetBtn" class="hidden-when-running">Start Set</button>
                         <button id="finishRepeatBtn" class="secondary hidden-when-stopped">Finish Lap</button>
-                        <button id="pauseBtn" class="hidden-when-stopped" style="background: var(--blue);">Pause ||</button>
+                        <button id="pauseBtn" class="hidden-when-stopped" style="background: var(--blue);">Pause
+                            ||</button>
                         <button id="skipRepeatBtn" class="warning hidden-when-stopped">Skip</button>
                         <button id="stopBtn" class="danger hidden-when-stopped">Stop</button>
                     </div>
@@ -656,7 +729,9 @@
                         <button id="resetBtn" class="muted hidden-when-running">Reset</button>
                     </div>
                     <div id="liveLapsContainer" class="hidden-when-stopped-block" style="margin-top: 16px;">
-                        <div id="liveLapsWrap" class="notice" style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.</div>
+                        <div id="liveLapsWrap" class="notice"
+                            style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.
+                        </div>
                     </div>
                 </div>
 
@@ -664,9 +739,6 @@
                     <h2>Current Set</h2>
                     <div class="notice" id="currentSetNotice">Add set lines, or load a saved set. Then press Start Set.
                     </div>
-                    <h3>IM</h3>
-                    <div class="notice">IM order: <strong>Fly, Back, Breast, Free</strong>.</div>
-                </div>
             </section>
         </section>
 
@@ -698,8 +770,8 @@
                                 <option value="continuous">Continuous</option>
                                 <option value="ready">Ready (Manual)</option>
                             </select></div>
-                        <div class="field-2"><label for="interval" id="intervalLabel">Interval</label><input id="interval" value="2:00"
-                                placeholder="2:00" /></div>
+                        <div class="field-2"><label for="interval" id="intervalLabel">Interval</label><input
+                                id="interval" value="2:00" placeholder="2:00" /></div>
                         <div class="field-6"><label for="notes">Notes</label><input id="notes" value="steady pace" />
                         </div>
                     </div>
@@ -717,12 +789,12 @@
         <section id="savedTab" class="tab-panel">
             <section class="grid">
                 <div class="panel span-12">
-                <div class="panel span-12">
-                    <h2>Saved Sets Library</h2>
-                    <div class="notice">To export or import sets, go to the <strong>Settings</strong> tab.</div>
-                    <h3>Library</h3>
-                    <div id="savedSetsWrap"></div>
-                </div>
+                    <div class="panel span-12">
+                        <h2>Saved Sets Library</h2>
+                        <div class="notice">To export or import sets, go to the <strong>Settings</strong> tab.</div>
+                        <h3>Library</h3>
+                        <div id="savedSetsWrap"></div>
+                    </div>
             </section>
         </section>
 
@@ -755,7 +827,7 @@
                     <div class="button-row" style="margin-top: 12px; margin-bottom: 24px;">
                         <button id="copyStatsTsvBtn" class="secondary">Copy Session as TSV</button>
                     </div>
-                    
+
                     <h2>Lifetime Statistics</h2>
                     <div class="summary-grid">
                         <div class="info-card">
@@ -766,14 +838,11 @@
                             <div class="info-label">Total Sessions</div>
                             <div class="info-value" id="statsTotalSessions">0</div>
                         </div>
+
+                        <h3 style="margin-top: 24px;">Session History</h3>
+                        <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No
+                            sessions recorded yet.</div>
                     </div>
-                    <div class="button-row" style="margin-top: 12px;">
-                        <button id="clearHistoryBtn" class="danger">Clear History</button>
-                    </div>
-                    
-                    <h3 style="margin-top: 24px;">Session History</h3>
-                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No sessions recorded yet.</div>
-                </div>
             </section>
         </section>
 
@@ -819,17 +888,19 @@
                         <button id="saveSettingsBtn">Save Settings</button>
                         <button id="testBeepBtn" class="secondary">Test Beep</button>
                     </div>
-                    
+
                     <h3>Data Management (CSV)</h3>
                     <div class="button-row">
                         <button id="downloadSessionBtn" class="secondary">Export Session CSV</button>
                         <button id="downloadSetsBtn" class="secondary">Export Saved Sets CSV</button>
                         <button id="clearSavedSetsBtn" class="danger">Clear Library</button>
+                        <button id="clearHistoryBtn" class="danger">Clear History</button>
                     </div>
                     <div style="margin-top: 12px;">
-                        <label><strong>Import CSV</strong></label><br/>
+                        <label><strong>Import CSV</strong></label><br />
                         <input type="file" id="csvImport" accept=".csv,text/csv" />
-                        <div class="notice" style="margin-top: 10px;">CSV columns: Set Name, Order, Repeats, Distance, Stroke, Mode, Interval, Notes</div>
+                        <div class="notice" style="margin-top: 10px;">CSV columns: Set Name, Order, Repeats, Distance,
+                            Stroke, Mode, Interval, Notes</div>
                     </div>
 
                     <h3>Full Backup (JSON)</h3>
@@ -838,7 +909,7 @@
                         <button id="restoreJsonBtn" class="secondary">Restore Data (JSON)</button>
                         <input type="file" id="jsonImport" accept=".json,application/json" style="display: none;" />
                     </div>
-                    
+
                     <h3>Shortcuts</h3>
                     <div class="notice">Space = Finish Lap<br />Enter = Start Set<br />S = Stop<br />R = Reset
                     </div>
@@ -1027,7 +1098,7 @@
             <strong>${escapeHtml(name)}</strong><br />
             ${lines.length} line(s), ${repeats} repeats, ${distance}m<br />
             <div class="button-row">
-              <button class="small-action secondary" onclick="loadSavedSet('${escapeJs(name)}')">Load</button>
+              <button class="small-action secondary" onclick="loadSavedSet('${escapeJs(name)}')">Start This Set</button>
               <button class="small-action secondary" onclick="editSavedSet('${escapeJs(name)}')">Edit</button>
               <button class="small-action secondary" onclick="copySavedSet('${escapeJs(name)}')">Copy</button>
               <button class="small-action danger" onclick="deleteSavedSet('${escapeJs(name)}')">Delete</button>
@@ -1100,10 +1171,32 @@
             let totalDistance = 0;
             const rows = [...appData.history].reverse().map((session, i) => {
                 const date = session[0] ? session[0].date : "Unknown Date";
+                const setName = session[0] && session[0].setName ? session[0].setName : "Unknown Set";
                 const dist = session.reduce((sum, row) => sum + Number(row.distance || 0), 0);
                 totalDistance += dist;
                 const repeats = session.length;
-                return `<div class="notice" style="margin-bottom:8px;"><strong>${date}</strong><br/>${repeats} repeats, ${dist}m total distance</div>`;
+
+                const lapRows = session.map(row => {
+                    if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
+                    let restText = "";
+                    if (row.restTime && row.restTime !== "0.0") {
+                        restText = ` <span style="color: var(--muted); font-size: 0.9em;">(Rest: ${row.restTime})</span>`;
+                    }
+                    return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
+                }).join("<br />");
+
+                return `
+                <details>
+                    <summary>
+                        <div>
+                            <strong>${date}</strong> - ${escapeHtml(setName)}<br/>
+                            <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} repeats, ${dist}m</span>
+                        </div>
+                    </summary>
+                    <div class="details-content">
+                        ${lapRows}
+                    </div>
+                </details>`;
             });
 
             $("statsTotalDistance").textContent = `${totalDistance}m`;
@@ -1181,7 +1274,7 @@
         window.copySavedSet = function (name) {
             const dateStr = new Date().toISOString().slice(0, 10);
             const newName = `${name} ${dateStr}`;
-            const lines = appData.savedSets.filter(line => line.setName === name).map(line => ({...line, setName: newName}));
+            const lines = appData.savedSets.filter(line => line.setName === name).map(line => ({ ...line, setName: newName }));
             appData.savedSets.push(...lines);
             saveData();
             renderAll();
@@ -1201,6 +1294,13 @@
             renderAll();
         }
 
+        function clearHistory() {
+            if (!confirm("Clear all session history? This cannot be undone.")) return;
+            appData.history = [];
+            saveData();
+            renderAll();
+        }
+
         function startSet() {
             if (!appData.currentSet.length) {
                 alert("Add or load a set first.");
@@ -1215,11 +1315,11 @@
             intervalState.repeatStartMs = performance.now();
             intervalState.lineStartMs = performance.now();
             intervalState.alreadyBeeped = new Set();
-            
+
             document.body.classList.add("is-running");
             $("pauseBtn").textContent = "Pause ||";
             $("pauseBtn").style.background = "var(--blue)";
-            
+
             switchTab("timerTab");
             renderLiveLaps();
             startTicker();
@@ -1243,7 +1343,7 @@
 
             const now = performance.now();
             let remaining = 0;
-            
+
             if (intervalState.waitingForNext) {
                 if (line.mode === "rest") {
                     const elapsedRest = (now - intervalState.finishRepeatMs) / 1000;
@@ -1252,7 +1352,7 @@
                     const elapsed = (now - intervalState.repeatStartMs) / 1000;
                     remaining = line.intervalSeconds - elapsed;
                 }
-                
+
                 handleBeeps(Math.ceil(remaining));
 
                 if (remaining <= 0) {
@@ -1404,10 +1504,10 @@
             saveData();
             renderStats();
         }
-        
+
         function togglePause() {
             if (!intervalState.running) return;
-            
+
             if (intervalState.paused) {
                 // Resume
                 intervalState.paused = false;
@@ -1455,7 +1555,7 @@
                     $("repeatInfo").textContent = `0 / ${getTotalRepeats()}`;
                     $("distanceInfo").textContent = `${first.distance}m`;
                     $("strokeInfo").textContent = first.stroke;
-                    
+
                     $("intervalInfoLabel").textContent = first.mode === "rest" ? "Rest" : "Interval";
                     $("intervalInfo").textContent = (first.mode === "continuous" || first.mode === "ready") ? "-" : formatSeconds(first.intervalSeconds);
                     $("intervalInfoLabel").style.opacity = (first.mode === "continuous" || first.mode === "ready") ? "0.3" : "1";
@@ -1471,12 +1571,12 @@
             $("repeatInfo").textContent = `${absoluteRepeat} / ${getTotalRepeats()}`;
             $("distanceInfo").textContent = `${line.distance}m`;
             $("strokeInfo").textContent = line.stroke;
-            
+
             $("intervalInfoLabel").textContent = line.mode === "rest" ? "Rest" : "Interval";
             $("intervalInfo").textContent = (line.mode === "continuous" || line.mode === "ready") ? "-" : formatSeconds(line.intervalSeconds);
             $("intervalInfoLabel").style.opacity = (line.mode === "continuous" || line.mode === "ready") ? "0.3" : "1";
             $("intervalInfo").style.opacity = (line.mode === "continuous" || line.mode === "ready") ? "0.3" : "1";
-            
+
             if (intervalState.waitingForReady) {
                 $("goCountdown").textContent = "READY";
                 $("timerStatus").textContent = "Press Next Lap";
@@ -1487,9 +1587,9 @@
                 $("goCountdown").textContent = "GO";
                 $("timerStatus").textContent = `${line.setName} - swim now`;
             }
-            
+
             $("swimTime").textContent = (intervalState.waitingForNext || intervalState.waitingForReady) && appData.sessionResults.length > 0
-                ? appData.sessionResults[appData.sessionResults.length - 1].swimTime 
+                ? appData.sessionResults[appData.sessionResults.length - 1].swimTime
                 : formatSeconds(elapsed, true);
         }
 
@@ -1703,7 +1803,7 @@
                 row.date, row.setName, row.repeat, row.distance, row.stroke, row.mode || "interval", row.interval, row.swimTime, row.restTime, row.notes
             ]);
             const tsv = [header, ...rows].map(row => row.join("\t")).join("\n");
-            
+
             navigator.clipboard.writeText(tsv).then(() => {
                 const btn = $("copyStatsTsvBtn");
                 const originalText = btn.textContent;
@@ -1727,7 +1827,7 @@
                 try {
                     const data = JSON.parse(reader.result);
                     if (!data || typeof data !== "object") throw new Error("Invalid format");
-                    
+
                     if (confirm("This will overwrite all existing sets, history, and settings. Proceed?")) {
                         appData.savedSets = data.savedSets || [];
                         appData.currentSet = data.currentSet || [];
@@ -1811,13 +1911,14 @@
             $("downloadSessionBtn").addEventListener("click", downloadSessionCSV);
             $("downloadSetsBtn").addEventListener("click", downloadSavedSetsCSV);
             $("clearSavedSetsBtn").addEventListener("click", clearSavedSets);
+            $("clearHistoryBtn").addEventListener("click", clearHistory);
             $("csvImport").addEventListener("change", importSavedSetsCSV);
-            
+
             $("copyStatsTsvBtn").addEventListener("click", copySessionTSV);
             $("backupJsonBtn").addEventListener("click", backupFullJson);
             $("restoreJsonBtn").addEventListener("click", () => $("jsonImport").click());
             $("jsonImport").addEventListener("change", restoreFullJson);
-            
+
             $("saveSettingsBtn").addEventListener("click", saveSettings);
             $("testBeepBtn").addEventListener("click", () => beep(800, 0.15));
             $("manualStartBtn").addEventListener("click", startManual);
