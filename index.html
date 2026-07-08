@@ -719,9 +719,6 @@
                 <div class="panel span-12">
                 <div class="panel span-12">
                     <h2>Saved Sets Library</h2>
-                    <div class="button-row">
-                        <button id="clearSavedSetsBtn" class="danger">Clear Library</button>
-                    </div>
                     <div class="notice">To export or import sets, go to the <strong>Settings</strong> tab.</div>
                     <h3>Library</h3>
                     <div id="savedSetsWrap"></div>
@@ -827,6 +824,7 @@
                     <div class="button-row">
                         <button id="downloadSessionBtn" class="secondary">Export Session CSV</button>
                         <button id="downloadSetsBtn" class="secondary">Export Saved Sets CSV</button>
+                        <button id="clearSavedSetsBtn" class="danger">Clear Library</button>
                     </div>
                     <div style="margin-top: 12px;">
                         <label><strong>Import CSV</strong></label><br/>
@@ -1030,6 +1028,8 @@
             ${lines.length} line(s), ${repeats} repeats, ${distance}m<br />
             <div class="button-row">
               <button class="small-action secondary" onclick="loadSavedSet('${escapeJs(name)}')">Load</button>
+              <button class="small-action secondary" onclick="editSavedSet('${escapeJs(name)}')">Edit</button>
+              <button class="small-action secondary" onclick="copySavedSet('${escapeJs(name)}')">Copy</button>
               <button class="small-action danger" onclick="deleteSavedSet('${escapeJs(name)}')">Delete</button>
             </div>
           </div>
@@ -1164,6 +1164,25 @@
         window.loadSavedSet = function (name) {
             const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
             appData.currentSet = lines.map(line => ({ ...line }));
+            saveData();
+            renderAll();
+            switchTab('timerTab');
+        };
+
+        window.editSavedSet = function (name) {
+            const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
+            appData.currentSet = lines.map(line => ({ ...line }));
+            $("setName").value = name;
+            saveData();
+            renderAll();
+            switchTab('builderTab');
+        };
+
+        window.copySavedSet = function (name) {
+            const dateStr = new Date().toISOString().slice(0, 10);
+            const newName = `${name} ${dateStr}`;
+            const lines = appData.savedSets.filter(line => line.setName === name).map(line => ({...line, setName: newName}));
+            appData.savedSets.push(...lines);
             saveData();
             renderAll();
         };
