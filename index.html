@@ -366,49 +366,19 @@
             display: none !important;
         }
 
-        body.is-running header,
-        body.is-running .tab-bar,
-        body.is-running .span-5,
-        body.is-running .button-row {
-            display: none !important;
+        /* Running View styling */
+        #runningTimerView {
+            display: none;
         }
 
-        .hidden-when-running {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        body.is-running .hidden-when-running {
-            display: none !important;
-        }
-
-        .hidden-when-stopped {
-            display: none !important;
-        }
-
-        body.is-running .hidden-when-stopped {
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hidden-when-stopped-block {
-            display: none !important;
-        }
-
-        body.is-running .hidden-when-stopped-block {
+        body.is-running #runningTimerView {
             display: block !important;
         }
 
-        #startSetBtn {
-            grid-column: span 12;
-        }
-
-        @media (max-width: 900px) {
-            #startSetBtn {
-                grid-column: span 2;
-            }
+        body.is-running header,
+        body.is-running .tab-bar,
+        body.is-running .tab-panel {
+            display: none !important;
         }
 
         .footer-note {
@@ -908,91 +878,76 @@
 <body>
     <header>
         <h1>Swim Interval Timer</h1>
-        <div class="subtitle">A simple offline swimming timer for sets like 10 x 100 Free on 2:00</div>
+        <div class="subtitle">A premium, distraction-free timer for swimming sets</div>
     </header>
 
     <main>
+        <!-- Sticky Navigation Bar (Hidden when timer is running) -->
         <nav class="tab-bar" aria-label="App sections">
-            <button class="tab-button active" data-tab="timerTab">Timer</button>
-            <button class="tab-button" data-tab="statsTab">Stats</button>
-            <button class="tab-button" data-tab="savedTab">Sets</button>
-            <button class="tab-button" data-tab="builderTab">Builder</button>
+            <button class="tab-button active" data-tab="intervalTab">Interval</button>
+            <button class="tab-button" data-tab="restTab">Rest</button>
             <button class="tab-button" data-tab="stopwatchTab">Stopwatch</button>
+            <button class="tab-button" data-tab="historyTab">History</button>
             <button class="tab-button" data-tab="settingsTab">Settings</button>
         </nav>
 
-        <section id="timerTab" class="tab-panel active">
-            <section class="grid">
-                <div class="panel span-7">
-                    <h2>Timer</h2>
-                    <div class="hero-timer" id="timerPanel">
-                        <div class="timer-status" id="timerStatus">Ready</div>
-                        <div class="go-countdown" id="goCountdown">0:00</div>
-                        <div class="swim-time" id="swimTime">0:00.0</div>
-                        <div class="timer-info">
-                            <div class="info-card">
-                                <div class="info-label">Lap</div>
-                                <div class="info-value" id="repeatInfo">0 / 0</div>
-                            </div>
-                            <div class="info-card">
-                                <div class="info-label">Distance</div>
-                                <div class="info-value" id="distanceInfo">-</div>
-                            </div>
-                            <div class="info-card">
-                                <div class="info-label">Stroke</div>
-                                <div class="info-value" id="strokeInfo">-</div>
-                            </div>
-                            <div class="info-card">
-                                <div class="info-label" id="intervalInfoLabel">Interval</div>
-                                <div class="info-value" id="intervalInfo">-</div>
-                            </div>
-                        </div>
+        <!-- Unified Fullscreen Timer view (Active when set is running) -->
+        <div id="runningTimerView" class="panel">
+            <div class="hero-timer" id="timerPanel">
+                <div class="timer-status" id="timerStatus">Ready</div>
+                <div class="go-countdown" id="goCountdown">0:00</div>
+                <div class="swim-time" id="swimTime">0:00.0</div>
+                <div class="timer-info">
+                    <div class="info-card">
+                        <div class="info-label">Lap</div>
+                        <div class="info-value" id="repeatInfo">0 / 0</div>
                     </div>
-
-                    <div class="big-button-row">
-                        <button id="startSetBtn" class="hidden-when-running">Start Set</button>
-                        <button id="finishRepeatBtn" class="secondary hidden-when-stopped">Finish Lap</button>
-                        <button id="pauseBtn" class="hidden-when-stopped" style="background: var(--blue);">Pause
-                            ||</button>
-                        <button id="skipRepeatBtn" class="warning hidden-when-stopped">Skip</button>
-                        <button id="stopBtn" class="danger hidden-when-stopped">Stop</button>
+                    <div class="info-card">
+                        <div class="info-label">Distance</div>
+                        <div class="info-value" id="distanceInfo">-</div>
                     </div>
-                    <div class="button-row" style="grid-template-columns: 1fr;">
-                        <button id="resetBtn" class="muted hidden-when-running">Reset</button>
+                    <div class="info-card">
+                        <div class="info-label">Stroke</div>
+                        <div class="info-value" id="strokeInfo">-</div>
                     </div>
-                    <div id="liveLapsContainer" class="hidden-when-stopped-block" style="margin-top: 16px;">
-                        <div id="liveLapsWrap" class="notice"
-                            style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.
-                        </div>
-                    </div>
-                    </div>
-                    <div id="motivationalBanner" class="motivational-banner" style="display: none; margin-top: 14px;"></div>
-                </div>
-
-                <div class="panel span-5">
-                    <h2>Today's Workout</h2>
-                    <div class="notice" id="currentSetNotice" style="margin-bottom: 12px;">No sets loaded yet.</div>
-                    <div id="timerWorkoutWrap" style="max-height: 45vh; overflow-y: auto; text-align: left; margin-bottom: 12px;"></div>
-                    <div class="button-row" style="margin-top: 12px;">
-                        <button id="editWorkoutBtn" class="secondary" style="min-height: 48px; padding: 10px 14px;">Edit Workout</button>
-                        <button id="clearWorkoutBtn" class="danger hidden-when-running" style="min-height: 48px; padding: 10px 14px;">Clear Workout</button>
+                    <div class="info-card">
+                        <div class="info-label" id="intervalInfoLabel">Interval</div>
+                        <div class="info-value" id="intervalInfo">-</div>
                     </div>
                 </div>
-            </section>
-        </section>
+            </div>
 
-        <section id="builderTab" class="tab-panel">
+            <div class="big-button-row">
+                <button id="finishRepeatBtn" class="secondary">Finish Lap</button>
+                <button id="pauseBtn" style="background: var(--blue);">Pause ||</button>
+                <button id="skipRepeatBtn" class="warning">Skip</button>
+                <button id="stopBtn" class="danger">Stop</button>
+            </div>
+            
+            <div id="motivationalBanner" class="motivational-banner" style="display: none; margin-top: 14px;"></div>
+            
+            <div id="liveLapsContainer" style="margin-top: 16px;">
+                <div id="liveLapsWrap" class="notice" style="text-align: left; max-height: 40vh; overflow-y: auto; line-height: 1.6;">No laps yet.</div>
+            </div>
+        </div>
+
+        <!-- Interval Timer Tab -->
+        <section id="intervalTab" class="tab-panel active">
             <section class="grid">
                 <div class="panel span-12">
-                    <h2>Set Builder</h2>
+                    <h2>Interval Timer</h2>
                     <div class="form-grid">
-                        <div class="field-3"><label for="setName">Set name</label><input id="setName"
-                                value="Main Free Set" /></div>
-                        <div class="field-1 field-2"><label for="repeats">Repeats</label><input id="repeats"
-                                type="number" min="1" value="10" /></div>
-                        <div class="field-1 field-2"><label for="distance">Distance</label><input id="distance"
-                                type="number" min="1" value="100" /></div>
-                        <div class="field-2"><label for="stroke">Stroke</label><select id="stroke">
+                        <div class="field-2">
+                            <label for="intRepeats">Repeats</label>
+                            <input id="intRepeats" type="number" min="1" value="10" />
+                        </div>
+                        <div class="field-2">
+                            <label for="intDistance">Distance (m/yd)</label>
+                            <input id="intDistance" type="number" min="0" value="100" />
+                        </div>
+                        <div class="field-2">
+                            <label for="intStroke">Stroke</label>
+                            <select id="intStroke">
                                 <option>Free</option>
                                 <option>Back</option>
                                 <option>Breast</option>
@@ -1002,42 +957,119 @@
                                 <option>Pull</option>
                                 <option>Drill</option>
                                 <option>Choice</option>
-                            </select></div>
-                        <div class="field-2"><label for="mode">Mode</label><select id="mode">
-                                <option value="interval">Interval</option>
-                                <option value="rest">Timed Rest</option>
-                                <option value="continuous">Continuous</option>
-                                <option value="ready">Ready (Manual)</option>
-                            </select></div>
-                        <div class="field-2"><label for="interval" id="intervalLabel">Interval</label><input
-                                id="interval" value="2:00" placeholder="2:00" /></div>
-                        <div class="field-6"><label for="notes">Notes</label><input id="notes" value="steady pace" />
+                            </select>
+                        </div>
+                        <div class="field-3">
+                            <label for="intIntervalSel">Interval</label>
+                            <select id="intIntervalSel">
+                                <option value="0:30">0:30</option>
+                                <option value="1:00">1:00</option>
+                                <option value="1:30">1:30</option>
+                                <option value="2:00" selected>2:00</option>
+                                <option value="2:30">2:30</option>
+                                <option value="3:00">3:00</option>
+                                <option value="3:30">3:30</option>
+                                <option value="4:00">4:00</option>
+                                <option value="other">Other...</option>
+                            </select>
+                        </div>
+                        <div class="field-3 hidden" id="intIntervalCustomContainer">
+                            <label for="intIntervalCustom">Custom Interval (e.g. 1:40)</label>
+                            <input id="intIntervalCustom" value="2:00" placeholder="2:00" />
+                        </div>
+                        <div class="field-6">
+                            <label for="intNotes">Notes</label>
+                            <input id="intNotes" value="steady pace" placeholder="e.g. focus on pacing" />
                         </div>
                     </div>
-                    <div class="button-row">
-                        <button id="addLineBtn">Add Line</button>
-                        <button id="saveSetBtn" class="secondary">Save Set</button>
-                        <button id="clearCurrentSetBtn" class="warning">Clear</button>
+                    <div class="button-row" style="margin-top: 20px;">
+                        <button id="startIntervalBtn" style="grid-column: span 12;">Start Set</button>
                     </div>
-                    <h3>Current set lines</h3>
-                    <div id="currentSetTableWrap" class="table-scroll"></div>
                 </div>
             </section>
         </section>
 
-        <section id="savedTab" class="tab-panel">
+        <!-- Rest Timer Tab -->
+        <section id="restTab" class="tab-panel">
             <section class="grid">
                 <div class="panel span-12">
-                    <div class="panel span-12">
-                        <h2>Saved Sets Library</h2>
-                        <div class="notice">To export or import sets, go to the <strong>Settings</strong> tab.</div>
-                        <h3>Library</h3>
-                        <div id="savedSetsWrap"></div>
+                    <h2>Rest Timer</h2>
+                    <div class="form-grid">
+                        <div class="field-2">
+                            <label for="restRepeats">Repeats</label>
+                            <input id="restRepeats" type="number" min="1" value="10" />
+                        </div>
+                        <div class="field-2">
+                            <label for="restDistance">Distance (m/yd)</label>
+                            <input id="restDistance" type="number" min="0" value="100" />
+                        </div>
+                        <div class="field-2">
+                            <label for="restStroke">Stroke</label>
+                            <select id="restStroke">
+                                <option>Free</option>
+                                <option>Back</option>
+                                <option>Breast</option>
+                                <option>Fly</option>
+                                <option>IM</option>
+                                <option>Kick</option>
+                                <option>Pull</option>
+                                <option>Drill</option>
+                                <option>Choice</option>
+                            </select>
+                        </div>
+                        <div class="field-3">
+                            <label for="restTimeSel">Rest Duration</label>
+                            <select id="restTimeSel">
+                                <option value="0:10">0:10</option>
+                                <option value="0:15">0:15</option>
+                                <option value="0:20">0:20</option>
+                                <option value="0:30" selected>0:30</option>
+                                <option value="0:45">0:45</option>
+                                <option value="1:00">1:00</option>
+                                <option value="1:30">1:30</option>
+                                <option value="2:00">2:00</option>
+                                <option value="other">Other...</option>
+                            </select>
+                        </div>
+                        <div class="field-3 hidden" id="restTimeCustomContainer">
+                            <label for="restTimeCustom">Custom Rest (e.g. 0:40)</label>
+                            <input id="restTimeCustom" value="0:30" placeholder="0:30" />
+                        </div>
+                        <div class="field-6">
+                            <label for="restNotes">Notes</label>
+                            <input id="restNotes" value="easy pace" placeholder="e.g. recovery swim" />
+                        </div>
                     </div>
+                    <div class="button-row" style="margin-top: 20px;">
+                        <button id="startRestBtn" style="grid-column: span 12;">Start Set</button>
+                    </div>
+                </div>
             </section>
         </section>
 
-        <section id="statsTab" class="tab-panel">
+        <!-- Stopwatch Tab -->
+        <section id="stopwatchTab" class="tab-panel">
+            <section class="grid">
+                <div class="panel span-12">
+                    <h2>Manual Stopwatch</h2>
+                    <div class="hero-timer">
+                        <div class="timer-status">Stopwatch mode</div>
+                        <div class="swim-time" id="manualTime">0:00.0</div>
+                    </div>
+                    <div class="big-button-row">
+                        <button id="manualStartBtn">Start</button>
+                        <button id="manualLapBtn" class="secondary" disabled>Lap</button>
+                        <button id="manualStopBtn" class="danger" disabled>Stop</button>
+                        <button id="manualResetBtn" class="muted">Reset</button>
+                    </div>
+                    <h3>Laps</h3>
+                    <div id="manualLapsWrap" class="notice">No laps yet.</div>
+                </div>
+            </section>
+        </section>
+
+        <!-- History Tab -->
+        <section id="historyTab" class="tab-panel">
             <section class="grid">
                 <div class="panel span-12">
                     <h2>Current Session Summary</h2>
@@ -1081,49 +1113,37 @@
                     </div>
 
                     <h3 style="margin-top: 24px;">Session History</h3>
-                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No
-                        sessions recorded yet.</div>
+                    <div id="statsHistoryWrap" class="notice" style="max-height: 50vh; overflow-y: auto;">No sessions recorded yet.</div>
                 </div>
             </section>
         </section>
 
-        <section id="stopwatchTab" class="tab-panel">
-            <section class="grid">
-                <div class="panel span-12">
-                    <h2>Manual Stopwatch</h2>
-                    <div class="hero-timer">
-                        <div class="timer-status">Manual mode</div>
-                        <div class="swim-time" id="manualTime">0:00.0</div>
-                    </div>
-                    <div class="big-button-row">
-                        <button id="manualStartBtn">Start</button>
-                        <button id="manualLapBtn" class="secondary" disabled>Lap</button>
-                        <button id="manualStopBtn" class="danger" disabled>Stop</button>
-                        <button id="manualResetBtn" class="muted">Reset</button>
-                    </div>
-                    <h3>Laps</h3>
-                    <div id="manualLapsWrap" class="notice">No laps yet.</div>
-                </div>
-            </section>
-        </section>
-
+        <!-- Settings Tab -->
         <section id="settingsTab" class="tab-panel">
             <section class="grid">
                 <div class="panel span-12">
                     <h2>Settings</h2>
                     <div class="form-grid">
-                        <div class="field-3"><label for="poolLength">Pool length</label><select id="poolLength">
+                        <div class="field-3">
+                            <label for="poolLength">Pool length</label>
+                            <select id="poolLength">
                                 <option value="25m">25m</option>
                                 <option value="50m">50m</option>
                                 <option value="25yd">25yd</option>
                                 <option value="custom">Custom</option>
-                            </select></div>
-                        <div class="field-3"><label for="customPoolLength">Custom pool length</label><input
-                                id="customPoolLength" value="25m" /></div>
-                        <div class="field-3"><label for="soundToggle">Sound</label><select id="soundToggle">
+                            </select>
+                        </div>
+                        <div class="field-3">
+                            <label for="customPoolLength">Custom pool length</label>
+                            <input id="customPoolLength" value="25m" />
+                        </div>
+                        <div class="field-3">
+                            <label for="soundToggle">Sound</label>
+                            <select id="soundToggle">
                                 <option value="on">On</option>
                                 <option value="off">Off</option>
-                            </select></div>
+                            </select>
+                        </div>
                     </div>
                     <div class="button-row">
                         <button id="saveSettingsBtn">Save Settings</button>
@@ -1133,16 +1153,12 @@
                     <h3>Data Management (CSV)</h3>
                     <div class="button-row">
                         <button id="downloadSessionBtn" class="secondary">Export Session CSV</button>
-                        <button id="downloadSetsBtn" class="secondary">Export Saved Sets CSV</button>
-                        <button id="addDefaultSetsBtn" class="secondary">Add Default Sets</button>
-                        <button id="clearSavedSetsBtn" class="danger">Clear Library</button>
+                        <button id="downloadSetsBtn" class="secondary" style="display: none;">Export Saved Sets CSV</button> <!-- Hidden but kept for backwards code safety -->
                         <button id="clearHistoryBtn" class="danger">Clear History</button>
                     </div>
-                    <div style="margin-top: 12px;">
+                    <div style="margin-top: 12px; display: none;"> <!-- Hidden but kept for CSV structure compat -->
                         <label><strong>Import CSV</strong></label><br />
                         <input type="file" id="csvImport" accept=".csv,text/csv" />
-                        <div class="notice" style="margin-top: 10px;">CSV columns: Set Name, Order, Repeats, Distance,
-                            Stroke, Mode, Interval, Notes</div>
                     </div>
 
                     <h3>Full Backup (JSON)</h3>
@@ -1153,43 +1169,15 @@
                     </div>
 
                     <h3>Shortcuts</h3>
-                    <div class="notice">Space = Finish Lap<br />Enter = Start Set<br />S = Stop<br />R = Reset
-                    </div>
+                    <div class="notice">Space = Finish Lap / Lap Stopwatch<br />Enter = Start Set / Start Stopwatch<br />S = Stop<br />P = Pause<br />R = Reset</div>
                     <h3>Privacy</h3>
-                    <div class="notice">No server. Saved sets and settings stay in this browser using localStorage. CSV
-                        exports and JSON backups are stored locally on your device.</div>
+                    <div class="notice">No server. Settings and history stay in this browser using localStorage. CSV exports and JSON backups are stored locally on your device.</div>
                 </div>
             </section>
         </section>
 
-        <div class="footer-note">First draft - simple, local, CSV-friendly and editable.</div>
+        <div class="footer-note">A clean, focused swimming interval timer.</div>
     </main>
-
-    <!-- Edit Workout Modal -->
-    <div id="editWorkoutModal" class="modal-overlay" style="display: none;">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Edit Today's Workout</h3>
-                <button type="button" class="delete-item-btn" id="closeWorkoutEditorX" style="font-size: 1.5rem; font-weight: bold; min-height: auto; padding: 0;">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="notice" style="margin-bottom: 12px; font-size: 0.9em;">
-                    Drag the handle ☰ to reorder sets. Tap ✕ to delete.
-                </div>
-                <div id="editWorkoutList" class="edit-workout-list"></div>
-                
-                <div style="margin-top: 20px;">
-                    <label for="editorAddSetSelect"><strong>Add set from library</strong></label>
-                    <select id="editorAddSetSelect" style="margin-top: 6px;">
-                        <option value="">-- Choose Set --</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveWorkoutEditorBtn" style="flex: 1; min-height: 48px; padding: 10px; background: var(--accent); color: #06131f;">Done</button>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Swim Interval Timer - first draft
@@ -1506,218 +1494,70 @@
             return formatSeconds(seconds, true);
         }
 
-        function getTotalRepeats() {
-            return appData.currentSet.reduce((sum, line) => sum + Number(line.repeats || 0), 0);
-        }
-
-        function getCompletedRepeatsBeforeLine(lineIndex) {
-            return appData.currentSet.slice(0, lineIndex).reduce((sum, line) => sum + Number(line.repeats || 0), 0);
-        }
-
         function getCurrentLine() {
-            return appData.currentSet[intervalState.currentLineIndex] || null;
+            return appData.currentSet[0] || null;
         }
 
         function renderAll() {
-            renderCurrentSet();
-            renderSavedSets();
-            renderSettings();
-            renderSessionSummary();
+            renderForms();
             renderStats();
+            renderSessionSummary();
             updateTimerDisplay();
+            updateManualDisplay();
+            renderManualLaps();
         }
 
-        function renderCurrentSet() {
-            const wrap = $("currentSetTableWrap");
-            const notice = $("currentSetNotice");
-            if (!appData.currentSet.length) {
-                wrap.innerHTML = `<div class="notice">No set lines yet.</div>`;
-                if (notice) notice.textContent = "Add set lines below, or load a saved set. Then press Start Set.";
-                renderTimerWorkout();
-                return;
-            }
+        function renderForms() {
+            // Pre-fill Interval Form
+            $("intRepeats").value = appData.settings.lastIntervalRepeats ?? 10;
+            $("intDistance").value = appData.settings.lastIntervalDistance ?? 100;
+            $("intStroke").value = appData.settings.lastIntervalStroke ?? "Free";
+            $("intIntervalSel").value = appData.settings.lastIntervalType ?? "2:00";
+            $("intIntervalCustom").value = appData.settings.lastIntervalCustom ?? "2:00";
+            $("intNotes").value = appData.settings.lastIntervalNotes ?? "steady pace";
+            toggleCustomInput("intIntervalSel", "intIntervalCustomContainer");
 
-            const totalDistance = appData.currentSet.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
-            const setNames = [...new Set(appData.currentSet.map(line => line.setName))].join(", ");
-            if (notice) notice.textContent = `${setNames} - ${getTotalRepeats()} repeats - ${totalDistance}m total`;
+            // Pre-fill Rest Form
+            $("restRepeats").value = appData.settings.lastRestRepeats ?? 10;
+            $("restDistance").value = appData.settings.lastRestDistance ?? 100;
+            $("restStroke").value = appData.settings.lastRestStroke ?? "Free";
+            $("restTimeSel").value = appData.settings.lastRestType ?? "0:30";
+            $("restTimeCustom").value = appData.settings.lastRestCustom ?? "0:30";
+            $("restNotes").value = appData.settings.lastRestNotes ?? "easy pace";
+            toggleCustomInput("restTimeSel", "restTimeCustomContainer");
 
-            const rows = appData.currentSet.map((line, index) => {
-                let intervalDisplay = formatSeconds(line.intervalSeconds);
-                let opacity = "1";
-                if (line.mode === "rest") intervalDisplay = `${intervalDisplay} Rest`;
-                if (line.mode === "continuous") { intervalDisplay = "Continuous"; opacity = "0.4"; }
-                if (line.mode === "ready") { intervalDisplay = "Ready"; opacity = "0.4"; }
-                return `
-        <tr>
-          <td>${line.order}</td>
-          <td>${escapeHtml(line.setName)}</td>
-          <td>${line.repeats}</td>
-          <td>${line.distance}</td>
-          <td>${escapeHtml(line.stroke)}</td>
-          <td style="opacity: ${opacity}">${intervalDisplay}</td>
-          <td>${escapeHtml(line.notes || "")}</td>
-          <td><button class="small-action danger" onclick="removeCurrentLine(${index})">Remove</button></td>
-        </tr>
-      `}).join("");
-
-            wrap.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Order</th><th>Set</th><th>Repeats</th><th>Distance</th><th>Stroke</th><th>Interval/Mode</th><th>Notes</th><th></th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-            renderTimerWorkout();
-        }
-
-        function renderTimerWorkout() {
-            const wrap = $("timerWorkoutWrap");
-            if (!wrap) return;
-            if (!appData.currentSet.length) {
-                wrap.innerHTML = `<div class="notice">Add default sets in Settings, use the Builder, or browse the Sets library to compile your workout!</div>`;
-                return;
-            }
-
-            const blocks = groupWorkoutIntoBlocks();
-            const rows = blocks.map((block, blockIdx) => {
-                const originalIndices = block.lines.map(l => l.originalIndex);
-                
-                const isSelected = intervalState.currentLineIndex !== undefined && intervalState.currentLineIndex !== null && originalIndices.includes(intervalState.currentLineIndex);
-                const isActive = intervalState.running && isSelected;
-                const isCompleted = intervalState.running && originalIndices.every(idx => idx < intervalState.currentLineIndex);
-                
-                let cardClass = "timer-workout-card";
-                if (isActive) {
-                    cardClass += " is-active-running";
-                } else if (isSelected && !intervalState.running) {
-                    cardClass += " is-selected-inactive";
-                } else if (isCompleted) {
-                    cardClass += " is-completed";
-                }
-                
-                const linesHtml = block.lines.map(line => {
-                    const idx = line.originalIndex;
-                    const isActiveLine = intervalState.running && intervalState.currentLineIndex === idx;
-                    const isCompletedLine = intervalState.running && idx < intervalState.currentLineIndex;
-                    
-                    let lineStyle = "padding: 6px; border-radius: 6px; margin: 4px 0; font-size: 0.9em;";
-                    let indicator = "";
-                    if (isActiveLine) {
-                        lineStyle += " background: rgba(32, 201, 151, 0.15); font-weight: bold; border-left: 3px solid var(--accent); padding-left: 8px;";
-                        indicator = "▶ ";
-                    } else if (isCompletedLine) {
-                        lineStyle += " opacity: 0.6; text-decoration: line-through;";
-                        indicator = "✓ ";
-                    }
-                    
-                    let intervalDisplay = formatSeconds(line.intervalSeconds);
-                    if (line.mode === "rest") intervalDisplay = `${intervalDisplay} Rest`;
-                    else if (line.mode === "continuous") intervalDisplay = `Continuous`;
-                    else if (line.mode === "ready") intervalDisplay = `Ready (Manual)`;
-                    
-                    return `
-                    <div style="${lineStyle}">
-                        ${indicator}<strong>${line.repeats} x ${line.distance}m ${escapeHtml(line.stroke)}</strong> on ${intervalDisplay}
-                        ${line.notes ? `<br/><span style="font-size: 0.85em; color: var(--muted);">${escapeHtml(line.notes)}</span>` : ""}
-                    </div>`;
-                }).join("");
-
-                const totalDist = block.lines.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
-                const repeats = block.lines.reduce((sum, line) => sum + Number(line.repeats), 0);
-
-                const startBtnText = isActive ? "Restart" : "Start";
-                const startBtnClass = isActive ? "small-action secondary" : "small-action";
-                const startBtnStyle = isActive ? "min-height: auto; padding: 4px 10px; font-size: 0.85em;" : "background: var(--accent); color: #06131f; min-height: auto; padding: 4px 10px; font-size: 0.85em;";
-
-                return `
-                <div class="${cardClass}" onclick="selectBlock(${originalIndices[0]}, event)">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <div>
-                            <strong style="font-size: 1.1em; color: ${isActive ? 'var(--accent)' : (isSelected && !intervalState.running ? 'var(--blue)' : 'var(--text)')};">
-                                ${escapeHtml(block.setName)}
-                            </strong>
-                            <div style="font-size: 0.8em; color: var(--muted); margin-top: 2px;">
-                                ${block.lines.length} lines • ${repeats} reps • ${totalDist}m
-                            </div>
-                        </div>
-                        <div class="button-row" style="margin-top: 0; min-height: auto; gap: 6px;" onclick="event.stopPropagation();">
-                            <button class="${startBtnClass}" style="${startBtnStyle}" onclick="selectAndStartBlock(${originalIndices[0]})">${startBtnText}</button>
-                            <button class="small-action secondary" style="min-height: auto; padding: 4px 10px; font-size: 0.85em;" onclick="openWorkoutEditorForBlock(${blockIdx})">Edit</button>
-                        </div>
-                    </div>
-                    <div style="margin-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px;">
-                        ${linesHtml}
-                    </div>
-                </div>`;
-            }).join("");
-            
-            wrap.innerHTML = rows;
-        }
-
-        window.selectBlock = function(startIndex, event) {
-            intervalState.currentLineIndex = startIndex;
-            intervalState.currentRepeat = 1;
-            updateTimerDisplay();
-            renderTimerWorkout();
-        };
-
-        window.selectAndStartBlock = function(startIndex) {
-            if (intervalState.running) {
-                if (!confirm("Are you sure you want to jump to this set and start it? Current progress will be lost.")) {
-                    return;
-                }
-            }
-            intervalState.currentLineIndex = startIndex;
-            startSet(startIndex);
-        };
-
-        window.openWorkoutEditorForBlock = function(blockIdx) {
-            openWorkoutEditor();
-            const el = $(`inlineEditBlock-${blockIdx}`);
-            if (el) {
-                el.style.display = "block";
-            }
-        };
-
-        function renderSavedSets() {
-            const wrap = $("savedSetsWrap");
-            if (!appData.savedSets.length) {
-                wrap.innerHTML = `<div class="notice">No saved sets yet.</div>`;
-                return;
-            }
-
-            const names = [...new Set(appData.savedSets.map(line => line.setName))];
-            wrap.innerHTML = names.map(name => {
-                const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
-                const repeats = lines.reduce((sum, line) => sum + Number(line.repeats || 0), 0);
-                const distance = lines.reduce((sum, line) => sum + Number(line.repeats || 0) * Number(line.distance || 0), 0);
-                return `
-           <div class="notice" style="margin-bottom: 10px;">
-            <strong>${escapeHtml(name)}</strong><br />
-            ${lines.length} line(s), ${repeats} repeats, ${distance}m<br />
-            <div class="button-row">
-              <button class="small-action secondary" onclick="addSavedSetToWorkout('${escapeJs(name)}')">Add to Today's Workout</button>
-              <button class="small-action secondary" onclick="editSavedSet('${escapeJs(name)}')">Edit</button>
-              <button class="small-action secondary" onclick="copySavedSet('${escapeJs(name)}')">Copy</button>
-              <button class="small-action danger" onclick="deleteSavedSet('${escapeJs(name)}')">Delete</button>
-            </div>
-          </div>
-        `;
-            }).join("");
-        }
-
-        function renderSettings() {
-            $("poolLength").value = appData.settings.poolLength;
-            $("customPoolLength").value = appData.settings.customPoolLength;
+            // Pre-fill Settings
+            $("poolLength").value = appData.settings.poolLength ?? "25m";
+            $("customPoolLength").value = appData.settings.customPoolLength ?? "25m";
             $("soundToggle").value = appData.settings.soundOn ? "on" : "off";
-            $("stroke").value = appData.settings.lastStroke;
-            $("mode").value = appData.settings.lastMode;
-            $("interval").value = appData.settings.lastInterval;
+            toggleCustomPoolLength();
         }
 
+        function toggleCustomInput(selectId, containerId) {
+            const selectEl = $(selectId);
+            const containerEl = $(containerId);
+            if (selectEl && containerEl) {
+                if (selectEl.value === "other") {
+                    containerEl.classList.remove("hidden");
+                } else {
+                    containerEl.classList.add("hidden");
+                }
+            }
+        }
+
+        function toggleCustomPoolLength() {
+            const lengthSel = $("poolLength");
+            const customInput = $("customPoolLength");
+            if (lengthSel && customInput) {
+                if (lengthSel.value === "custom") {
+                    customInput.parentElement.classList.remove("hidden");
+                } else {
+                    customInput.parentElement.classList.add("hidden");
+                }
+            }
+        }
+
+        // Achievements helpers
         function getSeededRandom(seed) {
             const x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
@@ -1831,451 +1671,129 @@
             return `🔥 <strong>Only ${percentOff}% more</strong> (${remaining}m / ${lapsNeeded} lap${lapsNeeded > 1 ? 's' : ''}) to unlock <strong>${chosen.name}</strong> (${chosen.region}: ${chosen.msg})`;
         }
 
-        function renderSessionSummary() {
-            const results = appData.sessionResults.filter(row => row.swimSeconds !== undefined && row.skipped !== true);
-            $("summaryCompleted").textContent = results.length;
-
-            if (!results.length) {
-                $("summaryFastest").textContent = "-";
-                $("summarySlowest").textContent = "-";
-                $("summaryAverage").textContent = "-";
-                $("summaryDistance").textContent = "0m";
-                const achWrap = $("currentSessionAchievements");
-                if (achWrap) achWrap.innerHTML = "";
-                return;
-            }
-
-            const times = results.map(row => row.swimSeconds);
-            const fastest = Math.min(...times);
-            const slowest = Math.max(...times);
-            const average = times.reduce((a, b) => a + b, 0) / times.length;
-            const distance = results.reduce((sum, row) => sum + Number(row.distance || 0), 0);
-
-            $("summaryFastest").textContent = formatSeconds(fastest, true);
-            $("summarySlowest").textContent = formatSeconds(slowest, true);
-            $("summaryAverage").textContent = formatSeconds(average, true);
-            $("summaryDistance").textContent = `${distance}m`;
-
-            const achWrap = $("currentSessionAchievements");
-            if (achWrap) {
-                const achievements = getAchievementsForSession(appData.sessionResults);
-                achWrap.innerHTML = renderAchievementsHTML(achievements);
+        // Web Audio audio generator
+        let audioContext = null;
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
-
-        function renderLiveLaps() {
-            const wrap = $("liveLapsWrap");
-            const currentSession = appData.sessionResults;
-            if (!currentSession.length) {
-                wrap.textContent = "No laps yet.";
-                return;
-            }
-            const rows = [...currentSession].reverse().map(row => {
-                if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
-                let restText = "";
-                if (row.restTime && row.restTime !== "0.0") {
-                    restText = ` <span style="color: var(--muted); font-size: 0.95em;">(Rest: ${row.restTime})</span>`;
+        function beep(frequency = 800, duration = 0.15) {
+            initAudio();
+            if (!audioContext) return;
+            try {
+                if (audioContext.state === "suspended") {
+                    audioContext.resume();
                 }
-                return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
-            });
-            wrap.innerHTML = rows.join("<br />");
-        }
-
-        function renderStats() {
-            const wrap = $("statsHistoryWrap");
-            if (!appData.history || !appData.history.length) {
-                wrap.textContent = "No sessions recorded yet.";
-                $("statsTotalDistance").textContent = "0m";
-                $("statsTotalSessions").textContent = "0";
-                return;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start();
+                osc.stop(audioContext.currentTime + duration + 0.02);
+            } catch (error) {
+                console.warn("Audio not available", error);
             }
-
-            let totalDistance = 0;
-            const rows = [...appData.history].reverse().map((session, i) => {
-                const date = session[0] ? session[0].date : "Unknown Date";
-                const setName = session[0] && session[0].setName ? session[0].setName : "Unknown Set";
-                const dist = session.reduce((sum, row) => sum + Number(row.distance || 0), 0);
-                totalDistance += dist;
-                const repeats = session.length;
-
-                const lapRows = session.map(row => {
-                    if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
-                    let restText = "";
-                    if (row.restTime && row.restTime !== "0.0") {
-                        restText = ` <span style="color: var(--muted); font-size: 0.9em;">(Rest: ${row.restTime})</span>`;
-                    }
-                    return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
-                }).join("<br />");
-
-                const achievements = getAchievementsForSession(session);
-                const achievementsHtml = renderAchievementsHTML(achievements);
-
-                return `
-                <details>
-                    <summary>
-                        <div>
-                            <strong>${date}</strong> - ${escapeHtml(setName)}<br/>
-                            <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} repeats, ${dist}m</span>
-                        </div>
-                    </summary>
-                    <div class="details-content">
-                        ${lapRows}
-                        ${achievementsHtml}
-                    </div>
-                </details>`;
-            });
-
-            $("statsTotalDistance").textContent = `${totalDistance}m`;
-            $("statsTotalSessions").textContent = appData.history.length;
-            wrap.innerHTML = rows.join("");
         }
 
-        function addLine() {
-            const setName = $("setName").value.trim() || "Untitled Set";
-            const repeats = Math.max(1, Number($("repeats").value || 1));
-            const distance = Math.max(1, Number($("distance").value || 1));
-            const stroke = $("stroke").value;
-            const mode = $("mode").value;
-            const intervalSeconds = parseTimeToSeconds($("interval").value);
-            const notes = $("notes").value.trim();
-            const nextOrder = appData.currentSet.length + 1;
-
-            if ((mode === "interval" || mode === "rest") && intervalSeconds <= 0) {
-                alert("Please enter a valid time for Interval/Rest.");
-                return;
-            }
-
-            appData.currentSet.push({ setName, order: nextOrder, repeats, distance, stroke, mode, intervalSeconds, notes });
-            appData.settings.lastStroke = stroke;
-            appData.settings.lastMode = mode;
-            if (mode === "interval" || mode === "rest") appData.settings.lastInterval = $("interval").value.trim();
-            saveData();
-            renderAll();
-        }
-
-        window.removeCurrentLine = function (index) {
-            appData.currentSet.splice(index, 1);
-            appData.currentSet.forEach((line, i) => line.order = i + 1);
-            saveData();
-            renderAll();
-        };
-
-        function clearCurrentSet() {
-            if (!confirm("Clear the current set?")) return;
-            appData.currentSet = [];
-            intervalState.currentLineIndex = 0;
-            saveData();
-            renderAll();
-        }
-
-        function saveCurrentSet() {
-            if (!appData.currentSet.length) {
-                alert("Add at least one set line first.");
-                return;
-            }
-            const setName = appData.currentSet[0].setName;
-            appData.savedSets = appData.savedSets.filter(line => line.setName !== setName);
-            appData.savedSets.push(...appData.currentSet.map(line => ({ ...line })));
-            saveData();
-            renderAll();
-            alert(`Saved set: ${setName}`);
-        }
-
-        window.addSavedSetToWorkout = function (name) {
-            const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
-            const startOrder = appData.currentSet.length;
-            const copied = lines.map((line, idx) => ({ 
-                ...line, 
-                order: startOrder + idx + 1 
-            }));
-            appData.currentSet.push(...copied);
-            saveData();
-            renderAll();
-            switchTab('timerTab');
-        };
-
-        window.editSavedSet = function (name) {
-            const lines = appData.savedSets.filter(line => line.setName === name).sort((a, b) => a.order - b.order);
-            appData.currentSet = lines.map(line => ({ ...line }));
-            $("setName").value = name;
-            saveData();
-            renderAll();
-            switchTab('builderTab');
-        };
-
-        function groupWorkoutIntoBlocks() {
-            const blocks = [];
-            let currentBlock = null;
+        // Start set trigger logic
+        function startIntervalSet() {
+            const repeats = Math.max(1, parseInt($("intRepeats").value) || 10);
+            const distance = Math.max(0, parseInt($("intDistance").value) || 100);
+            const stroke = $("intStroke").value;
+            const notes = $("intNotes").value.trim();
             
-            appData.currentSet.forEach((line, index) => {
-                if (currentBlock && currentBlock.setName === line.setName) {
-                    currentBlock.lines.push({ ...line, originalIndex: index });
-                } else {
-                    if (currentBlock) blocks.push(currentBlock);
-                    currentBlock = {
-                        setName: line.setName,
-                        lines: [{ ...line, originalIndex: index }]
-                    };
-                }
-            });
-            if (currentBlock) blocks.push(currentBlock);
-            return blocks;
-        }
-
-        function reorderWorkoutFromBlocks(newBlockOrder) {
-            if (intervalState.running) {
-                const activeLine = appData.currentSet[intervalState.currentLineIndex];
-                if (activeLine) activeLine.isActiveFlag = true;
+            let intervalStr = $("intIntervalSel").value;
+            if (intervalStr === "other") {
+                intervalStr = $("intIntervalCustom").value.trim();
             }
-
-            const newLines = [];
-            let currentOrder = 1;
-            newBlockOrder.forEach(block => {
-                block.lines.forEach(line => {
-                    newLines.push({
-                        ...line,
-                        order: currentOrder++
-                    });
-                });
-            });
-            appData.currentSet = newLines;
-
-            if (intervalState.running) {
-                const newActiveIndex = appData.currentSet.findIndex(line => line.isActiveFlag);
-                if (newActiveIndex !== -1) {
-                    intervalState.currentLineIndex = newActiveIndex;
-                } else {
-                    stopSet();
-                }
-                appData.currentSet.forEach(line => delete line.isActiveFlag);
-            }
-
-            saveData();
-            renderAll();
-            renderLiveLaps();
-        }
-
-        function addSetToWorkoutFromEditor(setName) {
-            const lines = appData.savedSets.filter(line => line.setName === setName).sort((a, b) => a.order - b.order);
-            const startOrder = appData.currentSet.length;
-            const copied = lines.map((line, idx) => ({ 
-                ...line, 
-                order: startOrder + idx + 1 
-            }));
-            appData.currentSet.push(...copied);
-            saveData();
-            renderAll();
-            renderWorkoutEditorList();
-        }
-
-        window.deleteBlockFromEditor = function(blockIndex) {
-            const blocks = groupWorkoutIntoBlocks();
-            blocks.splice(blockIndex, 1);
-            reorderWorkoutFromBlocks(blocks);
-            renderWorkoutEditorList();
-        };
-
-        window.toggleEditBlockInline = function(blockIndex) {
-            const el = $(`inlineEditBlock-${blockIndex}`);
-            if (el) {
-                el.style.display = el.style.display === "none" ? "block" : "none";
-            }
-        };
-
-        function renderWorkoutEditorList() {
-            const listContainer = $("editWorkoutList");
-            const select = $("editorAddSetSelect");
-            if (!listContainer) return;
             
-            const savedNames = [...new Set(appData.savedSets.map(line => line.setName))];
-            select.innerHTML = `<option value="">-- Choose Set --</option>` + 
-                savedNames.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
-            
-            const blocks = groupWorkoutIntoBlocks();
-            if (!blocks.length) {
-                listContainer.innerHTML = `<div class="notice">Today's workout is empty.</div>`;
+            const intervalSeconds = parseTimeToSeconds(intervalStr);
+            if (intervalSeconds <= 0) {
+                alert("Please enter a valid interval duration (e.g. 2:00 or 90).");
                 return;
             }
             
-            const strokes = ["Free", "Back", "Breast", "Fly", "IM", "Kick", "Pull", "Drill", "Choice"];
+            // Save settings presets
+            appData.settings.lastIntervalRepeats = repeats;
+            appData.settings.lastIntervalDistance = distance;
+            appData.settings.lastIntervalStroke = stroke;
+            appData.settings.lastIntervalType = $("intIntervalSel").value;
+            appData.settings.lastIntervalCustom = $("intIntervalCustom").value.trim();
+            appData.settings.lastIntervalNotes = notes;
+            saveData();
             
-            listContainer.innerHTML = blocks.map((block, index) => {
-                const totalDist = block.lines.reduce((sum, line) => sum + (Number(line.repeats) * Number(line.distance)), 0);
-                const repeats = block.lines.reduce((sum, line) => sum + Number(line.repeats), 0);
-                
-                const linesForm = block.lines.map((line, lineIdx) => {
-                    const isInt = line.mode !== "continuous" && line.mode !== "ready";
-                    const formattedInt = isInt ? formatSeconds(line.intervalSeconds) : "-";
-                    return `
-                    <div style="margin-bottom: 12px; font-size: 0.9em; border-left: 2px solid var(--accent); padding-left: 10px;">
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px;">
-                            <div>
-                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Reps</label>
-                                <input type="number" class="small-input edit-rep" data-orig-idx="${line.originalIndex}" value="${line.repeats}" min="1" style="height: 32px; padding: 4px;" />
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Dist (m)</label>
-                                <input type="number" class="small-input edit-dist" data-orig-idx="${line.originalIndex}" value="${line.distance}" min="0" step="25" style="height: 32px; padding: 4px;" />
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Stroke</label>
-                                <select class="small-input edit-stroke" data-orig-idx="${line.originalIndex}" style="height: 32px; padding: 4px;">
-                                    ${strokes.map(st => `<option ${st === line.stroke ? 'selected' : ''}>${st}</option>`).join("")}
-                                </select>
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Interval</label>
-                                <input type="text" class="small-input edit-int" data-orig-idx="${line.originalIndex}" value="${formattedInt}" ${isInt ? '' : 'disabled'} style="height: 32px; padding: 4px;" />
-                            </div>
-                        </div>
-                        <div>
-                            <label style="font-size: 0.75em; color: var(--muted); display: block; margin-bottom: 2px;">Notes</label>
-                            <input type="text" class="small-input edit-notes" data-orig-idx="${line.originalIndex}" value="${escapeHtml(line.notes || '')}" style="height: 32px; padding: 4px;" />
-                        </div>
-                    </div>
-                    ${lineIdx < block.lines.length - 1 ? '<hr style="border: 0; border-top: 1px solid var(--border); margin: 8px 0;" />' : ''}
-                    `;
-                }).join("");
-                
-                return `
-                <div class="edit-workout-container" data-index="${index}" style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.02); margin-bottom: 8px;">
-                    <div class="edit-workout-item" style="border: none; border-radius: 0; background: none; margin-bottom: 0;">
-                        <div class="drag-handle" style="touch-action: none;">☰</div>
-                        <div class="edit-item-details">
-                            <strong>${escapeHtml(block.setName)}</strong><br/>
-                            <span style="font-size:0.85em; color:var(--muted);">${block.lines.length} lines, ${repeats} repeats, ${totalDist}m</span>
-                        </div>
-                        <div class="button-row" style="margin-top: 0; min-height: auto; gap: 6px;">
-                            <button class="small-action secondary" onclick="toggleEditBlockInline(${index})" style="min-height: auto; padding: 6px 10px; font-size: 0.85em;">Edit</button>
-                            <button class="delete-item-btn" onclick="deleteBlockFromEditor(${index})" style="min-height: auto; padding: 6px; box-shadow: none;">✕</button>
-                        </div>
-                    </div>
-                    <div id="inlineEditBlock-${index}" style="display: none; background: rgba(0, 0, 0, 0.2); padding: 12px; border-top: 1px solid var(--border);">
-                        ${linesForm}
-                    </div>
-                </div>`;
-            }).join("");
+            appData.currentSet = [{
+                setName: "Interval Set",
+                repeats: repeats,
+                distance: distance,
+                stroke: stroke,
+                mode: "interval",
+                intervalSeconds: intervalSeconds,
+                notes: notes
+            }];
             
-            setupTouchDragReordering();
+            startSet();
         }
 
-        function setupTouchDragReordering() {
-            const list = $("editWorkoutList");
-            const containers = list.querySelectorAll(".edit-workout-container");
-            let dragEl = null;
-            let activeIndex = -1;
+        function startRestSet() {
+            const repeats = Math.max(1, parseInt($("restRepeats").value) || 10);
+            const distance = Math.max(0, parseInt($("restDistance").value) || 100);
+            const stroke = $("restStroke").value;
+            const notes = $("restNotes").value.trim();
             
-            containers.forEach(container => {
-                const handle = container.querySelector(".drag-handle");
-                if (!handle) return;
-                
-                handle.addEventListener("touchstart", function(e) {
-                    dragEl = container;
-                    activeIndex = Number(container.dataset.index);
-                    dragEl.classList.add("dragging");
-                }, { passive: true });
-            });
-            
-            list.addEventListener("touchmove", function(e) {
-                if (!dragEl) return;
-                e.preventDefault();
-                
-                const touch = e.touches[0];
-                const clientY = touch.clientY;
-                
-                const target = document.elementFromPoint(touch.clientX, clientY);
-                if (!target) return;
-                
-                const sibling = target.closest(".edit-workout-container");
-                if (sibling && sibling !== dragEl) {
-                    const rect = sibling.getBoundingClientRect();
-                    const next = (clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                    list.insertBefore(dragEl, next ? sibling.nextSibling : sibling);
-                }
-            }, { passive: false });
-            
-            function handleEnd() {
-                if (!dragEl) return;
-                dragEl.classList.remove("dragging");
-                
-                const newOrderIndexes = Array.from(list.querySelectorAll(".edit-workout-container")).map(container => Number(container.dataset.index));
-                const blocks = groupWorkoutIntoBlocks();
-                const newBlocks = newOrderIndexes.map(idx => blocks[idx]);
-                
-                reorderWorkoutFromBlocks(newBlocks);
-                dragEl = null;
-                renderWorkoutEditorList();
+            let restStr = $("restTimeSel").value;
+            if (restStr === "other") {
+                restStr = $("restTimeCustom").value.trim();
             }
             
-            list.addEventListener("touchend", handleEnd);
-            list.addEventListener("touchcancel", handleEnd);
-        }
-
-        function openWorkoutEditor() {
-            renderWorkoutEditorList();
-            $("editWorkoutModal").style.display = "flex";
-        }
-
-        function closeWorkoutEditor() {
-            $("editWorkoutModal").style.display = "none";
-        }
-
-        window.copySavedSet = function (name) {
-            const dateStr = new Date().toISOString().slice(0, 10);
-            const newName = `${name} ${dateStr}`;
-            const lines = appData.savedSets.filter(line => line.setName === name).map(line => ({ ...line, setName: newName }));
-            appData.savedSets.push(...lines);
-            saveData();
-            renderAll();
-        };
-
-        window.deleteSavedSet = function (name) {
-            if (!confirm(`Delete saved set: ${name}?`)) return;
-            appData.savedSets = appData.savedSets.filter(line => line.setName !== name);
-            saveData();
-            renderAll();
-        };
-
-        function clearSavedSets() {
-            if (!confirm("Clear all saved sets?")) return;
-            appData.savedSets = [];
-            saveData();
-            renderAll();
-        }
-
-        function clearHistory() {
-            if (!confirm("Clear all session history? This cannot be undone.")) return;
-            appData.history = [];
-            saveData();
-            renderAll();
-        }
-
-        function startSet(startIndex = null) {
-            if (!appData.currentSet.length) {
-                alert("Add or load a set first.");
+            const restSeconds = parseTimeToSeconds(restStr);
+            if (restSeconds <= 0) {
+                alert("Please enter a valid rest duration (e.g. 0:30 or 30).");
                 return;
             }
+            
+            // Save settings presets
+            appData.settings.lastRestRepeats = repeats;
+            appData.settings.lastRestDistance = distance;
+            appData.settings.lastRestStroke = stroke;
+            appData.settings.lastRestType = $("restTimeSel").value;
+            appData.settings.lastRestCustom = $("restTimeCustom").value.trim();
+            appData.settings.lastRestNotes = notes;
+            saveData();
+            
+            appData.currentSet = [{
+                setName: "Rest Set",
+                repeats: repeats,
+                distance: distance,
+                stroke: stroke,
+                mode: "rest",
+                intervalSeconds: restSeconds,
+                notes: notes
+            }];
+            
+            startSet();
+        }
+
+        function startSet() {
+            if (!appData.currentSet.length) return;
             appData.sessionResults = [];
+            
             intervalState.running = true;
             intervalState.paused = false;
             intervalState.waitingForNext = false;
-            
-            if (typeof startIndex === "number") {
-                intervalState.currentLineIndex = startIndex;
-            } else if (intervalState.currentLineIndex === undefined || intervalState.currentLineIndex === null || intervalState.currentLineIndex >= appData.currentSet.length) {
-                intervalState.currentLineIndex = 0;
-            }
-            
             intervalState.currentRepeat = 1;
             intervalState.repeatStartMs = performance.now();
-            intervalState.lineStartMs = performance.now();
+            intervalState.finishRepeatMs = 0;
             intervalState.alreadyBeeped = new Set();
-
+            
             document.body.classList.add("is-running");
             $("pauseBtn").textContent = "Pause ||";
             $("pauseBtn").style.background = "var(--blue)";
-
-            // Set initial motivational banner if appropriate
+            
             const firstLine = getCurrentLine();
             const banner = $("motivationalBanner");
             if (banner && firstLine) {
@@ -2287,13 +1805,12 @@
                     banner.style.display = "none";
                 }
             }
-
-            switchTab("timerTab");
+            
             renderLiveLaps();
             startTicker();
             beep(880, 0.18);
             flashGo();
-            renderTimerWorkout();
+            updateTimerDisplay();
         }
 
         function startTicker() {
@@ -2303,27 +1820,27 @@
         }
 
         function tickIntervalTimer() {
-            if (!intervalState.running || intervalState.paused || intervalState.waitingForReady) return;
+            if (!intervalState.running || intervalState.paused) return;
             const line = getCurrentLine();
             if (!line) {
                 finishSet();
                 return;
             }
-
+            
             const now = performance.now();
             let remaining = 0;
-
+            
             if (intervalState.waitingForNext) {
                 if (line.mode === "rest") {
                     const elapsedRest = (now - intervalState.finishRepeatMs) / 1000;
                     remaining = line.intervalSeconds - elapsedRest;
-                } else {
+                } else { // "interval"
                     const elapsed = (now - intervalState.repeatStartMs) / 1000;
                     remaining = line.intervalSeconds - elapsed;
                 }
-
+                
                 handleBeeps(Math.ceil(remaining));
-
+                
                 if (remaining <= 0) {
                     nextRepeat();
                 } else {
@@ -2345,43 +1862,37 @@
 
         function finishRepeat() {
             if (!intervalState.running || intervalState.waitingForNext) return;
-            if (intervalState.waitingForReady) {
-                nextRepeat();
-                return;
-            }
             const line = getCurrentLine();
             if (!line) return;
+            
             const now = performance.now();
             const swimSeconds = (now - intervalState.repeatStartMs) / 1000;
-            const absoluteRepeat = getCompletedRepeatsBeforeLine(intervalState.currentLineIndex) + intervalState.currentRepeat;
-
+            
             let restSeconds = 0;
             if (line.mode === "interval") {
                 restSeconds = line.intervalSeconds - swimSeconds;
             } else if (line.mode === "rest") {
                 restSeconds = line.intervalSeconds;
             }
-
+            
             appData.sessionResults.push({
                 date: new Date().toISOString().slice(0, 10),
                 setName: line.setName,
-                repeat: absoluteRepeat,
-                lineRepeat: intervalState.currentRepeat,
+                repeat: intervalState.currentRepeat,
                 distance: line.distance,
                 stroke: line.stroke,
                 interval: formatSeconds(line.intervalSeconds),
                 swimTime: formatSeconds(swimSeconds, true),
-                swimSeconds,
-                restTime: line.mode === "ready" ? "..." : formatRestSeconds(restSeconds),
+                swimSeconds: swimSeconds,
+                restTime: formatRestSeconds(restSeconds),
                 notes: line.notes || "",
                 skipped: false
             });
-
+            
             intervalState.finishRepeatMs = now;
             saveData();
-            renderSessionSummary();
             renderLiveLaps();
-
+            
             const currentDistance = appData.sessionResults.reduce((sum, row) => sum + Number(row.distance || 0), 0);
             const banner = $("motivationalBanner");
             if (banner) {
@@ -2393,41 +1904,31 @@
                     banner.style.display = "none";
                 }
             }
-
-            if (line.mode === "continuous") {
-                nextRepeat();
-            } else if (line.mode === "ready") {
-                intervalState.waitingForNext = false;
-                intervalState.waitingForReady = true;
-                $("finishRepeatBtn").textContent = "Next Lap ▶";
-                $("finishRepeatBtn").style.background = "var(--accent)";
-                $("finishRepeatBtn").style.color = "#06131f";
-                $("timerStatus").textContent = "Ready - press Next Lap";
-                $("goCountdown").textContent = "READY";
-                updateTimerDisplay();
-            } else {
-                intervalState.waitingForNext = true;
-                updateTimerDisplay();
-            }
+            
+            intervalState.waitingForNext = true;
+            updateTimerDisplay();
         }
 
         function skipRepeat() {
             if (!intervalState.running) return;
             const line = getCurrentLine();
-            const absoluteRepeat = getCompletedRepeatsBeforeLine(intervalState.currentLineIndex) + intervalState.currentRepeat;
+            if (!line) return;
+            
             appData.sessionResults.push({
                 date: new Date().toISOString().slice(0, 10),
                 setName: line.setName,
-                repeat: absoluteRepeat,
-                lineRepeat: intervalState.currentRepeat,
+                repeat: intervalState.currentRepeat,
                 distance: line.distance,
                 stroke: line.stroke,
                 interval: formatSeconds(line.intervalSeconds),
-                swimTime: "SKIP",
-                restTime: "",
+                swimTime: "SKIPPED",
+                swimSeconds: 0,
+                restTime: "-",
                 notes: line.notes || "",
                 skipped: true
             });
+            
+            saveData();
             renderLiveLaps();
             nextRepeat();
         }
@@ -2435,55 +1936,20 @@
         function nextRepeat() {
             const line = getCurrentLine();
             if (!line) return finishSet();
-
-            if (line.mode === "ready" && intervalState.finishRepeatMs) {
-                const now = performance.now();
-                const restSeconds = (now - intervalState.finishRepeatMs) / 1000;
-                if (appData.sessionResults.length > 0) {
-                    appData.sessionResults[appData.sessionResults.length - 1].restTime = formatRestSeconds(restSeconds);
-                    saveData();
-                    renderLiveLaps();
-                }
-            }
-
-            $("finishRepeatBtn").textContent = "Finish Lap";
-            $("finishRepeatBtn").style.background = "";
-            $("finishRepeatBtn").style.color = "";
-            intervalState.waitingForReady = false;
+            
             intervalState.waitingForNext = false;
-
+            
             if (intervalState.currentRepeat < Number(line.repeats)) {
                 intervalState.currentRepeat += 1;
+                intervalState.repeatStartMs = performance.now();
+                intervalState.finishRepeatMs = 0;
+                intervalState.alreadyBeeped = new Set();
+                beep(980, 0.24);
+                flashGo();
+                updateTimerDisplay();
             } else {
-                intervalState.currentLineIndex += 1;
-                intervalState.currentRepeat = 1;
-            }
-
-            if (!getCurrentLine()) {
                 finishSet();
-                return;
             }
-
-            intervalState.repeatStartMs = performance.now();
-            intervalState.finishRepeatMs = 0;
-            intervalState.alreadyBeeped = new Set();
-            beep(980, 0.24);
-            flashGo();
-            updateTimerDisplay();
-
-            const nextL = getCurrentLine();
-            const currentDistance = appData.sessionResults.reduce((sum, row) => sum + Number(row.distance || 0), 0);
-            const banner = $("motivationalBanner");
-            if (banner && nextL) {
-                const motivation = getNextMilestoneMotivation(currentDistance, nextL.distance);
-                if (motivation) {
-                    banner.innerHTML = motivation;
-                    banner.style.display = "flex";
-                } else {
-                    banner.style.display = "none";
-                }
-            }
-            renderTimerWorkout();
         }
 
         function stopSet() {
@@ -2499,41 +1965,10 @@
             
             const banner = $("motivationalBanner");
             if (banner) banner.style.display = "none";
-            renderTimerWorkout();
-
+            
             saveData();
             renderStats();
-        }
-
-        function togglePause() {
-            if (!intervalState.running) return;
-
-            if (intervalState.paused) {
-                // Resume
-                intervalState.paused = false;
-                const pauseDuration = performance.now() - intervalState.pauseStartMs;
-                intervalState.repeatStartMs += pauseDuration;
-                intervalState.lineStartMs += pauseDuration;
-                if (intervalState.finishRepeatMs) intervalState.finishRepeatMs += pauseDuration;
-                $("pauseBtn").textContent = "Pause ||";
-                $("pauseBtn").style.background = "var(--blue)";
-            } else {
-                // Pause
-                intervalState.paused = true;
-                intervalState.pauseStartMs = performance.now();
-                $("pauseBtn").textContent = "Resume ▶";
-                $("pauseBtn").style.background = "var(--warning)";
-                $("timerStatus").textContent = "Paused";
-            }
-        }
-
-        function resetSetTimer() {
-            stopSet();
-            intervalState.currentLineIndex = 0;
-            intervalState.currentRepeat = 0;
-            appData.sessionResults = [];
-            saveData();
-            renderAll();
+            renderSessionSummary();
         }
 
         function finishSet() {
@@ -2544,56 +1979,52 @@
             beep(1040, 0.12);
             setTimeout(() => beep(1240, 0.18), 150);
             saveData();
+            renderStats();
             renderSessionSummary();
+        }
+
+        function togglePause() {
+            if (!intervalState.running) return;
+            if (intervalState.paused) {
+                intervalState.paused = false;
+                const pauseDuration = performance.now() - intervalState.pauseStartMs;
+                intervalState.repeatStartMs += pauseDuration;
+                if (intervalState.finishRepeatMs) intervalState.finishRepeatMs += pauseDuration;
+                $("pauseBtn").textContent = "Pause ||";
+                $("pauseBtn").style.background = "var(--blue)";
+                $("timerStatus").textContent = "Running";
+            } else {
+                intervalState.paused = true;
+                intervalState.pauseStartMs = performance.now();
+                $("pauseBtn").textContent = "Resume ▶";
+                $("pauseBtn").style.background = "var(--warning)";
+                $("timerStatus").textContent = "Paused";
+            }
         }
 
         function updateTimerDisplay(remaining = 0) {
             const line = getCurrentLine();
-            if (!line || !intervalState.running) {
-                if (!intervalState.running && appData.currentSet.length) {
-                    const targetIdx = (intervalState.currentLineIndex !== undefined && intervalState.currentLineIndex !== null && intervalState.currentLineIndex < appData.currentSet.length)
-                        ? intervalState.currentLineIndex
-                        : 0;
-                    const targetLine = appData.currentSet[targetIdx];
-                    if (targetLine) {
-                        $("repeatInfo").textContent = `${getCompletedRepeatsBeforeLine(targetIdx)} / ${getTotalRepeats()}`;
-                        $("distanceInfo").textContent = `${targetLine.distance}m`;
-                        $("strokeInfo").textContent = targetLine.stroke;
-
-                        $("intervalInfoLabel").textContent = targetLine.mode === "rest" ? "Rest" : "Interval";
-                        $("intervalInfo").textContent = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "-" : formatSeconds(targetLine.intervalSeconds);
-                        $("intervalInfoLabel").style.opacity = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "0.3" : "1";
-                        $("intervalInfo").style.opacity = (targetLine.mode === "continuous" || targetLine.mode === "ready") ? "0.3" : "1";
-                    }
-                }
-                return;
-            }
-
+            if (!line || !intervalState.running) return;
+            
             const now = performance.now();
             const elapsed = (now - intervalState.repeatStartMs) / 1000;
-            const absoluteRepeat = getCompletedRepeatsBeforeLine(intervalState.currentLineIndex) + intervalState.currentRepeat;
-
-            $("repeatInfo").textContent = `${absoluteRepeat} / ${getTotalRepeats()}`;
+            
+            $("repeatInfo").textContent = `${intervalState.currentRepeat} / ${line.repeats}`;
             $("distanceInfo").textContent = `${line.distance}m`;
             $("strokeInfo").textContent = line.stroke;
-
+            
             $("intervalInfoLabel").textContent = line.mode === "rest" ? "Rest" : "Interval";
-            $("intervalInfo").textContent = (line.mode === "continuous" || line.mode === "ready") ? "-" : formatSeconds(line.intervalSeconds);
-            $("intervalInfoLabel").style.opacity = (line.mode === "continuous" || line.mode === "ready") ? "0.3" : "1";
-            $("intervalInfo").style.opacity = (line.mode === "continuous" || line.mode === "ready") ? "0.3" : "1";
-
-            if (intervalState.waitingForReady) {
-                $("goCountdown").textContent = "READY";
-                $("timerStatus").textContent = "Press Next Lap";
-            } else if (intervalState.waitingForNext) {
+            $("intervalInfo").textContent = formatSeconds(line.intervalSeconds);
+            
+            if (intervalState.waitingForNext) {
                 $("goCountdown").textContent = formatSeconds(remaining, false);
                 $("timerStatus").textContent = `Resting - next start in ${formatSeconds(remaining)}`;
             } else {
                 $("goCountdown").textContent = "GO";
-                $("timerStatus").textContent = `${line.setName} - swim now`;
+                $("timerStatus").textContent = `Swim - Lap ${intervalState.currentRepeat}`;
             }
-
-            $("swimTime").textContent = (intervalState.waitingForNext || intervalState.waitingForReady) && appData.sessionResults.length > 0
+            
+            $("swimTime").textContent = intervalState.waitingForNext && appData.sessionResults.length > 0
                 ? appData.sessionResults[appData.sessionResults.length - 1].swimTime
                 : formatSeconds(elapsed, true);
         }
@@ -2605,27 +2036,27 @@
             panel.classList.add("flash-go");
         }
 
-        function beep(frequency = 700, duration = 0.1) {
-            if (!appData.settings.soundOn) return;
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                oscillator.frequency.value = frequency;
-                oscillator.type = "sine";
-                gain.gain.setValueAtTime(0.001, audioContext.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.25, audioContext.currentTime + 0.01);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-                oscillator.connect(gain);
-                gain.connect(audioContext.destination);
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + duration + 0.02);
-            } catch (error) {
-                console.warn("Audio not available", error);
+        function renderLiveLaps() {
+            const wrap = $("liveLapsWrap");
+            const currentSession = appData.sessionResults;
+            if (!currentSession.length) {
+                wrap.textContent = "No laps yet.";
+                return;
             }
+            const rows = [...currentSession].reverse().map(row => {
+                if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
+                let restText = "";
+                if (row.restTime && row.restTime !== "0.0" && row.restTime !== "-") {
+                    restText = ` <span style="color: var(--muted); font-size: 0.95em;">(Rest: ${row.restTime})</span>`;
+                }
+                return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
+            });
+            wrap.innerHTML = rows.join("<br />");
         }
 
+        // Stopwatch functions
         function startManual() {
+            initAudio();
             if (manualState.running) return;
             manualState.running = true;
             manualState.startMs = performance.now();
@@ -2682,12 +2113,99 @@
             wrap.innerHTML = manualState.laps.map((lap, index) => `Lap ${index + 1}: <strong>${formatSeconds(lap, true)}</strong>`).join("<br />");
         }
 
-        function saveSettings() {
-            appData.settings.poolLength = $("poolLength").value;
-            appData.settings.customPoolLength = $("customPoolLength").value.trim() || "25m";
-            appData.settings.soundOn = $("soundToggle").value === "on";
-            saveData();
-            alert("Settings saved.");
+        // Stats history render
+        function renderStats() {
+            const wrap = $("statsHistoryWrap");
+            if (!appData.history || !appData.history.length) {
+                wrap.textContent = "No sessions recorded yet.";
+                $("statsTotalDistance").textContent = "0m";
+                $("statsTotalSessions").textContent = "0";
+                return;
+            }
+
+            let totalDistance = 0;
+            const rows = [...appData.history].reverse().map((session, i) => {
+                const date = session[0] ? session[0].date : "Unknown Date";
+                const setName = session[0] && session[0].setName ? session[0].setName : "Swim Set";
+                const dist = session.reduce((sum, row) => sum + Number(row.distance || 0), 0);
+                totalDistance += dist;
+                const repeats = session.length;
+
+                const lapRows = session.map(row => {
+                    if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
+                    let restText = "";
+                    if (row.restTime && row.restTime !== "0.0" && row.restTime !== "-") {
+                        restText = ` <span style="color: var(--muted); font-size: 0.9em;">(Rest: ${row.restTime})</span>`;
+                    }
+                    return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
+                }).join("<br />");
+
+                const achievements = getAchievementsForSession(session);
+                const achievementsHtml = renderAchievementsHTML(achievements);
+
+                return `
+                <details style="margin-bottom: 10px;">
+                    <summary>
+                        <div>
+                            <strong>${date}</strong> - ${escapeHtml(setName)}<br/>
+                            <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} repeats, ${dist}m</span>
+                        </div>
+                    </summary>
+                    <div class="details-content">
+                        ${lapRows}
+                        ${achievementsHtml}
+                    </div>
+                </details>`;
+            });
+
+            $("statsTotalDistance").textContent = `${totalDistance}m`;
+            $("statsTotalSessions").textContent = appData.history.length;
+            wrap.innerHTML = rows.join("");
+        }
+
+        function renderSessionSummary() {
+            const results = appData.sessionResults.filter(row => row.swimSeconds !== undefined && row.skipped !== true);
+            $("summaryCompleted").textContent = results.length;
+
+            if (!results.length) {
+                $("summaryFastest").textContent = "-";
+                $("summarySlowest").textContent = "-";
+                $("summaryAverage").textContent = "-";
+                $("summaryDistance").textContent = "0m";
+                const achWrap = $("currentSessionAchievements");
+                if (achWrap) achWrap.innerHTML = "";
+                return;
+            }
+
+            const times = results.map(row => row.swimSeconds);
+            const fastest = Math.min(...times);
+            const slowest = Math.max(...times);
+            const average = times.reduce((a, b) => a + b, 0) / times.length;
+            const distance = results.reduce((sum, row) => sum + Number(row.distance || 0), 0);
+
+            $("summaryFastest").textContent = formatSeconds(fastest, true);
+            $("summarySlowest").textContent = formatSeconds(slowest, true);
+            $("summaryAverage").textContent = formatSeconds(average, true);
+            $("summaryDistance").textContent = `${distance}m`;
+
+            const achWrap = $("currentSessionAchievements");
+            if (achWrap) {
+                const achievements = getAchievementsForSession(appData.sessionResults);
+                achWrap.innerHTML = renderAchievementsHTML(achievements);
+            }
+        }
+
+        // CSV export
+        function downloadSessionCSV() {
+            if (!appData.sessionResults.length) {
+                alert("No current session results to export.");
+                return;
+            }
+            let csv = "Set Name,Date,Repeat,Distance,Stroke,Interval,Swim Time,Rest Time,Notes,Skipped\n";
+            appData.sessionResults.forEach(row => {
+                csv += `${csvEscape(row.setName)},${csvEscape(row.date)},${row.repeat},${row.distance},${csvEscape(row.stroke)},${csvEscape(row.interval)},${csvEscape(row.swimTime)},${csvEscape(row.restTime)},${csvEscape(row.notes)},${row.skipped}\n`;
+            });
+            downloadFile(`swim-session-${new Date().toISOString().slice(0, 10)}.csv`, csv, "text/csv");
         }
 
         function csvEscape(value) {
@@ -2710,145 +2228,65 @@
             URL.revokeObjectURL(url);
         }
 
-        function downloadSessionCSV() {
-            const header = ["Date", "Set Name", "Repeat", "Distance", "Stroke", "Mode", "Interval", "Swim Time", "Rest Time", "Notes"];
-            const rows = appData.sessionResults.map(row => [
-                row.date, row.setName, row.repeat, row.distance, row.stroke, row.mode || "interval", row.interval, row.swimTime, row.restTime, row.notes
-            ]);
-            const csv = [header, ...rows].map(row => row.map(csvEscape).join(",")).join("\n");
-            downloadFile(`swim-session-${new Date().toISOString().slice(0, 10)}.csv`, csv);
-        }
-
-        function downloadSavedSetsCSV() {
-            const header = ["Set Name", "Order", "Repeats", "Distance", "Stroke", "Mode", "Interval", "Notes"];
-            const rows = appData.savedSets.map(line => [
-                line.setName, line.order, line.repeats, line.distance, line.stroke, line.mode || "interval", formatSeconds(line.intervalSeconds), line.notes
-            ]);
-            const csv = [header, ...rows].map(row => row.map(csvEscape).join(",")).join("\n");
-            downloadFile("swim-saved-sets.csv", csv);
-        }
-
-        function parseSimpleCSV(text) {
-            // Simple CSV parser for files exported by this app.
-            const rows = [];
-            let row = [];
-            let cell = "";
-            let inQuotes = false;
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const next = text[i + 1];
-
-                if (char === '"' && inQuotes && next === '"') {
-                    cell += '"';
-                    i++;
-                } else if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === "," && !inQuotes) {
-                    row.push(cell);
-                    cell = "";
-                } else if ((char === "\n" || char === "\r") && !inQuotes) {
-                    if (char === "\r" && next === "\n") i++;
-                    row.push(cell);
-                    rows.push(row);
-                    row = [];
-                    cell = "";
-                } else {
-                    cell += char;
-                }
-            }
-            if (cell || row.length) {
-                row.push(cell);
-                rows.push(row);
-            }
-            return rows;
-        }
-
-        function importSavedSetsCSV(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                const rows = parseSimpleCSV(reader.result).filter(row => row.some(cell => cell.trim() !== ""));
-                if (rows.length < 2) {
-                    alert("No set rows found.");
-                    return;
-                }
-                const dataRows = rows.slice(1);
-                const imported = dataRows.map(row => {
-                    const parsedMode = ["interval", "rest", "continuous", "ready"].includes(row[5]) ? row[5] : "interval";
-                    return {
-                        setName: row[0] || "Imported Set",
-                        order: Number(row[1] || 1),
-                        repeats: Number(row[2] || 1),
-                        distance: Number(row[3] || 100),
-                        stroke: strokes.includes(row[4]) ? row[4] : "Free",
-                        mode: parsedMode,
-                        intervalSeconds: parseTimeToSeconds(row[6] || "1:00"),
-                        notes: row[7] || ""
-                    };
-                }).filter(line => line.mode === "continuous" || line.mode === "ready" || line.intervalSeconds > 0);
-
-                appData.savedSets.push(...imported);
-                saveData();
-                renderAll();
-                alert(`Imported ${imported.length} set line(s).`);
-                event.target.value = "";
-            };
-            reader.readAsText(file);
-        }
-
         function copySessionTSV() {
-            if (!appData.sessionResults || !appData.sessionResults.length) {
-                alert("No session data to copy.");
+            const results = appData.sessionResults;
+            if (!results.length) {
+                alert("No current session results to copy.");
                 return;
             }
-            const header = ["Date", "Set Name", "Repeat", "Distance", "Stroke", "Mode", "Interval", "Swim Time", "Rest Time", "Notes"];
-            const rows = appData.sessionResults.map(row => [
-                row.date, row.setName, row.repeat, row.distance, row.stroke, row.mode || "interval", row.interval, row.swimTime, row.restTime, row.notes
-            ]);
-            const tsv = [header, ...rows].map(row => row.join("\t")).join("\n");
-
-            navigator.clipboard.writeText(tsv).then(() => {
-                const btn = $("copyStatsTsvBtn");
-                const originalText = btn.textContent;
-                btn.textContent = "Copied!";
-                setTimeout(() => btn.textContent = originalText, 2000);
-            }).catch(err => {
-                alert("Failed to copy: " + err);
+            let tsv = "Set Name\tDate\tRepeat\tDistance\tStroke\tInterval\tSwim Time\tRest Time\tNotes\tSkipped\n";
+            results.forEach(row => {
+                tsv += `${row.setName}\t${row.date}\t${row.repeat}\t${row.distance}\t${row.stroke}\t${row.interval}\t${row.swimTime}\t${row.restTime}\t${row.notes}\t${row.skipped}\n`;
             });
+            navigator.clipboard.writeText(tsv)
+                .then(() => alert("Session data copied to clipboard as TSV!"))
+                .catch(err => alert("Could not copy text: " + err));
         }
 
+        // JSON backup/restore
         function backupFullJson() {
-            const jsonStr = JSON.stringify(appData, null, 2);
-            downloadFile(`swim-timer-backup-${new Date().toISOString().slice(0, 10)}.json`, jsonStr, "application/json");
+            const dataStr = JSON.stringify(appData, null, 2);
+            downloadFile(`swim-timer-backup-${new Date().toISOString().slice(0, 10)}.json`, dataStr, "application/json");
         }
 
         function restoreFullJson(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = () => {
+            reader.onload = function (e) {
                 try {
-                    const data = JSON.parse(reader.result);
-                    if (!data || typeof data !== "object") throw new Error("Invalid format");
-
-                    if (confirm("This will overwrite all existing sets, history, and settings. Proceed?")) {
-                        appData.savedSets = data.savedSets || [];
+                    const data = JSON.parse(e.target.result);
+                    if (data) {
+                        appData.history = data.history || [];
                         appData.currentSet = data.currentSet || [];
                         appData.sessionResults = data.sessionResults || [];
-                        appData.history = data.history || [];
-                        appData.settings = data.settings || appData.settings;
+                        appData.settings = { ...appData.settings, ...(data.settings || {}) };
                         saveData();
                         renderAll();
                         alert("Backup restored successfully.");
                     }
-                } catch (e) {
-                    alert("Error reading JSON file: " + e.message);
+                } catch (err) {
+                    alert("Error reading JSON: " + err.message);
                 }
                 event.target.value = "";
             };
             reader.readAsText(file);
+        }
+
+        function saveSettings() {
+            appData.settings.poolLength = $("poolLength").value;
+            appData.settings.customPoolLength = $("customPoolLength").value.trim() || "25m";
+            appData.settings.soundOn = $("soundToggle").value === "on";
+            saveData();
+            renderForms();
+            alert("Settings saved.");
+        }
+
+        function clearHistory() {
+            if (!confirm("Clear all session history? This cannot be undone.")) return;
+            appData.history = [];
+            saveData();
+            renderAll();
         }
 
         function escapeHtml(value) {
@@ -2860,11 +2298,6 @@
                 .replace(/'/g, "&#039;");
         }
 
-        function escapeJs(value) {
-            return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-        }
-
-
         function switchTab(tabId) {
             document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
             document.querySelectorAll(".tab-button").forEach(button => button.classList.remove("active"));
@@ -2875,181 +2308,50 @@
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        function bindTabs() {
-            document.querySelectorAll(".tab-button").forEach(button => {
-                button.addEventListener("click", () => switchTab(button.dataset.tab));
-            });
-        }
-
-        function handleKeyboard(event) {
-            const active = document.activeElement;
-            const typing = active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName);
-            if (typing) return;
-
-            if (event.code === "Space") {
-                event.preventDefault();
-                if (intervalState.running) finishRepeat();
-                else if (manualState.running) lapManual();
-            }
-            if (event.key === "Enter") startSet();
-            if (event.key.toLowerCase() === "p") {
-                if (intervalState.running) togglePause();
-            }
-            if (event.key.toLowerCase() === "s") {
-                if (intervalState.running) stopSet();
-                if (manualState.running) stopManual();
-            }
-            if (event.key.toLowerCase() === "r") resetSetTimer();
-        }
-
         function bindEvents() {
-            bindTabs();
-            $("addLineBtn").addEventListener("click", addLine);
-            $("clearCurrentSetBtn").addEventListener("click", clearCurrentSet);
-            $("saveSetBtn").addEventListener("click", saveCurrentSet);
-            $("startSetBtn").addEventListener("click", startSet);
+            // Tab switching
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+            });
+            
+            // Dropdown event listeners for custom inputs
+            $("intIntervalSel").addEventListener("change", () => {
+                toggleCustomInput("intIntervalSel", "intIntervalCustomContainer");
+            });
+            $("restTimeSel").addEventListener("change", () => {
+                toggleCustomInput("restTimeSel", "restTimeCustomContainer");
+            });
+            $("poolLength").addEventListener("change", toggleCustomPoolLength);
+            
+            // Set trigger buttons
+            $("startIntervalBtn").addEventListener("click", startIntervalSet);
+            $("startRestBtn").addEventListener("click", startRestSet);
+            
+            // Running timer buttons
             $("finishRepeatBtn").addEventListener("click", finishRepeat);
             $("pauseBtn").addEventListener("click", togglePause);
             $("skipRepeatBtn").addEventListener("click", skipRepeat);
             $("stopBtn").addEventListener("click", stopSet);
-            $("resetBtn").addEventListener("click", resetSetTimer);
+            
+            // Settings and Backup buttons
+            $("saveSettingsBtn").addEventListener("click", saveSettings);
+            $("testBeepBtn").addEventListener("click", () => beep(800, 0.15));
             $("downloadSessionBtn").addEventListener("click", downloadSessionCSV);
-            $("downloadSetsBtn").addEventListener("click", downloadSavedSetsCSV);
-            $("clearSavedSetsBtn").addEventListener("click", clearSavedSets);
             $("clearHistoryBtn").addEventListener("click", clearHistory);
-            $("addDefaultSetsBtn").addEventListener("click", addDefaultSets);
-            $("clearWorkoutBtn").addEventListener("click", clearCurrentSet);
-            $("editWorkoutBtn").addEventListener("click", openWorkoutEditor);
-            $("saveWorkoutEditorBtn").addEventListener("click", closeWorkoutEditor);
-            $("closeWorkoutEditorX").addEventListener("click", closeWorkoutEditor);
-            $("editWorkoutList").addEventListener("change", function(e) {
-                const target = e.target;
-                const origIdx = Number(target.dataset.origIdx);
-                if (isNaN(origIdx)) return;
-                
-                const line = appData.currentSet[origIdx];
-                if (!line) return;
-                
-                if (target.classList.contains("edit-rep")) {
-                    line.repeats = Math.max(1, Number(target.value || 1));
-                } else if (target.classList.contains("edit-dist")) {
-                    line.distance = Math.max(1, Number(target.value || 1));
-                } else if (target.classList.contains("edit-stroke")) {
-                    line.stroke = target.value;
-                } else if (target.classList.contains("edit-int")) {
-                    if (line.mode !== "continuous" && line.mode !== "ready") {
-                        line.intervalSeconds = parseTimeToSeconds(target.value) || line.intervalSeconds;
-                    }
-                } else if (target.classList.contains("edit-notes")) {
-                    line.notes = target.value.trim();
-                }
-                
-                saveData();
-                renderAll();
-                
-                const container = target.closest(".edit-workout-container");
-                if (container) {
-                    const blockIndex = Number(container.dataset.index);
-                    const blocks = groupWorkoutIntoBlocks();
-                    const block = blocks.find(b => b.lines.some(l => l.originalIndex === origIdx));
-                    if (block) {
-                        const totalDist = block.lines.reduce((sum, l) => sum + (Number(l.repeats) * Number(l.distance)), 0);
-                        const repeats = block.lines.reduce((sum, l) => sum + Number(l.repeats), 0);
-                        const summarySpan = container.querySelector(".edit-item-details span");
-                        if (summarySpan) {
-                            summarySpan.textContent = `${block.lines.length} lines, ${repeats} repeats, ${totalDist}m`;
-                        }
-                    }
-                }
-            });
-            $("editorAddSetSelect").addEventListener("change", function(e) {
-                const name = e.target.value;
-                if (name) {
-                    addSetToWorkoutFromEditor(name);
-                    e.target.value = "";
-                }
-            });
-            $("csvImport").addEventListener("change", importSavedSetsCSV);
-
-            $("copyStatsTsvBtn").addEventListener("click", copySessionTSV);
             $("backupJsonBtn").addEventListener("click", backupFullJson);
             $("restoreJsonBtn").addEventListener("click", () => $("jsonImport").click());
             $("jsonImport").addEventListener("change", restoreFullJson);
-
-            $("saveSettingsBtn").addEventListener("click", saveSettings);
-            $("testBeepBtn").addEventListener("click", () => beep(800, 0.15));
+            
+            // Manual stopwatch buttons
             $("manualStartBtn").addEventListener("click", startManual);
             $("manualLapBtn").addEventListener("click", lapManual);
             $("manualStopBtn").addEventListener("click", stopManual);
             $("manualResetBtn").addEventListener("click", resetManual);
+            
             document.addEventListener("keydown", handleKeyboard);
         }
 
-        function getDefaultSets() {
-            return [
-                // Set 1: Free sprint base
-                { setName: "Free Stroke - River rapids sprint", order: 1, repeats: 12, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 60, notes: "25 fast / 25 easy" },
-                
-                // Set 2: Fly strength
-                { setName: "Fly Stroke - Fly like Phelps", order: 1, repeats: 8, distance: 25, stroke: "Fly", mode: "interval", intervalSeconds: 45, notes: "strength" },
-                { setName: "Fly Stroke - Fly like Phelps", order: 2, repeats: 8, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 65, notes: "steady" },
-                
-                // Set 3: IM technique
-                { setName: "IM Stroke - Medley master class", order: 1, repeats: 8, distance: 50, stroke: "IM", mode: "interval", intervalSeconds: 75, notes: "drill" },
-                { setName: "IM Stroke - Medley master class", order: 2, repeats: 4, distance: 100, stroke: "IM", mode: "interval", intervalSeconds: 135, notes: "technique" },
-                
-                // Set 4: 100 free pace
-                { setName: "Free Stroke - Century cruise control", order: 1, repeats: 6, distance: 100, stroke: "Free", mode: "interval", intervalSeconds: 120, notes: "hold best steady pace" },
-                
-                // Set 5: Kick power
-                { setName: "Kick Stroke - Motorboat engine builder", order: 1, repeats: 10, distance: 50, stroke: "Kick", mode: "interval", intervalSeconds: 80, notes: "kick power" },
-                { setName: "Kick Stroke - Motorboat engine builder", order: 2, repeats: 8, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 40, notes: "sprint" },
-                
-                // Set 6: Fly/free combo
-                { setName: "Fly/Free Combo - Butterfly metamorphosis", order: 1, repeats: 8, distance: 50, stroke: "Free", mode: "interval", intervalSeconds: 70, notes: "25 fly / 25 free" },
-                
-                // Set 7: Speed endurance
-                { setName: "Free Stroke - Oxygen debt sprint", order: 1, repeats: 16, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 35, notes: "sprint" },
-                
-                // Set 8: IM strength
-                { setName: "IM Stroke - Iron Man medley power", order: 1, repeats: 4, distance: 100, stroke: "IM", mode: "interval", intervalSeconds: 140, notes: "strength" },
-                { setName: "IM Stroke - Iron Man medley power", order: 2, repeats: 8, distance: 50, stroke: "Pull", mode: "interval", intervalSeconds: 65, notes: "free pull" },
-                
-                // Set 9: Broken 100 free
-                { setName: "Free Stroke - Shattered century challenge", order: 1, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
-                { setName: "Free Stroke - Shattered century challenge", order: 2, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
-                { setName: "Free Stroke - Shattered century challenge", order: 3, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
-                { setName: "Free Stroke - Shattered century challenge", order: 4, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
-                { setName: "Free Stroke - Shattered century challenge", order: 5, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
-                { setName: "Free Stroke - Shattered century challenge", order: 6, repeats: 1, distance: 0, stroke: "Choice", mode: "rest", intervalSeconds: 60, notes: "Rest" },
-                { setName: "Free Stroke - Shattered century challenge", order: 7, repeats: 4, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 30, notes: "fast" },
-                
-                // Set 10: Race skills
-                { setName: "Free Stroke - Olympic start & glide", order: 1, repeats: 12, distance: 25, stroke: "Free", mode: "interval", intervalSeconds: 45, notes: "strong push, easy recovery" }
-            ];
-        }
-
-        function seedExampleIfEmpty() {
-            if (appData.currentSet.length || appData.savedSets.length) return;
-            const defaults = getDefaultSets();
-            appData.savedSets = defaults;
-            appData.currentSet = defaults.filter(line => line.setName === "Free Stroke - River rapids sprint").map(line => ({ ...line }));
-            saveData();
-        }
-
-        function addDefaultSets() {
-            if (appData.savedSets.length > 0 && !confirm("Add the 10 default sets to your library? This will append them to your current library.")) {
-                return;
-            }
-            const defaults = getDefaultSets();
-            appData.savedSets.push(...defaults.map(line => ({ ...line })));
-            saveData();
-            renderAll();
-            alert("Added 10 default sets to your library!");
-        }
-
         loadData();
-        seedExampleIfEmpty();
         bindEvents();
         renderAll();
 
