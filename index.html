@@ -1007,7 +1007,7 @@
 <body>
     <header>
         <h1>Swim Interval Timer</h1>
-        <div class="subtitle">A premium, distraction-free timer for swimming sets</div>
+        <div class="subtitle">Distraction-free timer for swimming sets</div>
     </header>
 
     <main>
@@ -2629,7 +2629,7 @@
                 htmlOutput += `<div style="margin-top: 20px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">`;
                 htmlOutput += `<h4 style="margin: 0; color: var(--accent); display: flex; justify-content: space-between; font-size: 1.1rem;"><span>📅 ${date}</span> <span>${data.totalDistance}m</span></h4>`;
                 htmlOutput += `</div>`;
-                
+
                 htmlOutput += data.sessions.map(({ session, dist }) => {
                     const setName = session[0] && session[0].setName ? session[0].setName : "Swim Set";
                     const repeats = session.length;
