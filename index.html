@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Swim Interval Timer</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#071827" />
@@ -158,6 +158,7 @@
             cursor: pointer;
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
             transition: transform 0.08s ease, opacity 0.2s ease, filter 0.2s ease;
+            touch-action: manipulation;
         }
 
         button:hover {
@@ -1127,6 +1128,8 @@
                                 <option value="8">8</option>
                                 <option value="9">9</option>
                                 <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
                                 <option value="other">Other...</option>
                             </select>
                             <div class="pill-grid" id="intRepeatsPills" data-select="intRepeatsSel">
@@ -1140,6 +1143,8 @@
                                 <button type="button" class="pill-btn" data-value="8">8</button>
                                 <button type="button" class="pill-btn" data-value="9">9</button>
                                 <button type="button" class="pill-btn" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="11">11</button>
+                                <button type="button" class="pill-btn" data-value="12">12</button>
                                 <button type="button" class="pill-btn" data-value="other">Other...</button>
                             </div>
                         </div>
@@ -1265,6 +1270,8 @@
                                 <option value="8">8</option>
                                 <option value="9">9</option>
                                 <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
                                 <option value="other">Other...</option>
                             </select>
                             <div class="pill-grid" id="restRepeatsPills" data-select="restRepeatsSel">
@@ -1278,6 +1285,8 @@
                                 <button type="button" class="pill-btn" data-value="8">8</button>
                                 <button type="button" class="pill-btn" data-value="9">9</button>
                                 <button type="button" class="pill-btn" data-value="10">10</button>
+                                <button type="button" class="pill-btn" data-value="11">11</button>
+                                <button type="button" class="pill-btn" data-value="12">12</button>
                                 <button type="button" class="pill-btn" data-value="other">Other...</button>
                             </div>
                         </div>
@@ -2597,44 +2606,65 @@
                 return;
             }
 
-            let totalDistance = 0;
-            const rows = [...appData.history].reverse().map((session, i) => {
+            let globalTotalDistance = 0;
+            const dates = [];
+            const groupedByDate = {};
+
+            [...appData.history].reverse().forEach((session) => {
                 const date = session[0] ? session[0].date : "Unknown Date";
-                const setName = session[0] && session[0].setName ? session[0].setName : "Swim Set";
+                if (!groupedByDate[date]) {
+                    dates.push(date);
+                    groupedByDate[date] = { sessions: [], totalDistance: 0 };
+                }
                 const dist = session.reduce((sum, row) => sum + Number(row.distance || 0), 0);
-                totalDistance += dist;
-                const repeats = session.length;
-
-                const lapRows = session.map(row => {
-                    if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
-                    let restText = "";
-                    if (row.restTime && row.restTime !== "0.0" && row.restTime !== "-") {
-                        restText = ` <span style="color: var(--muted); font-size: 0.9em;">(Rest: ${row.restTime})</span>`;
-                    }
-                    return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
-                }).join("<br />");
-
-                const achievements = getAchievementsForSession(session);
-                const achievementsHtml = renderAchievementsHTML(achievements);
-
-                return `
-                <details style="margin-bottom: 10px;">
-                    <summary>
-                        <div>
-                            <strong>${date}</strong> - ${escapeHtml(setName)}<br/>
-                             <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} times, ${dist}m</span>
-                        </div>
-                    </summary>
-                    <div class="details-content">
-                        ${lapRows}
-                        ${achievementsHtml}
-                    </div>
-                </details>`;
+                globalTotalDistance += dist;
+                groupedByDate[date].totalDistance += dist;
+                groupedByDate[date].sessions.push({ session, dist });
             });
 
-            $("statsTotalDistance").textContent = `${totalDistance}m`;
+            let htmlOutput = "";
+
+            dates.forEach(date => {
+                const data = groupedByDate[date];
+                htmlOutput += `<div style="margin-top: 20px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border);">`;
+                htmlOutput += `<h4 style="margin: 0; color: var(--accent); display: flex; justify-content: space-between; font-size: 1.1rem;"><span>📅 ${date}</span> <span>${data.totalDistance}m</span></h4>`;
+                htmlOutput += `</div>`;
+                
+                htmlOutput += data.sessions.map(({ session, dist }) => {
+                    const setName = session[0] && session[0].setName ? session[0].setName : "Swim Set";
+                    const repeats = session.length;
+
+                    const lapRows = session.map(row => {
+                        if (row.skipped) return `Lap ${row.repeat}: <strong>SKIPPED</strong>`;
+                        let restText = "";
+                        if (row.restTime && row.restTime !== "0.0" && row.restTime !== "-") {
+                            restText = ` <span style="color: var(--muted); font-size: 0.9em;">(Rest: ${row.restTime})</span>`;
+                        }
+                        return `Lap ${row.repeat} (${row.distance}m ${row.stroke}): <strong>${row.swimTime}</strong>${restText}`;
+                    }).join("<br />");
+
+                    const achievements = getAchievementsForSession(session);
+                    const achievementsHtml = renderAchievementsHTML(achievements);
+
+                    return `
+                    <details style="margin-bottom: 10px;">
+                        <summary>
+                            <div>
+                                <strong>${escapeHtml(setName)}</strong><br/>
+                                 <span style="font-size: 0.9em; color: var(--muted); font-weight: normal;">${repeats} sets, ${dist}m</span>
+                            </div>
+                        </summary>
+                        <div class="details-content">
+                            ${lapRows}
+                            ${achievementsHtml}
+                        </div>
+                    </details>`;
+                }).join("");
+            });
+
+            $("statsTotalDistance").textContent = `${globalTotalDistance}m`;
             $("statsTotalSessions").textContent = appData.history.length;
-            wrap.innerHTML = rows.join("");
+            wrap.innerHTML = htmlOutput;
         }
 
         function renderSessionSummary() {
