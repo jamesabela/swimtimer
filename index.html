@@ -2896,6 +2896,7 @@
             // Settings and Backup buttons
             $("saveSettingsBtn").addEventListener("click", saveSettings);
             $("testBeepBtn").addEventListener("click", () => beep(800, 0.15));
+            $("copyStatsTsvBtn").addEventListener("click", copySessionTSV);
             $("downloadSessionBtn").addEventListener("click", downloadSessionCSV);
             $("clearHistoryBtn").addEventListener("click", clearHistory);
             $("backupJsonBtn").addEventListener("click", backupFullJson);
