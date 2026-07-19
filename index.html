@@ -2742,9 +2742,34 @@
             results.forEach(row => {
                 tsv += `${row.setName}\t${row.date}\t${row.repeat}\t${row.distance}\t${row.stroke}\t${row.interval}\t${row.swimTime}\t${row.restTime}\t${row.notes}\t${row.skipped}\n`;
             });
-            navigator.clipboard.writeText(tsv)
-                .then(() => alert("Session data copied to clipboard as TSV!"))
-                .catch(err => alert("Could not copy text: " + err));
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(tsv)
+                    .then(() => alert("Session data copied to clipboard as TSV!"))
+                    .catch(err => alert("Could not copy text: " + err));
+            } else {
+                // Fallback for non-secure contexts or older browsers
+                let textArea = document.createElement("textarea");
+                textArea.value = tsv;
+                // Make the textarea out of viewport
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    let successful = document.execCommand('copy');
+                    if (successful) {
+                        alert("Session data copied to clipboard as TSV!");
+                    } else {
+                        alert("Could not copy text using fallback.");
+                    }
+                } catch (err) {
+                    alert("Could not copy text: " + err);
+                }
+                document.body.removeChild(textArea);
+            }
         }
 
         // JSON backup/restore
